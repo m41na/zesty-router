@@ -136,7 +136,14 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	public void redirect(String path) {
 		this.redirect = true;
 		this.routeUri = path;
-		setStatus(SC_MOVED_PERMANENTLY);
+		setStatus(SC_SEE_OTHER);
+	}
+	
+	@Override
+	public void redirect(int status, String path) {
+		this.redirect = true;
+		this.routeUri = path;
+		setStatus(status);
 	}
 
 	@Override

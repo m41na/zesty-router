@@ -32,6 +32,8 @@ public interface RouteResponse {
     
     void redirect(String path);
     
+    void redirect(int status, String path);
+    
     void type(String mimetype);
     
     void cookie(String name, String value);

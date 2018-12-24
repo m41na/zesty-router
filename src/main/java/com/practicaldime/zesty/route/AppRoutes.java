@@ -106,7 +106,7 @@ public class AppRoutes {
     * 
     *step 1. identify param patterns in the configured route (:.*?)[\b\W]
     *step 2. replace the patterns identified with literals (:.*?)
-    *step 3. resulting string from step 3 becomes regex to match agains input uri
+    *step 3. resulting string from step 3 becomes regex to match against input uri
     *step 4. match identified params from route
      */
     private boolean pathMatch(AppRoute route, String inputPath) {
