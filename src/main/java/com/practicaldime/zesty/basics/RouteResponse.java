@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.route;
+package com.practicaldime.zesty.basics;
 
 import java.util.Map;
 

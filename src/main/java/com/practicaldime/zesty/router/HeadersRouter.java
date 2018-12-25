@@ -14,9 +14,9 @@ public class HeadersRouter implements Router{
 		List<Route> pool = new ArrayList<>(routes);
 		for(Iterator<Route> iter = pool.iterator(); iter.hasNext();) {
 			Route mapping = iter.next();
-			//is content-type declared in mapping route?
-			if(mapping.contentType != null) {
-				String reqHeader = input.request.getHeader("Content-Type");
+			//is 'content-type' declared in mapping route?
+			if(mapping.contentType != null && mapping.contentType.trim().length() > 0) {
+				String reqHeader = input.requestAttrs.getHeader("Content-Type");
 				if(reqHeader != null) {
 					if(!reqHeader.contains(mapping.contentType)) {
 						iter.remove();
@@ -28,11 +28,11 @@ public class HeadersRouter implements Router{
 					continue;
 				}
 			}
-			//is accepts declared in mapping route?
-			if(mapping.accepts != null) {
-				String reqHeader = input.request.getHeader("Accepts");
+			//is 'accept' declared in mapping route?
+			if(mapping.accept != null && mapping.accept.trim().length() > 0) {
+				String reqHeader = input.requestAttrs.getHeader("Accept");
 				if(reqHeader != null) {
-					if(!reqHeader.contains(mapping.accepts)) {
+					if(!reqHeader.contains(mapping.accept)) {
 						iter.remove();
 						continue;
 					}
@@ -46,8 +46,8 @@ public class HeadersRouter implements Router{
 			if(!mapping.headers.isEmpty()) {
 				Map<String, String> headers = mapping.headers;
 				for(String key : headers.keySet()) {
-					if(input.request.headers.containsKey(key)) {
-						if(!input.request.getHeader(key).contains(headers.get(key))) {
+					if(input.requestAttrs.headers.containsKey(key)) {
+						if(!input.requestAttrs.getHeader(key).contains(headers.get(key))) {
 							iter.remove();
 							break;
 						}

@@ -18,12 +18,12 @@ public class MethodRouter implements Router{
 
 	@Override
 	public void accept(RouteSearch input) {
-		String method = input.request.method;
+		String method = input.requestAttrs.method;
 		Method type = method != null? Method.valueOf(method.toUpperCase()) : null;
 		if(type != null) {
 			this.routers.get(type).accept(input);
 			//if a matching route is found, set the method value in the result
-			if(input.request != null) {
+			if(input.requestAttrs != null) {
 				input.result.method = type.name();
 			}
 		}

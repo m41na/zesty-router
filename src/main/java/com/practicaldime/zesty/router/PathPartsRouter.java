@@ -9,7 +9,7 @@ public class PathPartsRouter implements Router{
 
 	@Override
 	public void accept(RouteSearch input) {
-		String inputPath = input.request.url;
+		String inputPath = input.requestAttrs.url;
 		String path = inputPath != null? (inputPath.startsWith("/")? inputPath.substring(1) : inputPath) : null;
 		String[] parts = path != null? path.split("/") : null;
 		if(parts != null) {

@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.practicaldime.zesty.app.AppServer;
-import com.practicaldime.zesty.route.BodyWriter;
-import com.practicaldime.zesty.route.RouteResponse;
+import com.practicaldime.zesty.basics.BodyWriter;
+import com.practicaldime.zesty.basics.RouteResponse;
 import com.practicaldime.zesty.view.ViewEngine;
 
 public class HandlerResponse extends HttpServletResponseWrapper implements RouteResponse {

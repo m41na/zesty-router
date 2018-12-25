@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class RouteSearch {
 
-	public final Request request;
+	public final RequestAttrs requestAttrs;
 	public final Map<String, String> pathParams = new HashMap<>();
 	public Route result;
 	
-	public RouteSearch(Request request) {
+	public RouteSearch(RequestAttrs requestAttrs) {
 		super();
-		this.request = request;
+		this.requestAttrs = requestAttrs;
 	}
 	
 	public void visit(Router router) {

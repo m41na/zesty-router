@@ -13,10 +13,10 @@ public class PathRegexRouter implements Router{
 	public void accept(RouteSearch input) {
 		for(PathPattern pathRegex : routers.keySet()) {
 			Pattern valuesPattern = pathRegex.valuesPattern;
-			Matcher matcher = valuesPattern.matcher(input.request.url);
+			Matcher matcher = valuesPattern.matcher(input.requestAttrs.url);
 			if(matcher.matches()) {
 				routers.get(pathRegex).accept(input);
-				//if a matching route is found, ectract path params from the input's url and get the values path params if any
+				//if a matching route is found, extract path params from the input's url and get the values path params if any
 				if(input.result != null) {
 					if(matcher.groupCount() > 0) {
 						Pattern paramsPattern = pathRegex.paramsPattern;

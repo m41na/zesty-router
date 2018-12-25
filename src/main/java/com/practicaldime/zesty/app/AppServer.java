@@ -41,10 +41,11 @@ import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.practicaldime.zesty.basics.AppRoutes;
 import com.practicaldime.zesty.extras.AppWsProvider;
 import com.practicaldime.zesty.extras.AppWsServlet;
-import com.practicaldime.zesty.route.AppRoute;
-import com.practicaldime.zesty.route.AppRoutes;
+import com.practicaldime.zesty.router.MethodRouter;
+import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.servlet.HandlerFilter;
 import com.practicaldime.zesty.servlet.HandlerRequest;
 import com.practicaldime.zesty.servlet.HandlerResponse;
@@ -142,7 +143,7 @@ public class AppServer {
 	}
 
 	public AppServer router() {
-		this.routes = AppRoutes.instance();
+		this.routes = new AppRoutes(new MethodRouter());
 		return this;
 	}
 
@@ -191,12 +192,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer head(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "head", accepts, type);
+	public AppServer head(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "head", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -216,12 +217,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer trace(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "trace", accepts, type);
+	public AppServer trace(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "trace", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -241,12 +242,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer options(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "options", accepts, type);
+	public AppServer options(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "options", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -259,9 +260,9 @@ public class AppServer {
 		return get(path, "", "", handler);
 	}
 
-	public AppServer get(String path, String accepts, String type,
+	public AppServer get(String path, String accept, String type,
 			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return get(path, accepts, type, new HandlerServlet() {
+		return get(path, accept, type, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -271,12 +272,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer get(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "get", accepts, type);
+	public AppServer get(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "get", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -289,9 +290,9 @@ public class AppServer {
 		return post(path, "", "", handler);
 	}
 
-	public AppServer post(String path, String accepts, String type,
+	public AppServer post(String path, String accept, String type,
 			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return post(path, accepts, type, new HandlerServlet() {
+		return post(path, accept, type, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -301,8 +302,8 @@ public class AppServer {
 		});
 	}
 
-	public AppServer post(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "post", accepts, type);
+	public AppServer post(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "post", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
@@ -312,7 +313,7 @@ public class AppServer {
 			MultipartConfigElement mpce = new MultipartConfigElement("temp", 1024 * 1024 * 50, 1024 * 1024, 5);
 			sholder.getRegistration().setMultipartConfig(mpce);
 		}
-		servlets.addServlet(sholder, route.pathId);
+		servlets.addServlet(sholder, route.rid);
 		return this;
 	}
 
@@ -325,9 +326,9 @@ public class AppServer {
 		return put(path, "", "", handler);
 	}
 
-	public AppServer put(String path, String accepts, String type,
+	public AppServer put(String path, String accept, String type,
 			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return put(path, accepts, type, new HandlerServlet() {
+		return put(path, accept, type, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -337,12 +338,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer put(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "put", accepts, type);
+	public AppServer put(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "put", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -355,9 +356,9 @@ public class AppServer {
 		return delete(path, "", "", handler);
 	}
 
-	public AppServer delete(String path, String accepts, String type,
+	public AppServer delete(String path, String accept, String type,
 			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return delete(path, accepts, type, new HandlerServlet() {
+		return delete(path, accept, type, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -367,12 +368,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer delete(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "delete", accepts, type);
+	public AppServer delete(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "delete", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 
@@ -385,9 +386,9 @@ public class AppServer {
 		return all(path, "", "", handler);
 	}
 
-	public AppServer all(String path, String accepts, String type,
+	public AppServer all(String path, String accept, String type,
 			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return all(path, accepts, type, new HandlerServlet() {
+		return all(path, accept, type, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -397,12 +398,12 @@ public class AppServer {
 		});
 	}
 
-	public AppServer all(String path, String accepts, String type, HandlerServlet handler) {
-		AppRoute route = new AppRoute(resolve(path), "*", accepts, type);
+	public AppServer all(String path, String accept, String type, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "*", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.pathId);
+		servlets.addServlet(new ServletHolder(handler), route.rid);
 		return this;
 	}
 

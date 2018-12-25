@@ -1,10 +1,5 @@
 package com.practicaldime.zesty.servlet;
 
-import com.google.gson.Gson;
-import com.practicaldime.zesty.route.AppRoute;
-import com.practicaldime.zesty.route.BodyReader;
-import com.practicaldime.zesty.route.RouteRequest;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,6 +11,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,13 +21,19 @@ import javax.servlet.http.Part;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.practicaldime.zesty.basics.BodyReader;
+import com.practicaldime.zesty.basics.RouteRequest;
+import com.practicaldime.zesty.router.RouteSearch;
 
 public class HandlerRequest extends HttpServletRequestWrapper implements RouteRequest {
 
     private final Logger LOG = LoggerFactory.getLogger(HandlerRequest.class);
-    protected AppRoute route;
+    protected RouteSearch route;
     protected boolean error;
     protected String message;
     protected byte[] body;
@@ -62,12 +64,12 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
     }
 
     @Override
-    public AppRoute route() {
+    public RouteSearch route() {
         return this.route;
     }
 
     @Override
-    public void route(AppRoute route) {
+    public void route(RouteSearch route) {
         this.route = route;
     }
 

@@ -3,13 +3,13 @@ package com.practicaldime.zesty.router;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Request {
+public class RequestAttrs {
 
 	public String url;
 	public String method;
-	public Map<String, String[]> headers = new HashMap<>();
+	public Map<String, String> headers = new HashMap<>();
 	
 	public String getHeader(String name) {
-		return headers.keySet().contains(name)? headers.get(name)[0] : null;
+		return headers.keySet().contains(name)? headers.get(name) : null;
 	}
 }

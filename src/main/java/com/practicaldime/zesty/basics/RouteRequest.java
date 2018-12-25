@@ -1,8 +1,11 @@
-package com.practicaldime.zesty.route;
+package com.practicaldime.zesty.basics;
 
 import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
+
+import com.practicaldime.zesty.router.RouteSearch;
 
 public interface RouteRequest {
     
@@ -38,9 +41,9 @@ public interface RouteRequest {
     
     Cookie[] cookies();
     
-    AppRoute route();
+    RouteSearch route();
     
-    void route(AppRoute route);
+    void route(RouteSearch route);
     
     HttpSession session(boolean create);
     

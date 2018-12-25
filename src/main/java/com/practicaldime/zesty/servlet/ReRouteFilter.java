@@ -1,10 +1,7 @@
 package com.practicaldime.zesty.servlet;
 
-import com.google.gson.Gson;
-import com.practicaldime.zesty.route.AppRoute;
-import com.practicaldime.zesty.route.AppRoutes;
-
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -13,8 +10,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.practicaldime.zesty.basics.AppRoutes;
+import com.practicaldime.zesty.router.RouteSearch;
 
 public class ReRouteFilter implements Filter {
 
@@ -46,11 +48,11 @@ public class ReRouteFilter implements Filter {
         //set additional properties in response wrapper
         httpResponse.context(httpRequest.getContextPath());
 
-        AppRoute route = routes.search(httpRequest);
-        if (route != null) {
+        RouteSearch route = routes.search(httpRequest);
+        if (route.result != null) {
         	LOG.info("matched route -> {}", gson.toJson(route));
             httpRequest.route(route);
-           httpRequest.getRequestDispatcher(route.pathId).forward(httpRequest, httpResponse);
+           httpRequest.getRequestDispatcher(route.result.rid).forward(httpRequest, httpResponse);
         } else {
             chain.doFilter(httpRequest, httpResponse);
         }
