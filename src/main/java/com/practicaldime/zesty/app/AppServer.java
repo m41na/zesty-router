@@ -148,8 +148,12 @@ public class AppServer {
 	}
 
 	public AppServer filter(HandlerFilter filter) {
+		return filter("/*", filter);
+	}
+
+	public AppServer filter(String context, HandlerFilter filter) {
 		FilterHolder holder = new FilterHolder(filter);
-		servlets.addFilter(holder, "/*", EnumSet.of(DispatcherType.REQUEST));
+		servlets.addFilter(holder, context, EnumSet.of(DispatcherType.REQUEST));
 		return this;
 	}
 
@@ -473,8 +477,7 @@ public class AppServer {
 			corsMapping.setPathSpec("*");
 			servlets.addFilter(corsFilter, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
 			// add routes filter
-			servlets.addFilter(new FilterHolder(new ReRouteFilter(this.routes)), "/*",
-					EnumSet.of(DispatcherType.REQUEST));
+			servlets.addFilter(new FilterHolder(new ReRouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
 
 			// configure resource handlers
 			String resourceBase = this.locals.getProperty("assets");

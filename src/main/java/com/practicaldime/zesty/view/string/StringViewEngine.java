@@ -1,17 +1,13 @@
 package com.practicaldime.zesty.view.string;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
-import javax.script.Bindings;
-import javax.script.Invocable;
-import javax.script.ScriptContext;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 
 import com.google.gson.Gson;
-import com.practicaldime.zesty.app.ZestyJs;
 import com.practicaldime.zesty.view.ViewEngine;
 
 public class StringViewEngine implements ViewEngine{
@@ -58,23 +54,22 @@ public class StringViewEngine implements ViewEngine{
 
 	@Override
 	public String merge(String template, Map<String, Object> model) throws Exception {		
-		String baseDir = System.getProperty("user.dir");
-		Path path = Paths.get(baseDir, templateDir);
+		Context context = Context.newBuilder("js")
+				.allowIO(true)
+				.allowCreateThread(true)
+				.allowHostAccess(true).build();
 		
-		Bindings bindings = ZestyJs.ENGINE.getBindings(ScriptContext.ENGINE_SCOPE);
-		bindings.put("dist", path.toString());		
+		Value bindings = context.getBindings("js");
+		bindings.putMember("dist", templateDir);
+		bindings.putMember("model", gson.toJson(model));
     	
-    	String script = new String(Files.readAllBytes(path.resolve(template + "." + templateExt)));
+    	String script = view.resolve(templateDir, template + "." + templateExt);
     	//server-side rendered content
-		ZestyJs.ENGINE.eval(script);
-		Invocable invocable = (Invocable) ZestyJs.ENGINE;
-
-		Object result = invocable.invokeFunction("renderString", gson.toJson(model.get("tasks")));
+    	Value result = context.eval(Source.newBuilder("js", script, template).build());
 		
     	//page markup
-    	String markup = new String(Files.readAllBytes(path.resolve(template + ".html")));
     	String regex = "<div id=\"app\"></div>";
-    	markup = markup.replaceFirst(regex, result.toString());
-		return markup;
+    	String markup = result.asString().replaceFirst(regex, result.asString());
+    	return markup;
 	}
 }

@@ -2,7 +2,9 @@ package com.practicaldime.zesty.view;
 
 public class ViewException extends RuntimeException{
 
-    public ViewException(String message) {
+	private static final long serialVersionUID = 1L;
+
+	public ViewException(String message) {
         super(message);
     }
 

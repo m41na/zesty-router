@@ -1,7 +1,5 @@
 package com.practicaldime.zesty.view;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,12 +12,16 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.resource.reference.ResourceReference;
 
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
+import com.practicaldime.zesty.view.string.StringViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
+
+import freemarker.template.Template;
 
 public abstract class AbstractView implements ViewBuilder {
 
@@ -93,10 +95,12 @@ public abstract class AbstractView implements ViewBuilder {
                     JtwigTemplate jtwigTemplate = new JtwigTemplate(TwigViewEngine.getConfiguration().getEnvironment(), resource);
                     JtwigModel viewModel = JtwigModel.newModel(getModel());
                     return jtwigTemplate.render(viewModel);
+                case "string":
+                	return StringViewEngine.instance().merge(markup, getModel());
                 default:
                     throw new ViewException("unsupported template engine");
             }
-        } catch (ViewException | TemplateException | IOException e) {
+        } catch (Exception e) {
             throw new ViewException(e);
         }
     }

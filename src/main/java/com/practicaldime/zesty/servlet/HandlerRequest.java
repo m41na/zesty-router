@@ -111,7 +111,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 
     @Override
     public <T> T body(Class<T> type) {
-        String contentType = header("ContentType");
+        String contentType = header("Content-Type");
         if (contentType.contains("application/json")) {
             Reader reader = new InputStreamReader(new ByteArrayInputStream(body()));
             Gson gson = new Gson();
