@@ -5,7 +5,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.UUID;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +22,17 @@ public class HandlerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String ID = UUID.randomUUID().toString();
     private final Logger LOG = LoggerFactory.getLogger(HandlerServlet.class);
+    private ThreadPoolExecutor executor;
 
     public void handle(HandlerRequest request, HandlerResponse response) {
         //override in subclasses to provide behavior
     }
 
-    @Override
+    public void setExecutor(ThreadPoolExecutor executor) {
+		this.executor = executor;
+	}
+
+	@Override
     protected void doTrace(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //delegate to super implementation
         super.doTrace(req, resp);
@@ -45,76 +52,99 @@ public class HandlerServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HandlerRequest request = (HandlerRequest) req;
+    	HandlerRequest request = (HandlerRequest) req;
         HandlerResponse response = (HandlerResponse) resp;
         doProcess(request, response);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HandlerRequest request = (HandlerRequest) req;
+    	HandlerRequest request = (HandlerRequest) req;
         HandlerResponse response = (HandlerResponse) resp;
         doProcess(request, response);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HandlerRequest request = (HandlerRequest) req;
+    	HandlerRequest request = (HandlerRequest) req;
         HandlerResponse response = (HandlerResponse) resp;
         doProcess(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HandlerRequest request = (HandlerRequest) req;
+    	HandlerRequest request = (HandlerRequest) req;
         HandlerResponse response = (HandlerResponse) resp;
         doProcess(request, response);
     }
 
     protected void doProcess(HandlerRequest request, HandlerResponse response) throws ServletException, IOException {
-        //AsyncContext async = request.startAsync(request, response);
+    	HandlerTask task = ()-> {
+			try {
+	            //handle the request
+	            handle(request, response);
+	        } catch (Exception e) {
+	            LOG.error("Exception occured while executing 'handle()' function", e);
+	            response.sendError(500, e.getMessage());
+	            return;
+	        }
+	        
+	        LOG.info("Servlet {} handled request successfully. Now preparing response", ID);
+	        if (response.forward) {
+	            try {
+	                request.getRequestDispatcher(response.routeUri).forward(request, response);
+	            } catch (IOException | ServletException e) {
+	                LOG.error("Exception occured while executing 'handle()' function", e);
+	                response.sendError(500, e.getMessage());
+	            }
+	            return;
+	        }
+
+	        if (response.redirect) {
+	            response.sendRedirect(response.routeUri);
+	            return;
+	        }
+
+	        if (request.error) {
+	            response.sendError(HttpStatus.BAD_REQUEST_400, request.message());
+	            return;
+	        }
+
+	        if (!response.isCommitted()) {
+	            //prepare response
+	            ByteBuffer content = ByteBuffer.wrap(response.getContent());
+	            //write response
+	            try (WritableByteChannel out = Channels.newChannel(response.getOutputStream())) {
+	                out.write(content);
+	            }
+	        }
+    	};
         
-        try {
-            //handle the request
-            handle(request, response);
-        } catch (Exception e) {
-            LOG.error("Exception occured while executing 'handle()' function", e);
-            response.sendError(500, e.getMessage());
-            return;
-        }
-        
-        LOG.info("Servlet {} handled request successfully. Now preparing response", ID);
-        if (response.forward) {
-            try {
-                request.getRequestDispatcher(response.routeUri).forward(request, response);
-            } catch (IOException | ServletException e) {
-                LOG.error("Exception occured while executing 'handle()' function", e);
-                response.sendError(500, e.getMessage());
-            }
-            return;
-        }
+    	if(request.isAsyncSupported()) {
+        	AsyncContext async = request.startAsync(request, response);
+        	executor.execute(new Runnable() {
 
-        if (response.redirect) {
-            response.sendRedirect(response.routeUri);
-            return;
+				@Override
+				public void run() {
+					try {
+						task.handle();
+					} catch (ServletException | IOException e) {
+						throw new RuntimeException(e);
+					}
+					finally {
+						LOG.info("Async request '{}' completed", request.getRequestURI());
+						async.complete();
+					}
+				}
+        		
+        	});
         }
-
-        if (request.error) {
-            response.sendError(HttpStatus.BAD_REQUEST_400, request.message());
-            return;
-        }
-
-        if (!response.isCommitted()) {
-            //prepare response
-            ByteBuffer content = ByteBuffer.wrap(response.getContent());
-            //write response
-            try (WritableByteChannel out = Channels.newChannel(response.getOutputStream())) {
-                out.write(content);
-            }
-        }
+    	else {
+    		task.handle();
+    	}
     }
 
-    protected final Thread.UncaughtExceptionHandler h = (Thread th, Throwable ex) -> {
+    protected final Thread.UncaughtExceptionHandler threadErr = (Thread th, Throwable ex) -> {
         LOG.error("Uncaught exception in thread : " + th.getName(), ex);
     };
 }

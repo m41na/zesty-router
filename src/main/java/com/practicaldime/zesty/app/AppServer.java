@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -46,6 +49,7 @@ import com.practicaldime.zesty.extras.AppWsProvider;
 import com.practicaldime.zesty.extras.AppWsServlet;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
+import com.practicaldime.zesty.servlet.HandlerConfig;
 import com.practicaldime.zesty.servlet.HandlerFilter;
 import com.practicaldime.zesty.servlet.HandlerRequest;
 import com.practicaldime.zesty.servlet.HandlerResponse;
@@ -64,6 +68,7 @@ public class AppServer {
 	private AppRoutes routes;
 	private String status = "stopped";
 	private final Properties locals = new Properties();
+	private final ThreadPoolExecutor threadPoolExecutor;
 	private final Map<String, String> wpcontext = new HashMap<>();
 	private final LifecycleSubscriber lifecycle = new LifecycleSubscriber();
 	private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -77,6 +82,7 @@ public class AppServer {
 		this.assets(Optional.ofNullable(props.get("assets")).orElse("www"));
 		this.appctx(Optional.ofNullable(props.get("appctx")).orElse("/"));
 		this.engine(Optional.ofNullable(props.get("engine")).orElse("jtwig"));
+		this.threadPoolExecutor = createThreadPoolExecutor();
 	}
 
 	public static ViewEngine engine() {
@@ -84,6 +90,10 @@ public class AppServer {
 			throw new RuntimeException("The engine is not yet initialized");
 		}
 		return engine;
+	}
+	
+	public ThreadPoolExecutor threadPool() {
+		return this.threadPoolExecutor;
 	}
 
 	public String status() {
@@ -158,23 +168,27 @@ public class AppServer {
 	}
 
 	public AppServer route(String method, String path, HandlerServlet handler) {
+		return route(method, path, null, handler);
+	}
+	
+	public AppServer route(String method, String path, HandlerConfig config, HandlerServlet handler) {
 		switch (method.toLowerCase()) {
 		case "get":
-			return get(path, "", "", handler);
+			return get(path, "", "", config, handler);
 		case "post":
-			return post(path, "", "", handler);
+			return post(path, "", "", config, handler);
 		case "put":
-			return put(path, "", "", handler);
+			return put(path, "", "", config, handler);
 		case "delete":
-			return delete(path, "", "", handler);
+			return delete(path, "", "", config, handler);
 		case "options":
-			return options(path, "", "", handler);
+			return options(path, "", "", config, handler);
 		case "trace":
-			return trace(path, "", "", handler);
+			return trace(path, "", "", config, handler);
 		case "head":
-			return head(path, "", "", handler);
+			return head(path, "", "", config, handler);
 		case "all":
-			return all(path, "", "", handler);
+			return all(path, "", "", config, handler);
 		default:
 			throw new UnsupportedOperationException(method + " is not a supported method");
 		}
@@ -182,11 +196,11 @@ public class AppServer {
 
 	// ************* HEAD *****************//
 	public AppServer head(String path, HandlerServlet handler) {
-		return head(path, "", "", handler);
+		return head(path, "", "", null, handler);
 	}
 
 	public AppServer head(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return head(path, "", "", new HandlerServlet() {
+		return head(path, "", "", null, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -196,22 +210,52 @@ public class AppServer {
 		});
 	}
 
-	public AppServer head(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer head(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return head(path, "", "", config, handler);
+	}
+
+	public AppServer head(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return head(path, accept, type, config, new HandlerServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handle(HandlerRequest request, HandlerResponse response) {
+				handler.apply(request, response);
+			}
+		});
+	}
+
+	public AppServer head(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "head", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* TRACE *****************//
 	public AppServer trace(String path, HandlerServlet handler) {
-		return trace(path, "", "", handler);
+		return trace(path, "", "", null, handler);
 	}
 
 	public AppServer trace(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return trace(path, "", "", new HandlerServlet() {
+		return trace(path, "", "", null, handler);
+	}
+	
+	public AppServer trace(String path,  HandlerConfig config, HandlerServlet handler) {
+		return trace(path, "", "", config, handler);
+	}
+
+	public AppServer trace(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return trace(path, "", "", config, handler);
+	}
+
+	public AppServer trace(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return trace(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -221,22 +265,37 @@ public class AppServer {
 		});
 	}
 
-	public AppServer trace(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer trace(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "trace", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* OPTIONS *****************//
 	public AppServer options(String path, HandlerServlet handler) {
-		return trace(path, "", "", handler);
+		return options(path, "", "", null, handler);
 	}
 
 	public AppServer options(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return options(path, "", "", new HandlerServlet() {
+		return options(path, "", "", null, handler);
+	}
+	
+	public AppServer options(String path,  HandlerConfig config, HandlerServlet handler) {
+		return options(path, "", "", config, handler);
+	}
+
+	public AppServer options(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return options(path, "", "", config, handler);
+	}
+
+	public AppServer options(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return options(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -246,27 +305,37 @@ public class AppServer {
 		});
 	}
 
-	public AppServer options(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer options(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "options", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* GET *****************//
 	public AppServer get(String path, HandlerServlet handler) {
-		return get(path, "", "", handler);
+		return get(path, "", "", null, handler);
 	}
 
 	public AppServer get(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return get(path, "", "", handler);
+		return get(path, "", "", null, handler);
+	}
+	
+	public AppServer get(String path,  HandlerConfig config, HandlerServlet handler) {
+		return get(path, "", "", config, handler);
 	}
 
-	public AppServer get(String path, String accept, String type,
-			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return get(path, accept, type, new HandlerServlet() {
+	public AppServer get(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return get(path, "", "", config, handler);
+	}
+
+	public AppServer get(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return get(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -276,27 +345,37 @@ public class AppServer {
 		});
 	}
 
-	public AppServer get(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer get(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "get", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* POST *****************//
 	public AppServer post(String path, HandlerServlet handler) {
-		return post(path, "", "", handler);
+		return post(path, "", "", null, handler);
 	}
 
 	public AppServer post(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return post(path, "", "", handler);
+		return post(path, "", "", null, handler);
+	}
+	
+	public AppServer post(String path,  HandlerConfig config, HandlerServlet handler) {
+		return post(path, "", "", config, handler);
 	}
 
-	public AppServer post(String path, String accept, String type,
-			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return post(path, accept, type, new HandlerServlet() {
+	public AppServer post(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return post(path, "", "", config, handler);
+	}
+
+	public AppServer post(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return post(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -306,33 +385,42 @@ public class AppServer {
 		});
 	}
 
-	public AppServer post(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer post(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "post", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		ServletHolder sholder = new ServletHolder(handler);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
 		// for multipart/form-data, customize the servlet holder
 		if (type.toLowerCase().contains("multipart/form-data")) {
 			MultipartConfigElement mpce = new MultipartConfigElement("temp", 1024 * 1024 * 50, 1024 * 1024, 5);
-			sholder.getRegistration().setMultipartConfig(mpce);
+			holder.getRegistration().setMultipartConfig(mpce);
 		}
-		servlets.addServlet(sholder, route.rid);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* PUT *****************//
 	public AppServer put(String path, HandlerServlet handler) {
-		return put(path, "", "", handler);
+		return put(path, "", "", null, handler);
 	}
 
 	public AppServer put(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return put(path, "", "", handler);
+		return put(path, "", "", null, handler);
+	}
+	
+	public AppServer out(String path,  HandlerConfig config, HandlerServlet handler) {
+		return put(path, "", "", config, handler);
 	}
 
-	public AppServer put(String path, String accept, String type,
-			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return put(path, accept, type, new HandlerServlet() {
+	public AppServer put(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return put(path, "", "", config, handler);
+	}
+
+	public AppServer put(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return put(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -342,27 +430,37 @@ public class AppServer {
 		});
 	}
 
-	public AppServer put(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer put(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "put", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* DELETE *****************//
 	public AppServer delete(String path, HandlerServlet handler) {
-		return delete(path, "", "", handler);
+		return delete(path, "", "", null, handler);
 	}
 
 	public AppServer delete(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return delete(path, "", "", handler);
+		return delete(path, "", "", null, handler);
+	}
+	
+	public AppServer delete(String path,  HandlerConfig config, HandlerServlet handler) {
+		return delete(path, "", "", config, handler);
 	}
 
-	public AppServer delete(String path, String accept, String type,
-			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return delete(path, accept, type, new HandlerServlet() {
+	public AppServer delete(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return delete(path, "", "", config, handler);
+	}
+
+	public AppServer delete(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return delete(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -372,27 +470,37 @@ public class AppServer {
 		});
 	}
 
-	public AppServer delete(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer delete(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "delete", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
 	// ************* ALL *****************//
 	public AppServer all(String path, HandlerServlet handler) {
-		return all(path, "", "", handler);
+		return all(path, "", "", null, handler);
 	}
 
 	public AppServer all(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return all(path, "", "", handler);
+		return all(path, "", "", null, handler);
+	}
+	
+	public AppServer all(String path,  HandlerConfig config, HandlerServlet handler) {
+		return all(path, "", "", config, handler);
 	}
 
-	public AppServer all(String path, String accept, String type,
-			BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
-		return all(path, accept, type, new HandlerServlet() {
+	public AppServer all(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return all(path, "", "", config, handler);
+	}
+
+	public AppServer all(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+		return all(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -402,12 +510,15 @@ public class AppServer {
 		});
 	}
 
-	public AppServer all(String path, String accept, String type, HandlerServlet handler) {
+	public AppServer all(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "*", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		servlets.addServlet(new ServletHolder(handler), route.rid);
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
@@ -524,6 +635,14 @@ public class AppServer {
 			result.accept("AppServer could not start because -> " + e.getMessage());
 			System.exit(1);
 		}
+	}
+	
+	protected ThreadPoolExecutor createThreadPoolExecutor() {
+		int poolSize = Integer.valueOf(this.locals.getProperty("poolSize", "100"));
+		int maxSize = Integer.valueOf(this.locals.getProperty("maxSize", "200"));
+		Long aliveTimeout = Long.valueOf(this.locals.getProperty("aliveTimeout", "5000"));
+		return new ThreadPoolExecutor(poolSize, maxSize, aliveTimeout,
+				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(poolSize));
 	}
 
 	protected ResourceHandler createResourceHandler(String resourceBase) {
