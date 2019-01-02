@@ -92,10 +92,6 @@ public class AppServer {
 		return engine;
 	}
 	
-	public ThreadPoolExecutor threadPool() {
-		return this.threadPoolExecutor;
-	}
-
 	public String status() {
 		return "server status is " + status;
 	}
@@ -639,9 +635,9 @@ public class AppServer {
 	
 	protected ThreadPoolExecutor createThreadPoolExecutor() {
 		int poolSize = Integer.valueOf(this.locals.getProperty("poolSize", "100"));
-		int maxSize = Integer.valueOf(this.locals.getProperty("maxSize", "200"));
-		Long aliveTimeout = Long.valueOf(this.locals.getProperty("aliveTimeout", "5000"));
-		return new ThreadPoolExecutor(poolSize, maxSize, aliveTimeout,
+		int maxPoolSize = Integer.valueOf(this.locals.getProperty("maxPoolSize", "200"));
+		Long keepAliveTime = Long.valueOf(this.locals.getProperty("keepAliveTime", "5000"));
+		return new ThreadPoolExecutor(poolSize, maxPoolSize, keepAliveTime,
 				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(poolSize));
 	}
 
