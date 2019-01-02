@@ -31,7 +31,7 @@ copyright = '2019, Stephen Maina'
 author = 'Stephen Maina'
 
 # The short X.Y version
-version = ''
+version = '0.1.0'
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
 
@@ -83,7 +83,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'pyramid'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -104,13 +104,15 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {
+    '**': ['localtoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'],
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'zesty-routerdoc'
+htmlhelp_basename = 'zesty-router docs'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -137,8 +139,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'zesty-router.tex', 'zesty-router Documentation',
-     'Stephen Maina', 'manual'),
+    (master_doc, 'zesty-router.tex', 'zesty-router Documentation', 'Stephen Maina', 'manual'),
 ]
 
 
@@ -147,8 +148,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'zesty-router', 'zesty-router Documentation',
-     [author], 1)
+    (master_doc, 'zesty-router', 'zesty-router Documentation', [author], 1)
 ]
 
 
@@ -159,7 +159,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'zesty-router', 'zesty-router Documentation',
-     author, 'zesty-router', 'One line description of project.',
+     author, 'zesty-router', 'A Javascript wrapper for the Jetty Web Server.',
      'Miscellaneous'),
 ]
 

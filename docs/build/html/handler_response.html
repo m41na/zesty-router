@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>HandlerResponse Object &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="App Functions" href="app_functions.html" />
+    <link rel="prev" title="HandlerRequest Object" href="handler_request.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HandlerResponse Object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#header-header-string-value-string-void">header(header: String, value: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#templates-folder-string-void">templates(folder: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#context-ctx-string-void">context(ctx: String): void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#status-status-int-void">status(status: int) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sendstatus-status-int-void">sendStatus(status: int) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#end-payload-string-void">end(payload: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#json-payload-object-void">json(payload: Object) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jsonp-payload-object-void">jsonp(payload: Object) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xml-payload-object-template-class-t-void">xml(payload: Object, template: Class&lt;T&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#content-payload-t-writer-bodywriter-t-void">content(payload: &lt;T&gt;, writer: BodyWriter&lt;T&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#render-template-string-model-map-string-object-void">render(template: String, model: Map&lt;String, Object&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-path-string-void">next(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#redirect-path-string-void">redirect(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#redirect-status-int-path-string-void">redirect(status: int, path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#type-mimetype-string-void">type(mimetype: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cookie-name-string-value-string-void">cookie(name: String, value: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attachment-filename-string-void">attachment(filename: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-path-string-filename-string-mimetype-string-status-handlerstatus-void">download(path: String, filename: String, mimeType: String, status: HandlerStatus) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getcontent-byte">getContent() : byte[]</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>HandlerResponse Object</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/handler_response.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="handlerresponse-object">
+<h1>HandlerResponse Object<a class="headerlink" href="#handlerresponse-object" title="Permalink to this headline">¶</a></h1>
+<p>The HandlerResponse object is a wrapper around the HttpServletResponse object. Besides proving access to the entire
+HttpServletResponse API, the HandlerResponse object also adds some convenient methods which abstract the mundane and
+arduous tasks for performing some pretty common chores.</p>
+<div class="section" id="header-header-string-value-string-void">
+<h2>header(header: String, value: String) : void<a class="headerlink" href="#header-header-string-value-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletResponse’s setHeader method</p>
+</div>
+<div class="section" id="templates-folder-string-void">
+<h2>templates(folder: String) : void<a class="headerlink" href="#templates-folder-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sets the directory name where the configured template engine will look up files</p>
+</div>
+<div class="section" id="context-ctx-string-void">
+<h2>context(ctx: String): void<a class="headerlink" href="#context-ctx-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sets the contextPath value in the request to that configured in the application level</p>
+</div>
+<div class="section" id="status-status-int-void">
+<h2>status(status: int) : void<a class="headerlink" href="#status-status-int-void" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletResponse’s <code class="code docutils literal notranslate"><span class="pre">setStatus(status)</span></code> method</p>
+</div>
+<div class="section" id="sendstatus-status-int-void">
+<h2>sendStatus(status: int) : void<a class="headerlink" href="#sendstatus-status-int-void" title="Permalink to this headline">¶</a></h2>
+<p>Set the response status through status(int status) and the sends the status message as the response body</p>
+</div>
+<div class="section" id="end-payload-string-void">
+<h2>end(payload: String) : void<a class="headerlink" href="#end-payload-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sends the payload in UTF-8 format as the response body. Example usage.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.Date&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">DateFormat</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.text.SimpleDateFormat&#39;</span><span class="p">);</span>
+<span class="n">function</span> <span class="n">now</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">new</span> <span class="n">DateFormat</span><span class="p">(</span><span class="s2">&quot;hh:mm:ss a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot; @ &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">now</span><span class="p">()));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="json-payload-object-void">
+<h2>json(payload: Object) : void<a class="headerlink" href="#json-payload-object-void" title="Permalink to this headline">¶</a></h2>
+<p>Sends the payload in UTF-8 format and content-type as <em>application/json</em> as the response body</p>
+</div>
+<div class="section" id="jsonp-payload-object-void">
+<h2>jsonp(payload: Object) : void<a class="headerlink" href="#jsonp-payload-object-void" title="Permalink to this headline">¶</a></h2>
+<p>Sends the payload in UTF-8 format and content-type as <em>application/json</em> as the response body</p>
+</div>
+<div class="section" id="xml-payload-object-template-class-t-void">
+<h2>xml(payload: Object, template: Class&lt;T&gt;) : void<a class="headerlink" href="#xml-payload-object-template-class-t-void" title="Permalink to this headline">¶</a></h2>
+<p>Sends the payload in UTF-8 format and content-type as <em>application/json</em> as the response body.
+The template variable is used to determine the structure of the xml payload</p>
+</div>
+<div class="section" id="content-payload-t-writer-bodywriter-t-void">
+<h2>content(payload: &lt;T&gt;, writer: BodyWriter&lt;T&gt;) : void<a class="headerlink" href="#content-payload-t-writer-bodywriter-t-void" title="Permalink to this headline">¶</a></h2>
+<p>Sends the payload transformed by the writer object as the response body. The writer object is supplied by the caller of this method</p>
+</div>
+<div class="section" id="render-template-string-model-map-string-object-void">
+<h2>render(template: String, model: Map&lt;String, Object&gt;) : void<a class="headerlink" href="#render-template-string-model-map-string-object-void" title="Permalink to this headline">¶</a></h2>
+<p>Delegate the task of writing the response to the configured template engine. The engine will locate and load the template and merge it
+with the model object to create the response body</p>
+</div>
+<div class="section" id="next-path-string-void">
+<h2>next(path: String) : void<a class="headerlink" href="#next-path-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sets the forward flag to true, and sets the target uri to the path value prior to calling the request dispatcher to forward the request to the target resource.</p>
+</div>
+<div class="section" id="redirect-path-string-void">
+<h2>redirect(path: String) : void<a class="headerlink" href="#redirect-path-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sets the redirect flag to true, sets the target uri to the path value and sets the response status to 303 (see other) prior to calling the
+request to redirect to the target resource. Example usage.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/target&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/dest/target&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="redirect-status-int-path-string-void">
+<h2>redirect(status: int, path: String) : void<a class="headerlink" href="#redirect-status-int-path-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Sets the redirect flag to true, sets the target uri to the path value and sets the response status to status prior to calling the request
+to redirect to the target resource. A redirect could be done using either 301, 302 or 302 depending on your context, so this redirect
+method gives you that discretion.</p>
+</div>
+<div class="section" id="type-mimetype-string-void">
+<h2>type(mimetype: String) : void<a class="headerlink" href="#type-mimetype-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletResponse’s setContentType method</p>
+</div>
+<div class="section" id="cookie-name-string-value-string-void">
+<h2>cookie(name: String, value: String) : void<a class="headerlink" href="#cookie-name-string-value-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletResponse’s addCookie method</p>
+</div>
+<div class="section" id="attachment-filename-string-void">
+<h2>attachment(filename: String) : void<a class="headerlink" href="#attachment-filename-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around the download method and provides default values for attributes as shown:
+<code class="code docutils literal notranslate"><span class="pre">download(filename,</span> <span class="pre">filename,</span> <span class="pre">getContentType(),</span> <span class="pre">null)</span></code>;</p>
+</div>
+<div class="section" id="download-path-string-filename-string-mimetype-string-status-handlerstatus-void">
+<h2>download(path: String, filename: String, mimeType: String, status: HandlerStatus) : void<a class="headerlink" href="#download-path-string-filename-string-mimetype-string-status-handlerstatus-void" title="Permalink to this headline">¶</a></h2>
+<p>Reads the specified file relative the the application’s root, and writes it to the response as a raw byte stream. An optional HandlerStatus callback interface is used to communicate progress as the file gets written</p>
+</div>
+<div class="section" id="getcontent-byte">
+<h2>getContent() : byte[]<a class="headerlink" href="#getcontent-byte" title="Permalink to this headline">¶</a></h2>
+<p>Return the byte[] content stored in the response object</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="app_functions.html" class="btn btn-neutral float-right" title="App Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="handler_request.html" class="btn btn-neutral" title="HandlerRequest Object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

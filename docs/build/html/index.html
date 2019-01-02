@@ -1,109 +1,296 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Zesty-Router Docs &#8212; zesty-router 0.1.0 documentation</title>
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Zesty-Router Docs &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
+    <link rel="next" title="AppRoutes Object" href="app_routes.html" /> 
 
-  </head><body>
+  
+  <script src="_static/js/modernizr.min.js"></script>
 
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="license.html" title="License"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">zesty-router 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Zesty-Router Docs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="zesty-router-docs">
 <h1>Zesty-Router Docs<a class="headerlink" href="#zesty-router-docs" title="Permalink to this headline">¶</a></h1>
 <p>Zesty is a creative JavaScript wrapper around the Jetty web server. It works out-of-the-box with the servlet 3.0 API which enables handling requests in asynchronous fashion.
 Note that the servlet 3.1 API on the other hand, introduces new interfaces to handle asynchronous socket I/O for which there isn’t an idiomatic way to handle generically
 in zesty yet. However, using either Javascript or Java with zesty is handled using a uniform and easy to understand API.</p>
-<div class="section" id="the-app-object">
-<h2>The App Object<a class="headerlink" href="#the-app-object" title="Permalink to this headline">¶</a></h2>
-<p>The is the heart and soul of the zesty framework. It holders references to objects that play a central role in how everthing else is held together.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">Properties</span> <span class="nb">locals</span><span class="p">;</span>
+<div class="section" id="the-appserver-object">
+<h2>The AppServer Object<a class="headerlink" href="#the-appserver-object" title="Permalink to this headline">¶</a></h2>
+<p>The is one of the core components in the zesty framework. It holds references to objects that play a central role in how everthing else is held together.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">AppServer</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">this</span><span class="p">(</span><span class="n">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="n">public</span> <span class="n">AppServer</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">assets</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;www&quot;</span><span class="p">));</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">appctx</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;appctx&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">));</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">engine</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;engine&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;jtwig&quot;</span><span class="p">));</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">threadPoolExecutor</span> <span class="o">=</span> <span class="n">createThreadPoolExecutor</span><span class="p">();</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>This holds configuration attributes that can be passed to the application to alter its behavior.</p>
-<blockquote>
-<div><ul class="simple">
-<li>ThreadPoolExecutor threadPoolExecutor;</li>
-</ul>
-</div></blockquote>
-<p>This is a thread-pool that is seperate from the server’s own thread pool. This is only used to handle requests for servlet marked as ‘supports async’.
+<div class="section" id="locals-properties">
+<h3>locals: Properties;<a class="headerlink" href="#locals-properties" title="Permalink to this headline">¶</a></h3>
+<p>This holds configuration attributes that can be passed to the application and that are used by other components internally to configure their own behavior.</p>
+</div>
+<div class="section" id="threadpoolexecutor-threadpoolexecutor">
+<h3>threadPoolExecutor: ThreadPoolExecutor;<a class="headerlink" href="#threadpoolexecutor-threadpoolexecutor" title="Permalink to this headline">¶</a></h3>
+<p>This is a thread-pool that is seperate from the server’s own thread pool. This is only used to handle requests for servlet marked as ‘<em>supports async</em>’.
 This thread pool is configurable using 3 parameters which are passed through the <strong>locals</strong> objects. These properties are:</p>
 <blockquote>
-<div><p>poolSize - the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
-maxPoolSize - he maximum number of threads to allow in the pool
-keepAliveTime when the number of threads is greater than the core, this is the maximum time (in MILLISECONDS) that excess idle threads will wait for new tasks before terminating.</p>
-<ul class="simple">
-<li>Map&lt;String, String&gt; wpcontext;</li>
-</ul>
-</div></blockquote>
-<p>If configuring the application for <strong>wordpress</strong>, this will holder the configuration parameters required.</p>
-<blockquote>
 <div><ul class="simple">
-<li>ServletContextHandler servlets;</li>
+<li><em>poolSize</em> - the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set</li>
+<li><em>maxPoolSize</em> - he maximum number of threads to allow in the pool</li>
+<li><em>keepAliveTime</em> - when the number of threads is greater than the core, this is the maximum time (in MILLISECONDS) that excess idle threads will wait for new tasks before terminating.</li>
 </ul>
 </div></blockquote>
+</div>
+<div class="section" id="wpcontext-map-string-string">
+<h3>wpcontext: Map&lt;String, String&gt;;<a class="headerlink" href="#wpcontext-map-string-string" title="Permalink to this headline">¶</a></h3>
+<p>If configuring the application for <strong>wordpress</strong>, this will hold the configuration parameters required.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="o">*************</span> <span class="n">WORDPRESS</span> <span class="o">*****************//</span>
+<span class="n">public</span> <span class="n">AppServer</span> <span class="n">wordpress</span><span class="p">(</span><span class="n">String</span> <span class="n">home</span><span class="p">,</span> <span class="n">String</span> <span class="n">fcgi_proxy</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;activate&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;resource_base&quot;</span><span class="p">,</span> <span class="n">home</span><span class="p">);</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;welcome_file&quot;</span><span class="p">,</span> <span class="s2">&quot;index.php&quot;</span><span class="p">);</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;fcgi_proxy&quot;</span><span class="p">,</span> <span class="n">fcgi_proxy</span><span class="p">);</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;script_root&quot;</span><span class="p">,</span> <span class="n">home</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">this</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="servlets-servletcontexthandler">
+<h3>servlets: ServletContextHandler;<a class="headerlink" href="#servlets-servletcontexthandler" title="Permalink to this headline">¶</a></h3>
 <p>This is the servlet handlers’ container for the application. All configured routes are added to this handler under one context.</p>
+</div>
+<div class="section" id="engine-viewengine">
+<h3>engine: ViewEngine;<a class="headerlink" href="#engine-viewengine" title="Permalink to this headline">¶</a></h3>
+<p>This is an interface for exposing the active <strong>view</strong> component for the application. The other configurations which can be passed through
+the <strong>local</strong> objects are:</p>
 <blockquote>
 <div><ul class="simple">
-<li>ViewEngine engine;</li>
+<li>assets - this points to the static resources folder</li>
+<li>appctx - the base request path through which incoming requests will be handled</li>
+<li>engine - the concrete view implementation to be used by the application. This could be either be <em>freemarker</em>, <em>jtwig</em> or <em>string</em>.</li>
 </ul>
 </div></blockquote>
-<p>This is an interface for exposing the active <strong>view</strong> component for the application.</p>
-<p>The other configurations which can be passed through the <strong>local</strong> objects are:</p>
-<blockquote>
-<div><ul>
-<li><p class="first">assets - this points to the static resources folder</p>
-</li>
-<li><p class="first">appctx - the base request path through which incoming requests will be handled</p>
-</li>
-<li><p class="first">engine - the concrete view implementation to be used by the application. This could be either be</p>
-<blockquote>
-<div><ul class="simple">
-<li>freemarker</li>
-<li>jtwig</li>
-<li>string</li>
-</ul>
-</div></blockquote>
-</li>
-<li></li>
-</ul>
-</div></blockquote>
+</div>
+</div>
+<div class="section" id="appprovider-object">
+<h2>AppProvider Object<a class="headerlink" href="#appprovider-object" title="Permalink to this headline">¶</a></h2>
+<p>This is a provider for the <strong>AppServer</strong> object which is comes in handy when working with Javascript.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">AppProvider</span> <span class="p">{</span>
+
+    <span class="n">public</span> <span class="n">static</span> <span class="n">AppServer</span> <span class="n">provide</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">new</span> <span class="n">AppServer</span><span class="p">(</span><span class="n">props</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can alternatively just simply instantiate the <strong>AppServer</strong> manually.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#protocol-string">protocol() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#secure-boolean">secure() : boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#hostname-string">hostname() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#ip-string">ip() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#path-string">path() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#route-routesearch">route() : RouteSearch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#param-name-string-string">param(name: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#pathparams-map-string-string">pathParams() : Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#query-string">query() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#header-name-string-string">header(name: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#error-boolean">error() : boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#message-string">message() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-byte">body() : byte[]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-type-class-t-t-t">body(type: Class&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-provider-bodyreader-t-t-t">body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#capture-long">capture() : long</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#upload-destination-string-long">upload(destination: String) : long</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#cookies-cookie">cookies() : Cookie[]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#session-create-boolean-httpsession">session(create: boolean) : HttpSession</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#header-header-string-value-string-void">header(header: String, value: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#templates-folder-string-void">templates(folder: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#context-ctx-string-void">context(ctx: String): void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#status-status-int-void">status(status: int) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#sendstatus-status-int-void">sendStatus(status: int) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#end-payload-string-void">end(payload: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#json-payload-object-void">json(payload: Object) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#jsonp-payload-object-void">jsonp(payload: Object) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#xml-payload-object-template-class-t-void">xml(payload: Object, template: Class&lt;T&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#content-payload-t-writer-bodywriter-t-void">content(payload: &lt;T&gt;, writer: BodyWriter&lt;T&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#render-template-string-model-map-string-object-void">render(template: String, model: Map&lt;String, Object&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#next-path-string-void">next(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-path-string-void">redirect(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-status-int-path-string-void">redirect(status: int, path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#type-mimetype-string-void">type(mimetype: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#cookie-name-string-value-string-void">cookie(name: String, value: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#attachment-filename-string-void">attachment(filename: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#download-path-string-filename-string-mimetype-string-status-handlerstatus-void">download(path: String, filename: String, mimeType: String, status: HandlerStatus) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#getcontent-byte">getContent() : byte[]</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#status-string">status() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#appctx-path-string-void">appctx(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#assets-path-string-void">assets(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#engine-string-view-void">engine(String view) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#resolve-path-string-string">resolve(path: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-set-string">locals() : Set&lt;String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-param-string-object">locals(param: String) : Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-appserver">router() : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
 </ul>
@@ -120,61 +307,60 @@ keepAliveTime when the number of threads is greater than the core, this is the m
 </div>
 
 
+           </div>
+           
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Zesty-Router Docs</a><ul>
-<li><a class="reference internal" href="#the-app-object">The App Object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="app_routes.html" class="btn btn-neutral float-right" title="AppRoutes Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="license.html"
-                        title="next chapter">License</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="license.html" title="License"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">zesty-router 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Stephen Maina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.3.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

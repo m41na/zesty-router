@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>HandlerRequest Object &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HandlerResponse Object" href="handler_response.html" />
+    <link rel="prev" title="AppRoutes Object" href="app_routes.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HandlerRequest Object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#protocol-string">protocol() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#secure-boolean">secure() : boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hostname-string">hostname() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ip-string">ip() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#path-string">path() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#route-routesearch">route() : RouteSearch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#param-name-string-string">param(name: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pathparams-map-string-string">pathParams() : Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#query-string">query() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header-name-string-string">header(name: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#error-boolean">error() : boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#message-string">message() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body-byte">body() : byte[]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body-type-class-t-t-t">body(type: Class&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body-provider-bodyreader-t-t-t">body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#capture-long">capture() : long</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upload-destination-string-long">upload(destination: String) : long</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cookies-cookie">cookies() : Cookie[]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#session-create-boolean-httpsession">session(create: boolean) : HttpSession</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>HandlerRequest Object</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/handler_request.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="handlerrequest-object">
+<h1>HandlerRequest Object<a class="headerlink" href="#handlerrequest-object" title="Permalink to this headline">¶</a></h1>
+<p>The HandlerRequest object is a wrapper around the HttpServletRequest object. Besides proving access to the entire HttpServletRequest API,
+the HandlerRequest object also adds some convenient methods which abstract the mundane and arduous tasks for performing some pretty common chores.</p>
+<div class="section" id="protocol-string">
+<h2>protocol() : String<a class="headerlink" href="#protocol-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getProtocol method</p>
+</div>
+<div class="section" id="secure-boolean">
+<h2>secure() : boolean<a class="headerlink" href="#secure-boolean" title="Permalink to this headline">¶</a></h2>
+<p>Returns true if the protocol is https</p>
+</div>
+<div class="section" id="hostname-string">
+<h2>hostname() : String<a class="headerlink" href="#hostname-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getRemoteHost method</p>
+</div>
+<div class="section" id="ip-string">
+<h2>ip() : String<a class="headerlink" href="#ip-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getRemoteAddr method</p>
+</div>
+<div class="section" id="path-string">
+<h2>path() : String<a class="headerlink" href="#path-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getRequestURI method</p>
+</div>
+<div class="section" id="route-routesearch">
+<h2>route() : RouteSearch<a class="headerlink" href="#route-routesearch" title="Permalink to this headline">¶</a></h2>
+<p>Returns the route matched together with path parameters discovered as a Map&lt;String, String&gt; pathParams and the
+RequestAttrs used to search for the route.</p>
+</div>
+<div class="section" id="param-name-string-string">
+<h2>param(name: String) : String<a class="headerlink" href="#param-name-string-string" title="Permalink to this headline">¶</a></h2>
+<p>Returns a named path parameter extracted from the request uri. This is defined using {curly braces} in the request path mapping.</p>
+</div>
+<div class="section" id="pathparams-map-string-string">
+<h2>pathParams() : Map&lt;String, String&gt;<a class="headerlink" href="#pathparams-map-string-string" title="Permalink to this headline">¶</a></h2>
+<p>Returns a map of all named path parameters extracted from the request uri. These are defined using <em>{curly braces}</em> in the request path mapping.</p>
+</div>
+<div class="section" id="query-string">
+<h2>query() : String<a class="headerlink" href="#query-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getQueryString method</p>
+</div>
+<div class="section" id="header-name-string-string">
+<h2>header(name: String) : String<a class="headerlink" href="#header-name-string-string" title="Permalink to this headline">¶</a></h2>
+<p>Wraps around HttpServletRequest’s getHeader(name) method</p>
+</div>
+<div class="section" id="error-boolean">
+<h2>error() : boolean<a class="headerlink" href="#error-boolean" title="Permalink to this headline">¶</a></h2>
+<p>Return an error status associated with the request if something went wrong and was captured</p>
+</div>
+<div class="section" id="message-string">
+<h2>message() : String<a class="headerlink" href="#message-string" title="Permalink to this headline">¶</a></h2>
+<p>Return a message associated with the request if one was saved when the request was processed.</p>
+</div>
+<div class="section" id="body-byte">
+<h2>body() : byte[]<a class="headerlink" href="#body-byte" title="Permalink to this headline">¶</a></h2>
+<p>Return the request body captured if the long capture() was called prior.</p>
+</div>
+<div class="section" id="body-type-class-t-t-t">
+<h2>body(type: Class&lt;T&gt;) : &lt;T&gt; T<a class="headerlink" href="#body-type-class-t-t-t" title="Permalink to this headline">¶</a></h2>
+<p>Used to return the request’s body() content as either json or xml depending on the respective Content-Type header in the request.</p>
+</div>
+<div class="section" id="body-provider-bodyreader-t-t-t">
+<h2>body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T<a class="headerlink" href="#body-provider-bodyreader-t-t-t" title="Permalink to this headline">¶</a></h2>
+<p>Used to return the request’s body() content that is transformed using the BodyReader implementation supplied by caller of this method.</p>
+</div>
+<div class="section" id="capture-long">
+<h2>capture() : long<a class="headerlink" href="#capture-long" title="Permalink to this headline">¶</a></h2>
+<p>Captures the request body into a byte[] which is subsequently accessible using the byte[] body() method.</p>
+</div>
+<div class="section" id="upload-destination-string-long">
+<h2>upload(destination: String) : long<a class="headerlink" href="#upload-destination-string-long" title="Permalink to this headline">¶</a></h2>
+<p>Used together with a servlet designated for uploading multipart/form-data using the POST method and that is configured with a MultipartConfigElement object. The configured values for (String location, long maxFileSize, long maxRequestSize, int fileSizeThreshold) are
+(“temp”, 1024 * 1024 * 50, 1024 * 1024, 5) respectively.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;upload&#39;</span><span class="p">,</span> <span class="p">{});</span> <span class="o">//</span><span class="k">return</span> <span class="n">upload</span> <span class="n">page</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/upload&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;multipart/form-data&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">dest</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;destination&#39;</span><span class="p">);</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">dest</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">));</span> <span class="o">//</span><span class="n">redirect</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">page</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>And the equivalent Java syntax would be.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">HandlerRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">HandlerResponse</span> <span class="n">response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;upload&quot;</span><span class="p">,</span> <span class="n">Maps</span><span class="o">.</span><span class="n">newHashMap</span><span class="p">());</span>
+<span class="p">});</span>
+
+<span class="n">post</span><span class="p">(</span><span class="s2">&quot;/www/upload&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;multipart/form-data&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">HandlerRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">HandlerResponse</span> <span class="n">response</span><span class="p">)</span> <span class="o">-&gt;</span><span class="p">{</span>
+    <span class="n">String</span> <span class="n">dest</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;destination&quot;</span><span class="p">);</span>
+    <span class="n">request</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">dest</span><span class="p">);</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cookies-cookie">
+<h2>cookies() : Cookie[]<a class="headerlink" href="#cookies-cookie" title="Permalink to this headline">¶</a></h2>
+<p>Returns the cookies associated with the request.</p>
+</div>
+<div class="section" id="session-create-boolean-httpsession">
+<h2>session(create: boolean) : HttpSession<a class="headerlink" href="#session-create-boolean-httpsession" title="Permalink to this headline">¶</a></h2>
+<p>Returns the session object associated with the request. If the create attribute is true, a new session is created and returned. If it is false it will only return a session if one already exists otherwise it will not create one and returns nothing.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="handler_response.html" class="btn btn-neutral float-right" title="HandlerResponse Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="app_routes.html" class="btn btn-neutral" title="AppRoutes Object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

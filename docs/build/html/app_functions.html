@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>App Functions &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="HandlerResponse Object" href="handler_response.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">App Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#status-string">status() : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#appctx-path-string-void">appctx(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assets-path-string-void">assets(path: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#engine-string-view-void">engine(String view) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolve-path-string-string">resolve(path: String) : String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#locals-set-string">locals() : Set&lt;String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#locals-param-string-object">locals(param: String) : Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#router-appserver">router() : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>App Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app_functions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="app-functions">
+<h1>App Functions<a class="headerlink" href="#app-functions" title="Permalink to this headline">¶</a></h1>
+<p>These are the functions you can be able to use that are made accessible through the <code class="code docutils literal notranslate"><span class="pre">AppServer</span></code> instance.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
+
+<span class="n">let</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.Date&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">DateFormat</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.text.SimpleDateFormat&#39;</span><span class="p">);</span>
+
+<span class="n">function</span> <span class="n">now</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">new</span> <span class="n">DateFormat</span><span class="p">(</span><span class="s2">&quot;hh:mm:ss a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="o">//</span><span class="n">create</span> <span class="n">AppServer</span> <span class="n">instance</span>
+<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s2">&quot;/app&quot;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="s2">&quot;freemarker&quot;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<div class="section" id="status-string">
+<h2>status() : String<a class="headerlink" href="#status-string" title="Permalink to this headline">¶</a></h2>
+<p>Return a value hinting at the health of the application:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot; @ &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">now</span><span class="p">());</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="appctx-path-string-void">
+<h2>appctx(path: String) : void<a class="headerlink" href="#appctx-path-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Add a key-value property in the <em>locals</em> object.</p>
+</div>
+<div class="section" id="assets-path-string-void">
+<h2>assets(path: String) : void<a class="headerlink" href="#assets-path-string-void" title="Permalink to this headline">¶</a></h2>
+<p>Set the application’s context through which requests can be routed</p>
+</div>
+<div class="section" id="engine-string-view-void">
+<h2>engine(String view) : void<a class="headerlink" href="#engine-string-view-void" title="Permalink to this headline">¶</a></h2>
+<p>Set the application’s view rendring engine - valid values are currently either <em>freemarker</em> or <em>jtwig</em>.</p>
+</div>
+<div class="section" id="resolve-path-string-string">
+<h2>resolve(path: String) : String<a class="headerlink" href="#resolve-path-string-string" title="Permalink to this headline">¶</a></h2>
+<p>Sanitizes the path value relative the <code class="code docutils literal notranslate"><span class="pre">appctx</span></code> to eliminate ambiguity when searching for files.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">));</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="locals-set-string">
+<h2>locals() : Set&lt;String&gt;<a class="headerlink" href="#locals-set-string" title="Permalink to this headline">¶</a></h2>
+<p>Return the keys contained in the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object</p>
+</div>
+<div class="section" id="locals-param-string-object">
+<h2>locals(param: String) : Object<a class="headerlink" href="#locals-param-string-object" title="Permalink to this headline">¶</a></h2>
+<p>Return a value from the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object using the given key</p>
+</div>
+<div class="section" id="router-appserver">
+<h2>router() : AppServer<a class="headerlink" href="#router-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Create the <code class="code docutils literal notranslate"><span class="pre">AppRoutes</span></code> object object and return the current instance on <code class="code docutils literal notranslate"><span class="pre">AppServer</span></code>.</p>
+</div>
+<div class="section" id="filter-filter-handlerfilter-appserver">
+<h2>filter(filter: HandlerFilter) : AppServer<a class="headerlink" href="#filter-filter-handlerfilter-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Apply a filter at the front of the request processing pipeline where the outcome would allow the request to proceed or send a response instead.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="handler_response.html" class="btn btn-neutral" title="HandlerResponse Object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
