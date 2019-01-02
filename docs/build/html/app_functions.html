@@ -83,6 +83,9 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
@@ -96,6 +99,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#locals-param-string-object">locals(param: String) : Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#router-appserver">router() : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#filter-context-string-filter-handlerfilter-appserver">filter(context: String, filter: HandlerFilter) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#route-method-string-path-string-handler-handlerservlet-appserver">route(method: String, path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#head-path-string-handler-handlerservlet-appserver">head(path: String, handler: HandlerServlet) : AppServer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -224,7 +231,36 @@
 </div>
 <div class="section" id="filter-filter-handlerfilter-appserver">
 <h2>filter(filter: HandlerFilter) : AppServer<a class="headerlink" href="#filter-filter-handlerfilter-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Apply a filter at the front of the request processing pipeline where the outcome would allow the request to proceed or send a response instead.</p>
+<p>Apply a filter at the front of the request processing pipeline where the outcome would allow the request to proceed or send a response instead.
+This filter is applied to all incoming requests</p>
+</div>
+<div class="section" id="filter-context-string-filter-handlerfilter-appserver">
+<h2>filter(context: String, filter: HandlerFilter) : AppServer<a class="headerlink" href="#filter-context-string-filter-handlerfilter-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Similar to <code class="code docutils literal notranslate"><span class="pre">filter(filter:</span> <span class="pre">HandlerFilter)</span></code> but this filter is only applied for requests on the specified context</p>
+</div>
+<div class="section" id="route-method-string-path-string-handler-handlerservlet-appserver">
+<h2>route(method: String, path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Add a route to handle request that match the specified <em>path</em> and <em>method</em>. This API is targeted for <em>Java</em> users.</p>
+</div>
+<div class="section" id="route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+<h2>route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Similar to the <code class="code docutils literal notranslate"><span class="pre">route(method:</span> <span class="pre">String,</span> <span class="pre">path:</span> <span class="pre">String,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>. However, this function allows you to
+dynamically configure the servlet before it is added to the server. This is done through the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> interface.
+A <em>Java</em> example is shown below.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/async/</span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">holder</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">holder</span><span class="o">.</span><span class="n">getRegistration</span><span class="p">()</span><span class="o">.</span><span class="n">setAsyncSupported</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="n">new</span> <span class="n">HandlerServlet</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nd">@Override</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">handle</span><span class="p">(</span><span class="n">HandlerRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">HandlerResponse</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">//</span><span class="n">code</span> <span class="n">goes</span> <span class="n">here</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>In this example, we configure the handler to use servlet 3.0’s <code class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code> object to process the request by setting
+<code class="code docutils literal notranslate"><span class="pre">setAsyncSupported</span></code> to <em>true</em>. This is how we leverage the <code class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code> becasue the default value is <em>false</em>.</p>
+</div>
+<div class="section" id="head-path-string-handler-handlerservlet-appserver">
+<h2>head(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#head-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Configure a route to handle <em>head</em> requests on the <em>path</em> url.</p>
 </div>
 </div>
 

@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="AppRoutes Object" href="app_routes.html" /> 
+    <link rel="next" title="AppServer Object" href="app_server.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -82,6 +82,9 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
@@ -157,83 +160,18 @@
 <p>Zesty is a creative JavaScript wrapper around the Jetty web server. It works out-of-the-box with the servlet 3.0 API which enables handling requests in asynchronous fashion.
 Note that the servlet 3.1 API on the other hand, introduces new interfaces to handle asynchronous socket I/O for which there isn’t an idiomatic way to handle generically
 in zesty yet. However, using either Javascript or Java with zesty is handled using a uniform and easy to understand API.</p>
-<div class="section" id="the-appserver-object">
-<h2>The AppServer Object<a class="headerlink" href="#the-appserver-object" title="Permalink to this headline">¶</a></h2>
-<p>The is one of the core components in the zesty framework. It holds references to objects that play a central role in how everthing else is held together.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">AppServer</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">this</span><span class="p">(</span><span class="n">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">());</span>
-<span class="p">}</span>
-
-<span class="n">public</span> <span class="n">AppServer</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">assets</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;www&quot;</span><span class="p">));</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">appctx</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;appctx&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">));</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">engine</span><span class="p">(</span><span class="n">Optional</span><span class="o">.</span><span class="n">ofNullable</span><span class="p">(</span><span class="n">props</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;engine&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="s2">&quot;jtwig&quot;</span><span class="p">));</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">threadPoolExecutor</span> <span class="o">=</span> <span class="n">createThreadPoolExecutor</span><span class="p">();</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="section" id="locals-properties">
-<h3>locals: Properties;<a class="headerlink" href="#locals-properties" title="Permalink to this headline">¶</a></h3>
-<p>This holds configuration attributes that can be passed to the application and that are used by other components internally to configure their own behavior.</p>
-</div>
-<div class="section" id="threadpoolexecutor-threadpoolexecutor">
-<h3>threadPoolExecutor: ThreadPoolExecutor;<a class="headerlink" href="#threadpoolexecutor-threadpoolexecutor" title="Permalink to this headline">¶</a></h3>
-<p>This is a thread-pool that is seperate from the server’s own thread pool. This is only used to handle requests for servlet marked as ‘<em>supports async</em>’.
-This thread pool is configurable using 3 parameters which are passed through the <strong>locals</strong> objects. These properties are:</p>
-<blockquote>
-<div><ul class="simple">
-<li><em>poolSize</em> - the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set</li>
-<li><em>maxPoolSize</em> - he maximum number of threads to allow in the pool</li>
-<li><em>keepAliveTime</em> - when the number of threads is greater than the core, this is the maximum time (in MILLISECONDS) that excess idle threads will wait for new tasks before terminating.</li>
-</ul>
-</div></blockquote>
-</div>
-<div class="section" id="wpcontext-map-string-string">
-<h3>wpcontext: Map&lt;String, String&gt;;<a class="headerlink" href="#wpcontext-map-string-string" title="Permalink to this headline">¶</a></h3>
-<p>If configuring the application for <strong>wordpress</strong>, this will hold the configuration parameters required.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="o">*************</span> <span class="n">WORDPRESS</span> <span class="o">*****************//</span>
-<span class="n">public</span> <span class="n">AppServer</span> <span class="n">wordpress</span><span class="p">(</span><span class="n">String</span> <span class="n">home</span><span class="p">,</span> <span class="n">String</span> <span class="n">fcgi_proxy</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;activate&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;resource_base&quot;</span><span class="p">,</span> <span class="n">home</span><span class="p">);</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;welcome_file&quot;</span><span class="p">,</span> <span class="s2">&quot;index.php&quot;</span><span class="p">);</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;fcgi_proxy&quot;</span><span class="p">,</span> <span class="n">fcgi_proxy</span><span class="p">);</span>
-    <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;script_root&quot;</span><span class="p">,</span> <span class="n">home</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">this</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="servlets-servletcontexthandler">
-<h3>servlets: ServletContextHandler;<a class="headerlink" href="#servlets-servletcontexthandler" title="Permalink to this headline">¶</a></h3>
-<p>This is the servlet handlers’ container for the application. All configured routes are added to this handler under one context.</p>
-</div>
-<div class="section" id="engine-viewengine">
-<h3>engine: ViewEngine;<a class="headerlink" href="#engine-viewengine" title="Permalink to this headline">¶</a></h3>
-<p>This is an interface for exposing the active <strong>view</strong> component for the application. The other configurations which can be passed through
-the <strong>local</strong> objects are:</p>
-<blockquote>
-<div><ul class="simple">
-<li>assets - this points to the static resources folder</li>
-<li>appctx - the base request path through which incoming requests will be handled</li>
-<li>engine - the concrete view implementation to be used by the application. This could be either be <em>freemarker</em>, <em>jtwig</em> or <em>string</em>.</li>
-</ul>
-</div></blockquote>
-</div>
-</div>
-<div class="section" id="appprovider-object">
-<h2>AppProvider Object<a class="headerlink" href="#appprovider-object" title="Permalink to this headline">¶</a></h2>
-<p>This is a provider for the <strong>AppServer</strong> object which is comes in handy when working with Javascript.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">AppProvider</span> <span class="p">{</span>
-
-    <span class="n">public</span> <span class="n">static</span> <span class="n">AppServer</span> <span class="n">provide</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">new</span> <span class="n">AppServer</span><span class="p">(</span><span class="n">props</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>You can alternatively just simply instantiate the <strong>AppServer</strong> manually.</p>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#locals-properties">locals: Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#threadpoolexecutor-threadpoolexecutor">threadPoolExecutor: ThreadPoolExecutor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#wpcontext-map-string-string">wpcontext: Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#servlets-servletcontexthandler">servlets: ServletContextHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#engine-viewengine">engine: ViewEngine</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#protocol-string">protocol() : String</a></li>
@@ -289,12 +227,15 @@ the <strong>local</strong> objects are:</p>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-param-string-object">locals(param: String) : Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-appserver">router() : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-context-string-filter-handlerfilter-appserver">filter(context: String, filter: HandlerFilter) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-handler-handlerservlet-appserver">route(method: String, path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-handler-handlerservlet-appserver">head(path: String, handler: HandlerServlet) : AppServer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
 </ul>
-</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -314,7 +255,7 @@ the <strong>local</strong> objects are:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="app_routes.html" class="btn btn-neutral float-right" title="AppRoutes Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="app_server.html" class="btn btn-neutral float-right" title="AppServer Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
