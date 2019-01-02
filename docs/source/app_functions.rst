@@ -99,6 +99,158 @@ In this example, we configure the handler to use servlet 3.0's :code:`AsyncConte
 head(path: String, handler: HandlerServlet) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Configure a route to handle *head* requests on the *path* url.
+Configures a route to handle a *head* requests on the *path* url.
 
+head(path: String, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Configures a route to handle a *head* requests on the *path* url. This function is exactly like :code:`head(path, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *head* requests on the *path* url. This function also uses the :code:`HandlerConfig` config object
+to further customize the handler before it is added to the server. With the :code:`config.getRegistration()` object, the handler
+can be further customized with servlet specific properties to adapt to different requirements.
+
+head(path: String, config: HandlerConfig, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *head* requests on the *path* url. This function is exactly like :code:`head(path, config, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+head(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *head* requests on the *path* url, with a *content-type* of header of *type* value and *accept* header of
+*accept* value. This function is exactly like :code:`head(path, config, handler: HandlerServlet)` with the added parameters. All the other
+functions in the :code:`head(...)` family eventually delegate to this function, which add the handler to the server.
+
+trace(path: String, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *trace* requests on the *path* url.
+
+trace(path: String, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *trace* requests on the *path* url. This function is exactly like :code:`trace(path, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *trace* requests on the *path* url. This function also uses the :code:`HandlerConfig` config object
+to further customize the handler before it is added to the server. With the :code:`config.getRegistration()` object, the handler
+can be further customized with servlet specific properties to adapt to different requirements.
+
+trace(path: String, config: HandlerConfig, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *trace* requests on the *path* url. This function is exactly like :code:`trace(path, config, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+trace(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *trace* requests on the *path* url, with a *content-type* of header of *type* value and *accept* header of
+*accept* value. This function is exactly like :code:`trace(path, config, handler: HandlerServlet)` with the added parameters. All the other
+functions in the :code:`trace(...)` family eventually delegate to this function, which add the handler to the server.
+
+options(path: String, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *options* requests on the *path* url.
+
+options(path: String, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *options* requests on the *path* url. This function is exactly like :code:`options(path, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *options* requests on the *path* url. This function also uses the :code:`HandlerConfig` config object
+to further customize the handler before it is added to the server. With the :code:`config.getRegistration()` object, the handler
+can be further customized with servlet specific properties to adapt to different requirements.
+
+options(path: String, config: HandlerConfig, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *options* requests on the *path* url. This function is exactly like :code:`options(path, config, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+options(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *options* requests on the *path* url, with a *content-type* of header of *type* value and *accept* header of
+*accept* value. This function is exactly like :code:`options(path, config, handler: HandlerServlet)` with the added parameters. All the other
+functions in the :code:`options(...)` family eventually delegate to this function, which add the handler to the server.
+
+get(path: String, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *get* requests on the *path* url.
+
+get(path: String, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *get* requests on the *path* url. This function is exactly like :code:`get(path, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *get* requests on the *path* url. This function also uses the :code:`HandlerConfig` config object
+to further customize the handler before it is added to the server. With the :code:`config.getRegistration()` object, the handler
+can be further customized with servlet specific properties to adapt to different requirements.
+
+get(path: String, config: HandlerConfig, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *get* requests on the *path* url. This function is exactly like :code:`get(path, config, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+get(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *get* requests on the *path* url, with a *content-type* of header of *type* value and *accept* header of
+*accept* value. This function is exactly like :code:`get(path, config, handler: HandlerServlet)` with the added parameters. All the other
+functions in the :code:`get(...)` family eventually delegate to this function, which add the handler to the server.
+
+post(path: String, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *post* requests on the *path* url.
+
+post(path: String, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configures a route to handle a *post* requests on the *path* url. This function is exactly like :code:`post(path, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *post* requests on the *path* url. This function also uses the :code:`HandlerConfig` config object
+to further customize the handler before it is added to the server. With the :code:`config.getRegistration()` object, the handler
+can be further customized with servlet specific properties to adapt to different requirements.
+
+post(path: String, config: HandlerConfig, handler: BiFunction<HttpServletRequest, HttpServletResponse, Void>) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *post* requests on the *path* url. This function is exactly like :code:`post(path, config, handler: HandlerServlet)`
+and is more favorable for use with Javascript instead of Java.
+
+post(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Configure a route to handle a *post* requests on the *path* url, with a *content-type* of header of *type* value and *accept* header of
+*accept* value. This function is exactly like :code:`post(path, config, handler: HandlerServlet)` with the added parameters. All the other
+functions in the :code:`post(...)` family eventually delegate to this function, which add the handler to the server.
+
+::
+
+    **Please check again soon. More material coming soon**
