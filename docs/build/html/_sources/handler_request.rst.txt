@@ -40,8 +40,8 @@ param(name: String) : String
 
 Returns a named path parameter extracted from the request uri. This is defined using {curly braces} in the request path mapping.
 
-pathParams() : Map<String, String>
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pathParams() : Map
+^^^^^^^^^^^^^^^^^^^
 
 Returns a map of all named path parameters extracted from the request uri. These are defined using *{curly braces}* in the request path mapping.
 
@@ -70,13 +70,13 @@ body() : byte[]
 
 Return the request body captured if the long capture() was called prior.
 
-body(type: Class<T>) : <T> T 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+body(type: Class) : T 
+^^^^^^^^^^^^^^^^^^^^^^
 
 Used to return the request's body() content as either json or xml depending on the respective Content-Type header in the request.
 
-body(provider: BodyReader<T>) : <T> T
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+body(provider: BodyReader) : T
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Used to return the request's body() content that is transformed using the BodyReader implementation supplied by caller of this method.
 

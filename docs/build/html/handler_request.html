@@ -86,6 +86,8 @@
 <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">HandlerRequest Object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#protocol-string">protocol() : String</a></li>
@@ -95,14 +97,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#path-string">path() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#route-routesearch">route() : RouteSearch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#param-name-string-string">param(name: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pathparams-map-string-string">pathParams() : Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pathparams-map">pathParams() : Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#query-string">query() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#header-name-string-string">header(name: String) : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#error-boolean">error() : boolean</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#message-string">message() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#body-byte">body() : byte[]</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#body-type-class-t-t-t">body(type: Class&lt;T&gt;) : &lt;T&gt; T</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#body-provider-bodyreader-t-t-t">body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body-type-class-t">body(type: Class) : T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#body-provider-bodyreader-t">body(provider: BodyReader) : T</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#capture-long">capture() : long</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#upload-destination-string-long">upload(destination: String) : long</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cookies-cookie">cookies() : Cookie[]</a></li>
@@ -210,8 +212,8 @@ RequestAttrs used to search for the route.</p>
 <h2>param(name: String) : String<a class="headerlink" href="#param-name-string-string" title="Permalink to this headline">¶</a></h2>
 <p>Returns a named path parameter extracted from the request uri. This is defined using {curly braces} in the request path mapping.</p>
 </div>
-<div class="section" id="pathparams-map-string-string">
-<h2>pathParams() : Map&lt;String, String&gt;<a class="headerlink" href="#pathparams-map-string-string" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pathparams-map">
+<h2>pathParams() : Map<a class="headerlink" href="#pathparams-map" title="Permalink to this headline">¶</a></h2>
 <p>Returns a map of all named path parameters extracted from the request uri. These are defined using <em>{curly braces}</em> in the request path mapping.</p>
 </div>
 <div class="section" id="query-string">
@@ -234,12 +236,12 @@ RequestAttrs used to search for the route.</p>
 <h2>body() : byte[]<a class="headerlink" href="#body-byte" title="Permalink to this headline">¶</a></h2>
 <p>Return the request body captured if the long capture() was called prior.</p>
 </div>
-<div class="section" id="body-type-class-t-t-t">
-<h2>body(type: Class&lt;T&gt;) : &lt;T&gt; T<a class="headerlink" href="#body-type-class-t-t-t" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="body-type-class-t">
+<h2>body(type: Class) : T<a class="headerlink" href="#body-type-class-t" title="Permalink to this headline">¶</a></h2>
 <p>Used to return the request’s body() content as either json or xml depending on the respective Content-Type header in the request.</p>
 </div>
-<div class="section" id="body-provider-bodyreader-t-t-t">
-<h2>body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T<a class="headerlink" href="#body-provider-bodyreader-t-t-t" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="body-provider-bodyreader-t">
+<h2>body(provider: BodyReader) : T<a class="headerlink" href="#body-provider-bodyreader-t" title="Permalink to this headline">¶</a></h2>
 <p>Used to return the request’s body() content that is transformed using the BodyReader implementation supplied by caller of this method.</p>
 </div>
 <div class="section" id="capture-long">

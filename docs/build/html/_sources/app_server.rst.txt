@@ -22,17 +22,17 @@ This holds configuration attributes that can be passed to the application and th
 threadPoolExecutor: ThreadPoolExecutor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is a thread-pool that is seperate from the server's own thread pool. This is only used to handle requests for servlet configured as '*supports async*'.
+This is a thread-pool that is separate from the server's own thread pool. This is only used to handle requests for handlers configured as '*supports async*'.
 This thread pool is configurable using 3 parameters which are passed through the **locals** objects. These properties are:
 
     * *poolSize* - the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set
-    * *maxPoolSize* - he maximum number of threads to allow in the pool
+    * *maxPoolSize* - the maximum number of threads to allow in the pool
     * *keepAliveTime* - when the number of threads is greater than the core, this is the maximum time (in MILLISECONDS) that excess idle threads will wait for new tasks before terminating.
 
-wpcontext: Map<String, String>
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+wpcontext: Map
+^^^^^^^^^^^^^^^
 
-If configuring the application for **wordpress**, this will hold the configuration parameters required.::
+If configuring the application for :code:`wordpress`, this will hold the configuration parameters required.::
 
     // ************* WORDPRESS *****************//
     public AppServer wordpress(String home, String fcgi_proxy) {
@@ -47,17 +47,13 @@ If configuring the application for **wordpress**, this will hold the configurati
 servlets: ServletContextHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is the servlet handlers' container for the application. All configured routes are added to this handler under one context.
+This is the servlet handlers' container for the application. All configured routes are added to this handler under one context path.
 
 engine: ViewEngine
 ^^^^^^^^^^^^^^^^^^^
 
-This is an interface for exposing the active **view** component for the application. The other configurations which can be passed through 
-the **local** objects are:
-
-    * assets - this points to the static resources folder
-    * appctx - the base request path through which incoming requests will be handled
-    * engine - the concrete view implementation to be used by the application. This could be either be *freemarker*, *jtwig* or *string*.
+This is an interface for exposing the active **view** component to the application. The value it holds specifies the concrete view 
+implementation to be used by the application. This could be either be *freemarker*, *jtwig* at the moment.
 
 AppProvider Object
 ===================
@@ -74,7 +70,7 @@ This is a provider for the **AppServer** object which is comes in handy when wor
 You can alternatively just simply instantiate the **AppServer** manually.
 
 HandlerConfig Object
-========================
+=====================
 
 This interface allows you to dynamically customize the request handler (the underlying object is a :code:`HttpServletRequest`) with the help of 
 :code:`ServletRegistration.Dynamic` to suit specific requirements.::
@@ -91,4 +87,25 @@ Through the :code:`holder.getRegistration()` object, you will have access to ser
     * Set<String> addMapping(String... urlPatterns)
     * setAsyncSupported(boolean supported)
 
-amongst others.
+among others.
+
+BodyWriter Object
+==================
+
+This interface allows you to take over the response generation responsibility and the output is sent back to the client as the response body. ::
+
+    public interface BodyWriter<T> {
+        
+        byte[] transform(T object);
+    }
+
+BodyReader Object
+==================
+
+This interface allows you to take over the request body processing responsibility and the output is used by the application to process the request. ::
+    
+    public interface BodyReader<T> {
+        
+        T transform(String type, byte[] bytes);
+    }
+

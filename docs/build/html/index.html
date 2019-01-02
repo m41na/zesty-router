@@ -85,6 +85,8 @@
 <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
@@ -165,13 +167,15 @@ in zesty yet. However, using either Javascript or Java with zesty is handled usi
 <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="app_server.html#locals-properties">locals: Properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_server.html#threadpoolexecutor-threadpoolexecutor">threadPoolExecutor: ThreadPoolExecutor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#wpcontext-map-string-string">wpcontext: Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_server.html#wpcontext-map">wpcontext: Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_server.html#servlets-servletcontexthandler">servlets: ServletContextHandler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_server.html#engine-viewengine">engine: ViewEngine</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#protocol-string">protocol() : String</a></li>
@@ -181,14 +185,14 @@ in zesty yet. However, using either Javascript or Java with zesty is handled usi
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#path-string">path() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#route-routesearch">route() : RouteSearch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#param-name-string-string">param(name: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#pathparams-map-string-string">pathParams() : Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#pathparams-map">pathParams() : Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#query-string">query() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#header-name-string-string">header(name: String) : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#error-boolean">error() : boolean</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#message-string">message() : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-byte">body() : byte[]</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-type-class-t-t-t">body(type: Class&lt;T&gt;) : &lt;T&gt; T</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-provider-bodyreader-t-t-t">body(provider: BodyReader&lt;T&gt;) : &lt;T&gt; T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-type-class-t">body(type: Class) : T</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-provider-bodyreader-t">body(provider: BodyReader) : T</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#capture-long">capture() : long</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#upload-destination-string-long">upload(destination: String) : long</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_request.html#cookies-cookie">cookies() : Cookie[]</a></li>
@@ -204,9 +208,9 @@ in zesty yet. However, using either Javascript or Java with zesty is handled usi
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#end-payload-string-void">end(payload: String) : void</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#json-payload-object-void">json(payload: Object) : void</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#jsonp-payload-object-void">jsonp(payload: Object) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#xml-payload-object-template-class-t-void">xml(payload: Object, template: Class&lt;T&gt;) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#content-payload-t-writer-bodywriter-t-void">content(payload: &lt;T&gt;, writer: BodyWriter&lt;T&gt;) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#render-template-string-model-map-string-object-void">render(template: String, model: Map&lt;String, Object&gt;) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#xml-payload-object-template-class-void">xml(payload: Object, template: Class) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#content-payload-t-writer-bodywriter-void">content(payload: T, writer: BodyWriter) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handler_response.html#render-template-string-model-map-void">render(template: String, model: Map) : void</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#next-path-string-void">next(path: String) : void</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-path-string-void">redirect(path: String) : void</a></li>
 <li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-status-int-path-string-void">redirect(status: int, path: String) : void</a></li>
@@ -226,11 +230,56 @@ in zesty yet. However, using either Javascript or Java with zesty is handled usi
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-set-string">locals() : Set&lt;String&gt;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-param-string-object">locals(param: String) : Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-appserver">router() : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-supplier-supplier-appserver">router(supplier: Supplier) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-context-string-filter-handlerfilter-appserver">filter(context: String, filter: HandlerFilter) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-handler-handlerservlet-appserver">route(method: String, path: String, handler: HandlerServlet) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-handler-handlerservlet-appserver">head(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-handler-bifunction-appserver">head(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-config-handlerconfig-handler-bifunction-appserver">head(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-handler-handlerservlet-appserver">trace(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-handler-bifunction-appserver">trace(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-config-handlerconfig-handler-bifunction-appserver">trace(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-handler-handlerservlet-appserver">options(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-handler-bifunction-appserver">options(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-config-handlerconfig-handler-bifunction-appserver">options(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-handler-handlerservlet-appserver">get(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-handler-bifunction-appserver">get(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-config-handlerconfig-handler-bifunction-appserver">get(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-handler-handlerservlet-appserver">post(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-handler-bifunction-appserver">post(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-config-handlerconfig-handler-bifunction-appserver">post(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-handler-handlerservlet-appserver">put(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-handler-bifunction-appserver">put(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-config-handlerconfig-handler-bifunction-appserver">put(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-handler-handlerservlet-appserver">delete(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-handler-bifunction-appserver">delete(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-config-handlerconfig-handler-bifunction-appserver">delete(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-handler-handlerservlet-appserver">all(path: String, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-handler-bifunction-appserver">all(path: String, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-config-handlerconfig-handler-bifunction-appserver">all(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#websocket-ctx-string-provider-appwsprovider-appserver">websocket(ctx: String, provider: AppWsProvider) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#wordpress-home-string-fcgi-proxy-string-appserver">wordpress(home: String, fcgi_proxy: String) : AppServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#listen-port-int-host-string-void">listen(port: int, host: String) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#listen-port-int-host-string-result-consumer-void">listen(port: int, host: String, result: Consumer) : void</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app_functions.html#lifecycle-event-string-callback-consumer-appserver">lifecycle(event: String, callback: Consumer) : AppServer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>

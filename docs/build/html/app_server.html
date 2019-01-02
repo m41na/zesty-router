@@ -86,13 +86,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">AppServer Object</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#locals-properties">locals: Properties</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#threadpoolexecutor-threadpoolexecutor">threadPoolExecutor: ThreadPoolExecutor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#wpcontext-map-string-string">wpcontext: Map&lt;String, String&gt;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wpcontext-map">wpcontext: Map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#servlets-servletcontexthandler">servlets: ServletContextHandler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#engine-viewengine">engine: ViewEngine</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#appprovider-object">AppProvider Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#bodyreader-object">BodyReader Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
@@ -184,19 +186,19 @@
 </div>
 <div class="section" id="threadpoolexecutor-threadpoolexecutor">
 <h2>threadPoolExecutor: ThreadPoolExecutor<a class="headerlink" href="#threadpoolexecutor-threadpoolexecutor" title="Permalink to this headline">¶</a></h2>
-<p>This is a thread-pool that is seperate from the server’s own thread pool. This is only used to handle requests for servlet configured as ‘<em>supports async</em>’.
+<p>This is a thread-pool that is separate from the server’s own thread pool. This is only used to handle requests for handlers configured as ‘<em>supports async</em>’.
 This thread pool is configurable using 3 parameters which are passed through the <strong>locals</strong> objects. These properties are:</p>
 <blockquote>
 <div><ul class="simple">
 <li><em>poolSize</em> - the number of threads to keep in the pool, even if they are idle, unless allowCoreThreadTimeOut is set</li>
-<li><em>maxPoolSize</em> - he maximum number of threads to allow in the pool</li>
+<li><em>maxPoolSize</em> - the maximum number of threads to allow in the pool</li>
 <li><em>keepAliveTime</em> - when the number of threads is greater than the core, this is the maximum time (in MILLISECONDS) that excess idle threads will wait for new tasks before terminating.</li>
 </ul>
 </div></blockquote>
 </div>
-<div class="section" id="wpcontext-map-string-string">
-<h2>wpcontext: Map&lt;String, String&gt;<a class="headerlink" href="#wpcontext-map-string-string" title="Permalink to this headline">¶</a></h2>
-<p>If configuring the application for <strong>wordpress</strong>, this will hold the configuration parameters required.:</p>
+<div class="section" id="wpcontext-map">
+<h2>wpcontext: Map<a class="headerlink" href="#wpcontext-map" title="Permalink to this headline">¶</a></h2>
+<p>If configuring the application for <code class="code docutils literal notranslate"><span class="pre">wordpress</span></code>, this will hold the configuration parameters required.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="o">*************</span> <span class="n">WORDPRESS</span> <span class="o">*****************//</span>
 <span class="n">public</span> <span class="n">AppServer</span> <span class="n">wordpress</span><span class="p">(</span><span class="n">String</span> <span class="n">home</span><span class="p">,</span> <span class="n">String</span> <span class="n">fcgi_proxy</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">this</span><span class="o">.</span><span class="n">wpcontext</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;activate&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">);</span>
@@ -211,19 +213,12 @@ This thread pool is configurable using 3 parameters which are passed through the
 </div>
 <div class="section" id="servlets-servletcontexthandler">
 <h2>servlets: ServletContextHandler<a class="headerlink" href="#servlets-servletcontexthandler" title="Permalink to this headline">¶</a></h2>
-<p>This is the servlet handlers’ container for the application. All configured routes are added to this handler under one context.</p>
+<p>This is the servlet handlers’ container for the application. All configured routes are added to this handler under one context path.</p>
 </div>
 <div class="section" id="engine-viewengine">
 <h2>engine: ViewEngine<a class="headerlink" href="#engine-viewengine" title="Permalink to this headline">¶</a></h2>
-<p>This is an interface for exposing the active <strong>view</strong> component for the application. The other configurations which can be passed through
-the <strong>local</strong> objects are:</p>
-<blockquote>
-<div><ul class="simple">
-<li>assets - this points to the static resources folder</li>
-<li>appctx - the base request path through which incoming requests will be handled</li>
-<li>engine - the concrete view implementation to be used by the application. This could be either be <em>freemarker</em>, <em>jtwig</em> or <em>string</em>.</li>
-</ul>
-</div></blockquote>
+<p>This is an interface for exposing the active <strong>view</strong> component to the application. The value it holds specifies the concrete view
+implementation to be used by the application. This could be either be <em>freemarker</em>, <em>jtwig</em> at the moment.</p>
 </div>
 </div>
 <div class="section" id="appprovider-object">
@@ -258,7 +253,27 @@ the <strong>local</strong> objects are:</p>
 <li>setAsyncSupported(boolean supported)</li>
 </ul>
 </div></blockquote>
-<p>amongst others.</p>
+<p>among others.</p>
+</div>
+<div class="section" id="bodywriter-object">
+<h1>BodyWriter Object<a class="headerlink" href="#bodywriter-object" title="Permalink to this headline">¶</a></h1>
+<p>This interface allows you to take over the response generation responsibility and the output is sent back to the client as the response body.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">interface</span> <span class="n">BodyWriter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+
+    <span class="n">byte</span><span class="p">[]</span> <span class="n">transform</span><span class="p">(</span><span class="n">T</span> <span class="nb">object</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bodyreader-object">
+<h1>BodyReader Object<a class="headerlink" href="#bodyreader-object" title="Permalink to this headline">¶</a></h1>
+<p>This interface allows you to take over the request body processing responsibility and the output is used by the application to process the request.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="n">interface</span> <span class="n">BodyReader</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+
+    <span class="n">T</span> <span class="n">transform</span><span class="p">(</span><span class="n">String</span> <span class="nb">type</span><span class="p">,</span> <span class="n">byte</span><span class="p">[]</span> <span class="nb">bytes</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div>
 
 

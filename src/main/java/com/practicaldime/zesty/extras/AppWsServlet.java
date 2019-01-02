@@ -5,7 +5,8 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 public class AppWsServlet extends WebSocketServlet{
 
-    private final AppWsProvider provider;
+	private static final long serialVersionUID = 1L;
+	private final AppWsProvider provider;
 
     public AppWsServlet(AppWsProvider provider) {
         this.provider = provider;

@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.management.remote.JMXServiceURL;
 import javax.servlet.DispatcherType;
@@ -40,7 +41,6 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
-import org.graalvm.polyglot.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +49,7 @@ import com.practicaldime.zesty.extras.AppWsProvider;
 import com.practicaldime.zesty.extras.AppWsServlet;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
+import com.practicaldime.zesty.router.Router;
 import com.practicaldime.zesty.servlet.HandlerConfig;
 import com.practicaldime.zesty.servlet.HandlerFilter;
 import com.practicaldime.zesty.servlet.HandlerRequest;
@@ -143,13 +144,18 @@ public class AppServer {
 		return locals.get(param);
 	}
 
-	public AppServer lifecycle(String event, Value callback) {
+	public AppServer lifecycle(String event, Consumer<String> callback) {
 		this.lifecycle.subscribe(event, callback);
 		return this;
 	}
 
 	public AppServer router() {
 		this.routes = new AppRoutes(new MethodRouter());
+		return this;
+	}
+	
+	public AppServer router(Supplier<Router> supplier) {
+		this.routes = new AppRoutes(supplier.get());
 		return this;
 	}
 
@@ -733,13 +739,14 @@ public class AppServer {
 
 	class LifecycleSubscriber {
 
-		private final Map<String, Value> subscribers;
+		private final Map<String, Consumer<String>> subscribers;
+		private String[] stages = {"starting", "started", "stopping", "stopped", "failed"};
 
 		public LifecycleSubscriber() {
 			this.subscribers = new HashMap<>();
 		}
 
-		public void subscribe(String event, Value callback) {
+		public void subscribe(String event, Consumer<String> callback) {
 			if (subscribers.keySet().contains(event)) {
 				this.subscribers.put(event, callback);
 			} else {
@@ -748,23 +755,23 @@ public class AppServer {
 		}
 
 		public void onStarting() {
-			subscribers.get("starting").execute(this);
+			subscribers.get("starting").accept(stages[0]);
 		}
 
 		public void onStarted() {
-			subscribers.get("started").execute(this);
+			subscribers.get("started").accept(stages[1]);
 		}
 
 		public void onStopping() {
-			subscribers.get("stopping").execute(this);
+			subscribers.get("stopping").accept(stages[2]);
 		}
 
 		public void onStopped() {
-			subscribers.get("stopped").execute(this);
+			subscribers.get("stopped").accept(stages[3]);
 		}
 
 		public void onFailed(Throwable thr) {
-			subscribers.get("started").execute(this, thr);
+			subscribers.get("failed").accept(stages[4]);
 		}
 	}
 }

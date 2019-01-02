@@ -54,19 +54,19 @@ jsonp(payload: Object) : void
 
 Sends the payload in UTF-8 format and content-type as *application/json* as the response body
 
-xml(payload: Object, template: Class<T>) : void
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+xml(payload: Object, template: Class) : void
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sends the payload in UTF-8 format and content-type as *application/json* as the response body. 
 The template variable is used to determine the structure of the xml payload
 
-content(payload: <T>, writer: BodyWriter<T>) : void
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+content(payload: T, writer: BodyWriter) : void
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Sends the payload transformed by the writer object as the response body. The writer object is supplied by the caller of this method
 
-render(template: String, model: Map<String, Object>) : void
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+render(template: String, model: Map) : void
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Delegate the task of writing the response to the configured template engine. The engine will locate and load the template and merge it 
 with the model object to create the response body
