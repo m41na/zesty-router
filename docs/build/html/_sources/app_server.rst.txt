@@ -109,3 +109,19 @@ This interface allows you to take over the request body processing responsibilit
         T transform(String type, byte[] bytes);
     }
 
+Configure Logging
+==================
+
+To configure logging, let's revisit how logback initialize itself.
+
+    * Logback tries to find a file called logback-test.xml in the classpath.
+    * If no such file is found, logback tries to find a file called logback.groovy in the classpath.
+    * If no such file is found, it checks for the file logback.xml in the classpath..
+    * If no such file is found, service-provider loading facility (introduced in JDK 1.6) is used to resolve the implementation of com.qos.logback.classic.spi.Configurator interface by looking up the file META-INF\services\ch.qos.logback.classic.spi.Configurator in the class path. Its contents should specify the fully qualified class name of the desired Configurator implementation.
+    * If none of the above succeeds, logback configures itself automatically using the BasicConfigurator which will cause logging output to be directed to the console.
+
+For the javascript application, we need another way to override this process in order to control logging. Fortunately, logback will allow us to configure a system property path which will preempt
+the initialization process above. :code:`java -Dlogback.configurationFile=/path/to/config.xml`. To configure this for javascript, use the syntax below::
+
+    jjs --language=es6 -ot -scripting -J-Dlogback.configurationFile=../../src/main/resources/app-logback.xml -J-Djava.class.path=../../target/zesty-router-0.1.0-shaded.jar index.js
+

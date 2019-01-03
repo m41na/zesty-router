@@ -1,0 +1,15 @@
+Initialization steps that logback follows to try to configure itself:
+
+1. Logback tries to find a file called logback-test.xml in the classpath.
+
+2. If no such file is found, logback tries to find a file called logback.groovy in the classpath.
+
+3. If no such file is found, it checks for the file logback.xml in the classpath..
+
+4. If no such file is found, service-provider loading facility (introduced in JDK 1.6) is used to resolve the implementation of com.qos.logback.classic.spi.Configurator interface by looking up the file META-INF\services\ch.qos.logback.classic.spi.Configurator in the class path. Its contents should specify the fully qualified class name of the desired Configurator implementation.
+
+5. If none of the above succeeds, logback configures itself automatically using the BasicConfigurator which will cause logging output to be directed to the console.
+
+or to skip the lookup, configure a system property path
+
+jjs --language=es6 -ot -scripting -J-Dlogback.configurationFile=../../src/main/resources/app-logback.xml -J-Djava.class.path=../../target/zesty-router-0.1.0-shaded.jar index.js

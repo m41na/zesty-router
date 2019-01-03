@@ -381,7 +381,3 @@ Add a lifecycle listener which gets invoked when the corresponding lifecycle eve
     * stopping  - happens when the server begins to shut down
     * stopped   - happens when the server has stopped running
     * failed    - happens when the server is unable to start successfully
-
-::
-
-    **Please check again soon. More material coming soon**

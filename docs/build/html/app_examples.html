@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>App Examples &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="App Functions" href="app_functions.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">App Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world-app">Hello World App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-rest-app">Simple REST App</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>App Examples</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app_examples.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="app-examples">
+<h1>App Examples<a class="headerlink" href="#app-examples" title="Permalink to this headline">¶</a></h1>
+<p>A few examples are included here to highlight usage scenarios. The syntax used will be JavaScript although the same the Java
+implementation would almost literary be the same.</p>
+<div class="section" id="hello-world-app">
+<h2>Hello World App<a class="headerlink" href="#hello-world-app" title="Permalink to this headline">¶</a></h2>
+<p>This is just a simple application which responds with the current time when the root context is accessed.</p>
+<ul>
+<li><p class="first">Create a new project directory and add a <code class="code docutils literal notranslate"><span class="pre">lib</span></code> folder to it as well.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">my</span><span class="o">-</span><span class="n">app</span><span class="o">/</span><span class="n">lib</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Download the <code class="code docutils literal notranslate"><span class="pre">zesty-router[version].jar</span></code> and place it in the <em>lib</em> folder.</p>
+</li>
+<li><p class="first"><em>cd</em> into <em>my-app</em> folder and create a new file, <code class="code docutils literal notranslate"><span class="pre">index.js</span></code>.</p>
+</li>
+<li><p class="first">In the <code class="code docutils literal notranslate"><span class="pre">index.js</span></code> file, import the <code class="code docutils literal notranslate"><span class="pre">AppProvider</span></code> class.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Initialize the application using some initial configuration.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({});</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;zesty app is configured&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create a router to add handlers.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">router</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="p">();</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add a function to fetch the current time. For a little bit or fun, let’s also format the time.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.Date&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">DateFormat</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.text.SimpleDateFormat&#39;</span><span class="p">);</span>
+
+<span class="n">function</span> <span class="n">now</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">new</span> <span class="n">DateFormat</span><span class="p">(</span><span class="s2">&quot;hh:mm:ss a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Add a route to handle the root context.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot; @ &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">now</span><span class="p">()));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Configure the host and port to listen for requests.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">router</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">result</span><span class="p">){</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Start the application and start serving time.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jjs</span> <span class="o">--</span><span class="n">language</span><span class="o">=</span><span class="n">es6</span> <span class="o">-</span><span class="n">ot</span> <span class="o">-</span><span class="n">scripting</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">path</span><span class="o">=./</span><span class="n">lib</span><span class="o">/</span><span class="n">zesty</span><span class="o">-</span><span class="n">router</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">shaded</span><span class="o">.</span><span class="n">jar</span> <span class="n">index</span><span class="o">.</span><span class="n">js</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="simple-rest-app">
+<h2>Simple REST App<a class="headerlink" href="#simple-rest-app" title="Permalink to this headline">¶</a></h2>
+<p>Let’s begin with creating a simple database access class.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">AtomicInteger</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.concurrent.atomic.AtomicInteger&#39;</span><span class="p">);</span>
+
+<span class="n">function</span> <span class="n">UserDao</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;alice@alice.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;bob@bob.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Carol&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;carol@carol.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+        <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Dave&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;dave@dave.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">()</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">findById</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+    <span class="p">}</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">findByEmail</span> <span class="o">=</span> <span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Object</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">it</span> <span class="o">=&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span> <span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">this</span><span class="o">.</span><span class="n">delete</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="n">delete</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Next, let’s create the API service.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">dao</span> <span class="o">=</span> <span class="n">new</span> <span class="n">UserDao</span><span class="p">();</span>
+
+<span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s1">&#39;/users&#39;</span>
+<span class="p">});</span>
+
+<span class="n">let</span> <span class="n">router</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="p">();</span>
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">users</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">)))</span>
+<span class="p">});</span>
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/email/</span><span class="si">{email}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">));</span>
+<span class="p">});</span>
+<span class="n">router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/update/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">let</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">router</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">result</span><span class="p">){</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Please</span> <span class="n">check</span> <span class="n">again</span> <span class="n">soon</span><span class="o">.</span> <span class="n">The</span> <span class="n">material</span> <span class="ow">is</span> <span class="n">continually</span> <span class="n">getting</span> <span class="n">updated</span><span class="o">**</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="app_functions.html" class="btn btn-neutral" title="App Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
