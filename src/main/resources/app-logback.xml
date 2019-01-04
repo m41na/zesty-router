@@ -11,7 +11,7 @@
 	</appender>
 
 	<logger name="com.practicaldime.zesty" level="DEBUG" />
-	<logger name="org.eclipse.jetty" level="DEBUG" />
+	<logger name="org.eclipse.jetty" level="ERROR" />
 
 	<root level="debug">
 		<appender-ref ref="STDOUT" />

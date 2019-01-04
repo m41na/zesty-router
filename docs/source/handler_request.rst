@@ -38,12 +38,14 @@ RequestAttrs used to search for the route.
 param(name: String) : String
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Returns a named path parameter extracted from the request uri. This is defined using {curly braces} in the request path mapping.
+First searches for a named path parameter extracted from the request uri. This is defined using {curly braces} in the request path mapping. If none if found,
+it falls back to the servlet's :code:`getParameter(name)` method which will return the named parameter if it exists in the request body. If none is found,
+it return s a null value.
 
 pathParams() : Map
 ^^^^^^^^^^^^^^^^^^^
 
-Returns a map of all named path parameters extracted from the request uri. These are defined using *{curly braces}* in the request path mapping.
+Returns a map of all named path parameters extracted from the request uri. These are defined using :code:`{curly braces}` in the request path mapping.
 
 query() : String
 ^^^^^^^^^^^^^^^^^

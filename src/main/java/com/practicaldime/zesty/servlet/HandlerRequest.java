@@ -80,8 +80,13 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 
     @Override
     public String param(String name) {
-        String value = getParameter(name);
-        return (value != null) ? value : pathParams().get(name);
+        String value = pathParams().get(name);
+        return (value != null) ? value : getParameter(name);
+    }
+
+    @Override
+    public Map<String, String> pathParams() {
+        return route.pathParams;
     }
 
     @Override
@@ -221,10 +226,5 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
             }
         }
         return "";
-    }
-
-    @Override
-    public Map<String, String> pathParams() {
-        return route.pathParams;
     }
 }

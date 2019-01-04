@@ -231,16 +231,17 @@ implementation would almost literary be the same.</p>
 </div>
 <div class="section" id="simple-rest-app">
 <h2>Simple REST App<a class="headerlink" href="#simple-rest-app" title="Permalink to this headline">¶</a></h2>
-<p>Let’s begin with creating a simple database access class.:</p>
+<p>Let’s begin with creating a simple database access class. Since <code class="code docutils literal notranslate"><span class="pre">nashorn</span></code> does not use the <code class="code docutils literal notranslate"><span class="pre">class</span></code> keyword,
+we will use the <code class="code docutils literal notranslate"><span class="pre">function</span></code> syntax instead.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">AtomicInteger</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.concurrent.atomic.AtomicInteger&#39;</span><span class="p">);</span>
 
 <span class="n">function</span> <span class="n">UserDao</span><span class="p">()</span> <span class="p">{</span>
 
     <span class="n">this</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;alice@alice.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
-        <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;bob@bob.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-        <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Carol&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;carol@carol.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-        <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Dave&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;dave@dave.kt&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;James&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;james@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Steve&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;steve@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Carol&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;carol@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+        <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Becky&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;becky@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
     <span class="p">}</span>
 
     <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -280,20 +281,24 @@ implementation would almost literary be the same.</p>
 <span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">users</span><span class="p">);</span>
 <span class="p">});</span>
+
 <span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
     <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">)))</span>
 <span class="p">});</span>
+
 <span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/email/</span><span class="si">{email}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
     <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">));</span>
 <span class="p">});</span>
+
 <span class="n">router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
     <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
     <span class="n">dao</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
     <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
 <span class="p">});</span>
+
 <span class="n">router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/update/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
     <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
@@ -301,6 +306,7 @@ implementation would almost literary be the same.</p>
     <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
     <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
 <span class="p">});</span>
+
 <span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
     <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
@@ -311,6 +317,121 @@ implementation would almost literary be the same.</p>
 <span class="n">router</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">result</span><span class="p">){</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
 <span class="p">});</span>
+</pre></div>
+</div>
+<p>Start the application and listen for requests.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jjs</span> <span class="o">--</span><span class="n">language</span><span class="o">=</span><span class="n">es6</span> <span class="o">-</span><span class="n">ot</span> <span class="o">-</span><span class="n">scripting</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Dlogback</span><span class="o">.</span><span class="n">configurationFile</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">logback</span><span class="o">.</span><span class="n">xml</span> \
+<span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">path</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">zesty</span><span class="o">-</span><span class="n">router</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">shaded</span><span class="o">.</span><span class="n">jar</span> <span class="n">simple_rest</span><span class="o">.</span><span class="n">js</span>
+</pre></div>
+</div>
+<p>For comparison, the Java equilavent of <code class="code docutils literal notranslate"><span class="pre">simple_rest.js</span></code> would be.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">public</span> <span class="k">class</span> <span class="nc">SimpleRest</span> <span class="p">{</span>
+
+    <span class="n">static</span> <span class="k">class</span> <span class="nc">User</span> <span class="p">{</span>
+
+        <span class="n">private</span> <span class="nb">int</span> <span class="nb">id</span><span class="p">;</span>
+        <span class="n">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">private</span> <span class="n">String</span> <span class="n">email</span><span class="p">;</span>
+
+        <span class="n">public</span> <span class="n">User</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">,</span> <span class="n">String</span> <span class="n">email</span><span class="p">,</span> <span class="nb">int</span> <span class="nb">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">super</span><span class="p">();</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span><span class="p">;</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">//</span><span class="n">omitted</span> <span class="n">getters</span> <span class="ow">and</span> <span class="n">setters</span>
+    <span class="p">}</span>
+
+    <span class="n">static</span> <span class="k">class</span> <span class="nc">UserDao</span> <span class="p">{</span>
+
+        <span class="n">private</span> <span class="n">AtomicInteger</span> <span class="n">lastId</span><span class="p">;</span>
+        <span class="n">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Integer</span><span class="p">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="n">users</span> <span class="o">=</span> <span class="n">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+        <span class="n">public</span> <span class="n">UserDao</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="s2">&quot;James&quot;</span><span class="p">,</span> <span class="s2">&quot;james@jjs.io&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="s2">&quot;Steve&quot;</span><span class="p">,</span> <span class="s2">&quot;steve@jjs.io&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="s2">&quot;Carol&quot;</span><span class="p">,</span> <span class="s2">&quot;carol@jjs.io&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="s2">&quot;Becky&quot;</span><span class="p">,</span> <span class="s2">&quot;becky@jjs.io&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
+            <span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">users</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">Integer</span><span class="p">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="nb">all</span><span class="p">(){</span>
+            <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">void</span> <span class="n">save</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">,</span> <span class="n">String</span> <span class="n">email</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">int</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">();</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">User</span> <span class="n">findById</span><span class="p">(</span><span class="nb">int</span> <span class="nb">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">User</span> <span class="n">findByEmail</span><span class="p">(</span><span class="n">String</span> <span class="n">email</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">users</span><span class="o">.</span><span class="n">values</span><span class="p">()</span><span class="o">.</span><span class="n">stream</span><span class="p">()</span>
+                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span> <span class="o">-&gt;</span> <span class="n">user</span><span class="o">.</span><span class="n">getEmail</span><span class="p">()</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">email</span><span class="p">))</span>
+                    <span class="o">.</span><span class="n">findFirst</span><span class="p">()</span>
+                    <span class="o">.</span><span class="n">orElse</span><span class="p">(</span><span class="n">null</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">void</span> <span class="n">update</span><span class="p">(</span><span class="nb">int</span> <span class="nb">id</span><span class="p">,</span> <span class="n">String</span> <span class="n">name</span><span class="p">,</span> <span class="n">String</span> <span class="n">email</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">new</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="n">public</span> <span class="n">void</span> <span class="n">delete</span><span class="p">(</span><span class="nb">int</span> <span class="nb">id</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">users</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">id</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">public</span> <span class="n">static</span> <span class="n">void</span> <span class="n">main</span><span class="p">(</span><span class="n">String</span><span class="o">...</span><span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">UserDao</span> <span class="n">dao</span> <span class="o">=</span> <span class="n">new</span> <span class="n">UserDao</span><span class="p">();</span>
+
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">config</span> <span class="o">=</span> <span class="n">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;appctx&quot;</span><span class="p">,</span> <span class="s2">&quot;/users&quot;</span><span class="p">);</span>
+        <span class="n">AppServer</span> <span class="n">app</span> <span class="o">=</span> <span class="n">AppProvider</span><span class="o">.</span><span class="n">provide</span><span class="p">(</span><span class="n">config</span><span class="p">);</span>
+
+        <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">all</span><span class="p">());</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">String</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="n">Integer</span><span class="o">.</span><span class="n">valueOf</span><span class="p">(</span><span class="nb">id</span><span class="p">)));</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/email/</span><span class="si">{email}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">);</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">));</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/create&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
+                <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">);</span>
+                <span class="n">dao</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/update/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">String</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+                <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span>
+                <span class="n">String</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">);</span>
+                <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">Integer</span><span class="o">.</span><span class="n">valueOf</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">204</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/delete/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{</span>
+                <span class="n">String</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">);</span>
+                <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">Integer</span><span class="o">.</span><span class="n">valueOf</span><span class="p">(</span><span class="nb">id</span><span class="p">));</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">205</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">-&gt;</span><span class="p">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+            <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Please</span> <span class="n">check</span> <span class="n">again</span> <span class="n">soon</span><span class="o">.</span> <span class="n">The</span> <span class="n">material</span> <span class="ow">is</span> <span class="n">continually</span> <span class="n">getting</span> <span class="n">updated</span><span class="o">**</span>

@@ -291,9 +291,32 @@ implementation to be used by the application. This could be either be <em>freema
 </div></blockquote>
 <p>For the javascript application, we need another way to override this process in order to control logging. Fortunately, logback will allow us to configure a system property path which will preempt
 the initialization process above. <code class="code docutils literal notranslate"><span class="pre">java</span> <span class="pre">-Dlogback.configurationFile=/path/to/config.xml</span></code>. To configure this for javascript, use the syntax below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jjs</span> <span class="o">--</span><span class="n">language</span><span class="o">=</span><span class="n">es6</span> <span class="o">-</span><span class="n">ot</span> <span class="o">-</span><span class="n">scripting</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Dlogback</span><span class="o">.</span><span class="n">configurationFile</span><span class="o">=../../</span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">logback</span><span class="o">.</span><span class="n">xml</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">path</span><span class="o">=../../</span><span class="n">target</span><span class="o">/</span><span class="n">zesty</span><span class="o">-</span><span class="n">router</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">shaded</span><span class="o">.</span><span class="n">jar</span> <span class="n">index</span><span class="o">.</span><span class="n">js</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jjs</span> <span class="o">--</span><span class="n">language</span><span class="o">=</span><span class="n">es6</span> <span class="o">-</span><span class="n">ot</span> <span class="o">-</span><span class="n">scripting</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Dlogback</span><span class="o">.</span><span class="n">configurationFile</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">logback</span><span class="o">.</span><span class="n">xml</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">path</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">zesty</span><span class="o">-</span><span class="n">router</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">shaded</span><span class="o">.</span><span class="n">jar</span> <span class="n">index</span><span class="o">.</span><span class="n">js</span>
 </pre></div>
 </div>
+<p>The corresponding <code class="code docutils literal notranslate"><span class="pre">app-logback.xml</span></code> file would look something like this.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration debug=&quot;true&quot;&gt;
+
+    &lt;appender name=&quot;STDOUT&quot;
+        class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder
+            class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&gt;
+            &lt;Pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            &lt;/Pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;logger name=&quot;com.practicaldime.zesty&quot; level=&quot;DEBUG&quot; /&gt;
+    &lt;logger name=&quot;org.eclipse.jetty&quot; level=&quot;ERROR&quot; /&gt;
+
+    &lt;root level=&quot;debug&quot;&gt;
+        &lt;appender-ref ref=&quot;STDOUT&quot; /&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;
+</pre></div>
+</div>
+<p>With this setup, you are back in control over the logging process through the configuration file.</p>
 </div>
 
 

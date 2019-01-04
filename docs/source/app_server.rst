@@ -123,5 +123,28 @@ To configure logging, let's revisit how logback initialize itself.
 For the javascript application, we need another way to override this process in order to control logging. Fortunately, logback will allow us to configure a system property path which will preempt
 the initialization process above. :code:`java -Dlogback.configurationFile=/path/to/config.xml`. To configure this for javascript, use the syntax below::
 
-    jjs --language=es6 -ot -scripting -J-Dlogback.configurationFile=../../src/main/resources/app-logback.xml -J-Djava.class.path=../../target/zesty-router-0.1.0-shaded.jar index.js
+    jjs --language=es6 -ot -scripting -J-Dlogback.configurationFile=../lib/app-logback.xml -J-Djava.class.path=../lib/zesty-router-0.1.0-shaded.jar index.js
 
+The corresponding :code:`app-logback.xml` file would look something like this.::
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration debug="true">
+
+        <appender name="STDOUT"
+            class="ch.qos.logback.core.ConsoleAppender">
+            <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+                </Pattern>
+            </encoder>
+        </appender>
+
+        <logger name="com.practicaldime.zesty" level="DEBUG" />
+        <logger name="org.eclipse.jetty" level="ERROR" />
+
+        <root level="debug">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </configuration>
+
+With this setup, you are back in control over the logging process through the configuration file.

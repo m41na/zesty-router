@@ -3,10 +3,10 @@ let AtomicInteger = Java.type('java.util.concurrent.atomic.AtomicInteger');
 function UserDao() {
 
     this.users = {
-        0: {name: "Alice", email: "alice@alice.kt", id: 0},
-        1: {name: "Bob", email: "bob@bob.kt", id: 1},
-        2: {name: "Carol", email: "carol@carol.kt", id: 2},
-        3: {name: "Dave", email: "dave@dave.kt", id: 3}
+        0: {name: "James", email: "james@jjs.io", id: 0},
+        1: {name: "Steve", email: "steve@jjs.io", id: 1},
+        2: {name: "Carol", email: "carol@jjs.io", id: 2},
+        3: {name: "Becky", email: "becky@jjs.io", id: 3}
     }
     
     this.lastId = new AtomicInteger(this.users.size - 1);   
@@ -44,20 +44,24 @@ let router = app.router();
 router.get('/', function (req, res) {
     res.json(dao.users);
 });
+
 router.get('/{id}', function (req, res) {
     let id = req.param('id');
     res.json(dao.findById(parseInt(id)))
 });
+
 router.get('/email/{email}', function (req, res) {
     let email = req.param('email');
     res.json(dao.findByEmail(email));
 });
+
 router.post('/create', function (req, res) {
     let name = req.param('name');
     let email = req.param('email');
     dao.save(name, email);
     res.status(201);
 });
+
 router.put('/update/{id}', function (req, res) {
     let id = req.param('id')
     let name = req.param('name');
@@ -65,6 +69,7 @@ router.put('/update/{id}', function (req, res) {
     dao.update(parseInt(id), name, email);
     res.status(200);
 });
+
 router.delete('/delete/{id}', function (req, res) {
     let id = req.param('id')
     dao.delete(parseInt(id))

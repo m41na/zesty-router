@@ -21,6 +21,8 @@ public interface RouteRequest {
     
     String param(String name);
     
+    Map<String, String> pathParams();
+    
     String query();
     
     String header(String name);
@@ -46,6 +48,4 @@ public interface RouteRequest {
     void route(RouteSearch route);
     
     HttpSession session(boolean create);
-    
-    Map<String, String> pathParams();
 }

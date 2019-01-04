@@ -18,8 +18,6 @@ import java.util.function.Supplier;
 import javax.management.remote.JMXServiceURL;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
@@ -201,7 +199,7 @@ public class AppServer {
 		return head(path, "", "", null, handler);
 	}
 
-	public AppServer head(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer head(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return head(path, "", "", null, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -212,11 +210,11 @@ public class AppServer {
 		});
 	}
 
-	public AppServer head(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer head(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return head(path, "", "", config, handler);
 	}
 
-	public AppServer head(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer head(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return head(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -244,7 +242,7 @@ public class AppServer {
 		return trace(path, "", "", null, handler);
 	}
 
-	public AppServer trace(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer trace(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return trace(path, "", "", null, handler);
 	}
 	
@@ -252,11 +250,11 @@ public class AppServer {
 		return trace(path, "", "", config, handler);
 	}
 
-	public AppServer trace(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer trace(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return trace(path, "", "", config, handler);
 	}
 
-	public AppServer trace(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer trace(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return trace(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -284,7 +282,7 @@ public class AppServer {
 		return options(path, "", "", null, handler);
 	}
 
-	public AppServer options(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer options(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return options(path, "", "", null, handler);
 	}
 	
@@ -292,11 +290,11 @@ public class AppServer {
 		return options(path, "", "", config, handler);
 	}
 
-	public AppServer options(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer options(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return options(path, "", "", config, handler);
 	}
 
-	public AppServer options(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer options(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return options(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -324,7 +322,7 @@ public class AppServer {
 		return get(path, "", "", null, handler);
 	}
 
-	public AppServer get(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer get(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return get(path, "", "", null, handler);
 	}
 	
@@ -332,11 +330,11 @@ public class AppServer {
 		return get(path, "", "", config, handler);
 	}
 
-	public AppServer get(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer get(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return get(path, "", "", config, handler);
 	}
 
-	public AppServer get(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer get(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return get(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -364,7 +362,7 @@ public class AppServer {
 		return post(path, "", "", null, handler);
 	}
 
-	public AppServer post(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer post(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return post(path, "", "", null, handler);
 	}
 	
@@ -372,11 +370,11 @@ public class AppServer {
 		return post(path, "", "", config, handler);
 	}
 
-	public AppServer post(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer post(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return post(path, "", "", config, handler);
 	}
 
-	public AppServer post(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer post(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return post(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -409,7 +407,7 @@ public class AppServer {
 		return put(path, "", "", null, handler);
 	}
 
-	public AppServer put(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer put(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return put(path, "", "", null, handler);
 	}
 	
@@ -417,11 +415,11 @@ public class AppServer {
 		return put(path, "", "", config, handler);
 	}
 
-	public AppServer put(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer put(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return put(path, "", "", config, handler);
 	}
 
-	public AppServer put(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer put(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return put(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -449,7 +447,7 @@ public class AppServer {
 		return delete(path, "", "", null, handler);
 	}
 
-	public AppServer delete(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer delete(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return delete(path, "", "", null, handler);
 	}
 	
@@ -457,11 +455,11 @@ public class AppServer {
 		return delete(path, "", "", config, handler);
 	}
 
-	public AppServer delete(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer delete(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return delete(path, "", "", config, handler);
 	}
 
-	public AppServer delete(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer delete(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return delete(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
@@ -489,7 +487,7 @@ public class AppServer {
 		return all(path, "", "", null, handler);
 	}
 
-	public AppServer all(String path, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer all(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return all(path, "", "", null, handler);
 	}
 	
@@ -497,11 +495,11 @@ public class AppServer {
 		return all(path, "", "", config, handler);
 	}
 
-	public AppServer all(String path, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer all(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return all(path, "", "", config, handler);
 	}
 
-	public AppServer all(String path, String accept, String type, HandlerConfig config, BiFunction<HttpServletRequest, HttpServletResponse, Void> handler) {
+	public AppServer all(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
 		return all(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
