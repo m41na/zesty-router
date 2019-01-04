@@ -373,37 +373,33 @@ Now create a template for displaying user data, and call it :code:`users.ftl`.::
     <#import "index.ftl" as u>
     <@u.page>
     <#list users?values as user>
-    <div class="content">
+    <div class="content" data-key="${user.id}">
         <p class="name">${user.name}</p>
         <p class="email">${user.email}</p>
         <p class="link">
-        <a href="#" onclick="removeUser(event, '/users/delete/${user.id}')">delete</a>
+            <a href="#" onclick="removeUser(event, '${user.id}')">delete</a>
         </p>
     </div>
     </#list>
     <script>
-        function removeUser(e, url){
+        function removeUser(e, id){
             e.preventDefault();
-            fetch(url, {method: 'DELETE'})
-                .then(res=>console.log(res))
+            fetch('/users/delete/' + id, {method: 'DELETE'})
+                .then(res=> {
+                    let user = document.querySelector("[data-key='" + id + "']");
+                    user.remove();
+                })
                 .catch(err=>console.log(err));
         }
     </script>
     </@u.page>
 
-Now create a route to render this :code:`users.ftl` page on the :code:`/users` context.::
+This template iterates over the values of the users' map passed from the calling function, and for each user it creates a corresponding 
+user element. Each user element also contains a :code:`delete` link. The template contains a script which removes the corresponding user 
+element from the page when clicked. Now create a route to render this :code:`users.ftl` page on the :code:`/users` context.::
 
     router.get('/', function (req, res) {
         res.render('users', {users: dao.users});
-    });
-
-You will notice that I added a :code:`delete` link. Refactor the delete route to redirect to the :code:`/users` 
-context to reload the page upon deletion.::
-
-    router.delete('/delete/{id}', function (req, res) {
-        let id = req.param('id')
-        dao.delete(parseInt(id))
-        res.redirect(app.resolve('/'));
     });
 
 And finally, let's configure the :code:`AppProvider` to be aware of the view engine.::

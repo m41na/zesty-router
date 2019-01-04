@@ -69,13 +69,13 @@ router.put('/update/{id}', function (req, res) {
     let name = req.param('name');
     let email = req.param('email');
     dao.update(parseInt(id), name, email);
-    res.status(200);
+    res.status(204);
 });
 
 router.delete('/delete/{id}', function (req, res) {
     let id = req.param('id')
     dao.delete(parseInt(id))
-    res.redirect(app.resolve('/'));
+    res.status(205);
 });
 
 let port = 8080, host = 'localhost';

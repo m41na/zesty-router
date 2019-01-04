@@ -545,37 +545,33 @@ This will be layout page for other pages. Let’s begin with extracting the css 
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;#import &quot;index.ftl&quot; as u&gt;
 &lt;@u.page&gt;
 &lt;#list users?values as user&gt;
-&lt;div class=&quot;content&quot;&gt;
+&lt;div class=&quot;content&quot; data-key=&quot;${user.id}&quot;&gt;
     &lt;p class=&quot;name&quot;&gt;${user.name}&lt;/p&gt;
     &lt;p class=&quot;email&quot;&gt;${user.email}&lt;/p&gt;
     &lt;p class=&quot;link&quot;&gt;
-    &lt;a href=&quot;#&quot; onclick=&quot;removeUser(event, &#39;/users/delete/${user.id}&#39;)&quot;&gt;delete&lt;/a&gt;
+        &lt;a href=&quot;#&quot; onclick=&quot;removeUser(event, &#39;${user.id}&#39;)&quot;&gt;delete&lt;/a&gt;
     &lt;/p&gt;
 &lt;/div&gt;
 &lt;/#list&gt;
 &lt;script&gt;
-    function removeUser(e, url){
+    function removeUser(e, id){
         e.preventDefault();
-        fetch(url, {method: &#39;DELETE&#39;})
-            .then(res=&gt;console.log(res))
+        fetch(&#39;/users/delete/&#39; + id, {method: &#39;DELETE&#39;})
+            .then(res=&gt; {
+                let user = document.querySelector(&quot;[data-key=&#39;&quot; + id + &quot;&#39;]&quot;);
+                user.remove();
+            })
             .catch(err=&gt;console.log(err));
     }
 &lt;/script&gt;
 &lt;/@u.page&gt;
 </pre></div>
 </div>
-<p>Now create a route to render this <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> page on the <code class="code docutils literal notranslate"><span class="pre">/users</span></code> context.:</p>
+<p>This template iterates over the values of the users’ map passed from the calling function, and for each user it creates a corresponding
+user element. Each user element also contains a <code class="code docutils literal notranslate"><span class="pre">delete</span></code> link. The template contains a script which removes the corresponding user
+element from the page when clicked. Now create a route to render this <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> page on the <code class="code docutils literal notranslate"><span class="pre">/users</span></code> context.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">users</span><span class="p">:</span> <span class="n">dao</span><span class="o">.</span><span class="n">users</span><span class="p">});</span>
-<span class="p">});</span>
-</pre></div>
-</div>
-<p>You will notice that I added a <code class="code docutils literal notranslate"><span class="pre">delete</span></code> link. Refactor the delete route to redirect to the <code class="code docutils literal notranslate"><span class="pre">/users</span></code>
-context to reload the page upon deletion.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
-    <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">));</span>
 <span class="p">});</span>
 </pre></div>
 </div>
