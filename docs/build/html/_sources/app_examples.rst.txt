@@ -59,8 +59,8 @@ This is just a simple application which responds with the current time when the 
 Simple REST App
 ^^^^^^^^^^^^^^^^
 
-Let's begin with creating a simple database access class. Since :code:`nashorn` does not use the :code:`class` keyword, 
-we will use the :code:`function` syntax instead.::
+Let's create a file :code:`simple_rest.js` and begin by creating a simple database access class. Since :code:`nashorn` 
+does not use the :code:`class` keyword, we will use the :code:`function` syntax instead.::
 
     let AtomicInteger = Java.type('java.util.concurrent.atomic.AtomicInteger');
 
@@ -133,13 +133,13 @@ Next, let's create the API service.::
         let name = req.param('name');
         let email = req.param('email');
         dao.update(parseInt(id), name, email);
-        res.status(200);
+        res.status(204);
     });
     
     router.delete('/delete/{id}', function (req, res) {
         let id = req.param('id')
         dao.delete(parseInt(id))
-        res.status(200);
+        res.status(205);
     });
 
     let port = 8080, host = 'localhost';
@@ -261,6 +261,160 @@ For comparison, the Java equilavent of :code:`simple_rest.js` would be.::
                 });
         }
     }
+
+Adding a Page
+^^^^^^^^^^^^^^^^^^^^^
+
+Let's now create a home page for the :code:`simple_rest` app we have going. To do this, create a folder :code:`www` in the project's
+root directory, and add a new file :code:`index.html`.::
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Index Page</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                * {
+                    margin: 0px;
+                    padding: 0px;
+                }
+                #wrapper {
+                    width: 900px;
+                    margin: 0px auto;
+                    display: grid;
+                    justify-content: center;
+                    align-content: center;
+                    grid-template-columns: repeat(3, 20vmin);
+                    grid-template-rows: repeat(5, 20vmin);
+                    grid-gap: 10px;
+                }
+                #wrapper .content {
+                    display: grid;
+                    align-content: center;
+                    justify-content: center;
+                }
+                #wrapper .content:nth-child(even) {background: #eee}
+                #wrapper .content:nth-child(odd) {background: #ccc}
+            </style>
+        </head>
+        <body>
+            <div id="wrapper">
+                <div class="content">A</div>
+                <div class="content">B</div>
+                <div class="content">C</div>
+                <div class="content">D</div>
+                <div class="content">E</div>
+                <div class="content">F</div>
+            </div>
+        </body>
+    </html>
+
+In the :code:`sample_rest.js` file, configure the assets parameters in the :code:`AppProvider`.::
+
+    let app = zesty.provide({
+        appctx: '/users',
+        assets: 'www'
+    });
+
+Restart the application and navigate to the root context :code:`http://localhost:8080`. Before adding the :code:`index.html`,
+the response was a :code:`404 - Not found` error. Now you should expect to see the index page.
+
+A Freemarker Template
+^^^^^^^^^^^^^^^^^^^^^^
+
+The previous example used a plain :code:`html` page. This example uses a Freemarker template to display the users from the 
+:code:`simple_rest` application. Let's create one. Copy the :code:`index.html` file and rename it to :code:`index.ftl`. 
+This will be layout page for other pages. Let's begin with extracting the css into a new file, :code:`index.css`::
+
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    #wrapper {
+        width: 900px;
+        margin: 0px auto;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        grid-template-columns: repeat(3, 20vmin);
+        grid-template-rows: repeat(5, 20vmin);
+        grid-gap: 10px;
+    }
+    #wrapper .content {
+        display: grid;
+        align-content: center;
+        justify-content: center;
+    }
+    #wrapper .content:nth-child(even) {background: #eee}
+    #wrapper .content:nth-child(odd) {background: #ccc}
+
+Refactor the :code:`index.ftl` page to make it a macro.::
+
+    <#macro page>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Index Page</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link type="text/css" rel="stylesheet" href="/index.css">
+        </head>
+        <body>
+            <div id="wrapper">
+                <#nested>
+            </div>
+        </body>
+    </html>
+    </#macro>
+
+Now create a template for displaying user data, and call it :code:`users.ftl`.::
+
+    <#import "index.ftl" as u>
+    <@u.page>
+    <#list users?values as user>
+    <div class="content">
+        <p class="name">${user.name}</p>
+        <p class="email">${user.email}</p>
+        <p class="link">
+        <a href="#" onclick="removeUser(event, '/users/delete/${user.id}')">delete</a>
+        </p>
+    </div>
+    </#list>
+    <script>
+        function removeUser(e, url){
+            e.preventDefault();
+            fetch(url, {method: 'DELETE'})
+                .then(res=>console.log(res))
+                .catch(err=>console.log(err));
+        }
+    </script>
+    </@u.page>
+
+Now create a route to render this :code:`users.ftl` page on the :code:`/users` context.::
+
+    router.get('/', function (req, res) {
+        res.render('users', {users: dao.users});
+    });
+
+You will notice that I added a :code:`delete` link. Refactor the delete route to redirect to the :code:`/users` 
+context to reload the page upon deletion.::
+
+    router.delete('/delete/{id}', function (req, res) {
+        let id = req.param('id')
+        dao.delete(parseInt(id))
+        res.redirect(app.resolve('/'));
+    });
+
+And finally, let's configure the :code:`AppProvider` to be aware of the view engine.::
+
+    let app = zesty.provide({
+        appctx: '/users',
+        assets: 'www',
+        engine: "freemarker"
+    }); 
+
+Restart the application and navigate to the root context :code:`http://localhost:8080/users`.
 
 ::
 

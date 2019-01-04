@@ -96,6 +96,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">App Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#hello-world-app">Hello World App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#simple-rest-app">Simple REST App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-page">Adding a Page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-freemarker-template">A Freemarker Template</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -231,8 +233,8 @@ implementation would almost literary be the same.</p>
 </div>
 <div class="section" id="simple-rest-app">
 <h2>Simple REST App<a class="headerlink" href="#simple-rest-app" title="Permalink to this headline">¶</a></h2>
-<p>Let’s begin with creating a simple database access class. Since <code class="code docutils literal notranslate"><span class="pre">nashorn</span></code> does not use the <code class="code docutils literal notranslate"><span class="pre">class</span></code> keyword,
-we will use the <code class="code docutils literal notranslate"><span class="pre">function</span></code> syntax instead.:</p>
+<p>Let’s create a file <code class="code docutils literal notranslate"><span class="pre">simple_rest.js</span></code> and begin by creating a simple database access class. Since <code class="code docutils literal notranslate"><span class="pre">nashorn</span></code>
+does not use the <code class="code docutils literal notranslate"><span class="pre">class</span></code> keyword, we will use the <code class="code docutils literal notranslate"><span class="pre">function</span></code> syntax instead.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">AtomicInteger</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.concurrent.atomic.AtomicInteger&#39;</span><span class="p">);</span>
 
 <span class="n">function</span> <span class="n">UserDao</span><span class="p">()</span> <span class="p">{</span>
@@ -304,13 +306,13 @@ we will use the <code class="code docutils literal notranslate"><span class="pre
     <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
     <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
     <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">204</span><span class="p">);</span>
 <span class="p">});</span>
 
 <span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
     <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">205</span><span class="p">);</span>
 <span class="p">});</span>
 
 <span class="n">let</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
@@ -434,6 +436,158 @@ we will use the <code class="code docutils literal notranslate"><span class="pre
 <span class="p">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="adding-a-page">
+<h2>Adding a Page<a class="headerlink" href="#adding-a-page" title="Permalink to this headline">¶</a></h2>
+<p>Let’s now create a home page for the <code class="code docutils literal notranslate"><span class="pre">simple_rest</span></code> app we have going. To do this, create a folder <code class="code docutils literal notranslate"><span class="pre">www</span></code> in the project’s
+root directory, and add a new file <code class="code docutils literal notranslate"><span class="pre">index.html</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Index Page&lt;/title&gt;
+        &lt;meta charset=&quot;UTF-8&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+        &lt;style&gt;
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            #wrapper {
+                width: 900px;
+                margin: 0px auto;
+                display: grid;
+                justify-content: center;
+                align-content: center;
+                grid-template-columns: repeat(3, 20vmin);
+                grid-template-rows: repeat(5, 20vmin);
+                grid-gap: 10px;
+            }
+            #wrapper .content {
+                display: grid;
+                align-content: center;
+                justify-content: center;
+            }
+            #wrapper .content:nth-child(even) {background: #eee}
+            #wrapper .content:nth-child(odd) {background: #ccc}
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;wrapper&quot;&gt;
+            &lt;div class=&quot;content&quot;&gt;A&lt;/div&gt;
+            &lt;div class=&quot;content&quot;&gt;B&lt;/div&gt;
+            &lt;div class=&quot;content&quot;&gt;C&lt;/div&gt;
+            &lt;div class=&quot;content&quot;&gt;D&lt;/div&gt;
+            &lt;div class=&quot;content&quot;&gt;E&lt;/div&gt;
+            &lt;div class=&quot;content&quot;&gt;F&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>In the <code class="code docutils literal notranslate"><span class="pre">sample_rest.js</span></code> file, configure the assets parameters in the <code class="code docutils literal notranslate"><span class="pre">AppProvider</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s1">&#39;/users&#39;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="p">:</span> <span class="s1">&#39;www&#39;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Restart the application and navigate to the root context <code class="code docutils literal notranslate"><span class="pre">http://localhost:8080</span></code>. Before adding the <code class="code docutils literal notranslate"><span class="pre">index.html</span></code>,
+the response was a <code class="code docutils literal notranslate"><span class="pre">404</span> <span class="pre">-</span> <span class="pre">Not</span> <span class="pre">found</span></code> error. Now you should expect to see the index page.</p>
+</div>
+<div class="section" id="a-freemarker-template">
+<h2>A Freemarker Template<a class="headerlink" href="#a-freemarker-template" title="Permalink to this headline">¶</a></h2>
+<p>The previous example used a plain <code class="code docutils literal notranslate"><span class="pre">html</span></code> page. This example uses a Freemarker template to display the users from the
+<code class="code docutils literal notranslate"><span class="pre">simple_rest</span></code> application. Let’s create one. Copy the <code class="code docutils literal notranslate"><span class="pre">index.html</span></code> file and rename it to <code class="code docutils literal notranslate"><span class="pre">index.ftl</span></code>.
+This will be layout page for other pages. Let’s begin with extracting the css into a new file, <code class="code docutils literal notranslate"><span class="pre">index.css</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="p">{</span>
+    <span class="n">margin</span><span class="p">:</span> <span class="mi">0</span><span class="n">px</span><span class="p">;</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="mi">0</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper {</span>
+    <span class="n">width</span><span class="p">:</span> <span class="mi">900</span><span class="n">px</span><span class="p">;</span>
+    <span class="n">margin</span><span class="p">:</span> <span class="mi">0</span><span class="n">px</span> <span class="n">auto</span><span class="p">;</span>
+    <span class="n">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
+    <span class="n">justify</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+    <span class="n">align</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">columns</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="n">vmin</span><span class="p">);</span>
+    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">rows</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="n">vmin</span><span class="p">);</span>
+    <span class="n">grid</span><span class="o">-</span><span class="n">gap</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content {</span>
+    <span class="n">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
+    <span class="n">align</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+    <span class="n">justify</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content:nth-child(even) {background: #eee}</span>
+<span class="c1">#wrapper .content:nth-child(odd) {background: #ccc}</span>
+</pre></div>
+</div>
+<p>Refactor the <code class="code docutils literal notranslate"><span class="pre">index.ftl</span></code> page to make it a macro.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;#macro page&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Index Page&lt;/title&gt;
+        &lt;meta charset=&quot;UTF-8&quot;&gt;
+        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+        &lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;/index.css&quot;&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id=&quot;wrapper&quot;&gt;
+            &lt;#nested&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;/#macro&gt;
+</pre></div>
+</div>
+<p>Now create a template for displaying user data, and call it <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;#import &quot;index.ftl&quot; as u&gt;
+&lt;@u.page&gt;
+&lt;#list users?values as user&gt;
+&lt;div class=&quot;content&quot;&gt;
+    &lt;p class=&quot;name&quot;&gt;${user.name}&lt;/p&gt;
+    &lt;p class=&quot;email&quot;&gt;${user.email}&lt;/p&gt;
+    &lt;p class=&quot;link&quot;&gt;
+    &lt;a href=&quot;#&quot; onclick=&quot;removeUser(event, &#39;/users/delete/${user.id}&#39;)&quot;&gt;delete&lt;/a&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+&lt;/#list&gt;
+&lt;script&gt;
+    function removeUser(e, url){
+        e.preventDefault();
+        fetch(url, {method: &#39;DELETE&#39;})
+            .then(res=&gt;console.log(res))
+            .catch(err=&gt;console.log(err));
+    }
+&lt;/script&gt;
+&lt;/@u.page&gt;
+</pre></div>
+</div>
+<p>Now create a route to render this <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> page on the <code class="code docutils literal notranslate"><span class="pre">/users</span></code> context.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">users</span><span class="p">:</span> <span class="n">dao</span><span class="o">.</span><span class="n">users</span><span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>You will notice that I added a <code class="code docutils literal notranslate"><span class="pre">delete</span></code> link. Refactor the delete route to redirect to the <code class="code docutils literal notranslate"><span class="pre">/users</span></code>
+context to reload the page upon deletion.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>And finally, let’s configure the <code class="code docutils literal notranslate"><span class="pre">AppProvider</span></code> to be aware of the view engine.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s1">&#39;/users&#39;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="p">:</span> <span class="s1">&#39;www&#39;</span><span class="p">,</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="s2">&quot;freemarker&quot;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Restart the application and navigate to the root context <code class="code docutils literal notranslate"><span class="pre">http://localhost:8080/users</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Please</span> <span class="n">check</span> <span class="n">again</span> <span class="n">soon</span><span class="o">.</span> <span class="n">The</span> <span class="n">material</span> <span class="ow">is</span> <span class="n">continually</span> <span class="n">getting</span> <span class="n">updated</span><span class="o">**</span>
 </pre></div>
 </div>

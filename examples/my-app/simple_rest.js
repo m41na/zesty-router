@@ -37,12 +37,14 @@ let dao = new UserDao();
 
 let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
 let app = zesty.provide({
-    appctx: '/users'
+    appctx: '/users',
+    assets: 'www',
+    engine: "freemarker"
 });    
 
 let router = app.router();
 router.get('/', function (req, res) {
-    res.json(dao.users);
+    res.render('users', {users: dao.users});
 });
 
 router.get('/{id}', function (req, res) {
@@ -73,7 +75,7 @@ router.put('/update/{id}', function (req, res) {
 router.delete('/delete/{id}', function (req, res) {
     let id = req.param('id')
     dao.delete(parseInt(id))
-    res.status(200);
+    res.redirect(app.resolve('/'));
 });
 
 let port = 8080, host = 'localhost';

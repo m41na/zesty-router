@@ -1,0 +1,21 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+#wrapper {
+    width: 900px;
+    margin: 0px auto;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    grid-template-columns: repeat(3, 20vmin);
+    grid-template-rows: repeat(5, 20vmin);
+    grid-gap: 10px;
+}
+#wrapper .content {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+}
+#wrapper .content:nth-child(even) {background: #eee}
+#wrapper .content:nth-child(odd) {background: #ccc}

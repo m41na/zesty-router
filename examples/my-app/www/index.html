@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Index Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            * {
+                margin: 0px;
+                padding: 0px;
+            }
+            #wrapper {
+                width: 900px;
+                margin: 0px auto;
+                display: grid;
+                justify-content: center;
+                align-content: center;
+                grid-template-columns: repeat(3, 20vmin);
+                grid-template-rows: repeat(5, 20vmin);
+                grid-gap: 10px;
+            }
+            #wrapper .content {
+                display: grid;
+                align-content: center;
+                justify-content: center;
+            }
+            #wrapper .content:nth-child(even) {background: #eee}
+            #wrapper .content:nth-child(odd) {background: #ccc}
+        </style>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="content">A</div>
+            <div class="content">B</div>
+            <div class="content">C</div>
+            <div class="content">D</div>
+            <div class="content">E</div>
+            <div class="content">F</div>
+        </div>
+    </body>
+</html>
