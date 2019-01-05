@@ -11,12 +11,13 @@ let app = zesty.provide({
 
 let router = app.router();
 router.get('/', function (req, res) {
-    res.json(dao.users);
+    res.render('users', {users: dao.users});
 });
 
 router.get('/{id}', function (req, res) {
     let id = req.param('id');
-    res.json(dao.findById(parseInt(id)))
+    let user = dao.findById(parseInt(id));
+    res.render('wrap', {user: user});
 });
 
 router.get('/email/{email}', function (req, res) {
@@ -27,8 +28,8 @@ router.get('/email/{email}', function (req, res) {
 router.post('/create', function (req, res) {
     let name = req.param('name');
     let email = req.param('email');
-    dao.save(name, email);
-    res.status(201);
+    let user = dao.save(name, email);
+    res.redirect(app.resolve("/" + user.id));
 });
 
 router.put('/update/{id}', function (req, res) {
@@ -36,7 +37,7 @@ router.put('/update/{id}', function (req, res) {
     let name = req.param('name');
     let email = req.param('email');
     dao.update(parseInt(id), name, email);
-    res.status(204);
+    res.redirect(app.resolve("/" + id));
 });
 
 router.delete('/delete/{id}', function (req, res) {

@@ -78,6 +78,7 @@ does not use the :code:`class` keyword, we will use the :code:`function` syntax 
         this.save = (name, email) => {
             let id = this.lastId.incrementAndGet()
             this.users[id] = {name: name, email: email, id: id}
+            return this.users[id];
         }
 
         this.findById = (id) => {
@@ -337,8 +338,8 @@ This will be layout page for other pages. Let's begin with extracting the css in
         display: grid;
         justify-content: center;
         align-content: center;
-        grid-template-columns: repeat(3, 20vmin);
-        grid-template-rows: repeat(5, 20vmin);
+        grid-template-columns: repeat(3, 40vmin);
+        grid-template-rows: repeat(5, 40vmin);
         grid-gap: 10px;
     }
     #wrapper .content {
@@ -411,6 +412,229 @@ And finally, let's configure the :code:`AppProvider` to be aware of the view eng
     }); 
 
 Restart the application and navigate to the root context :code:`http://localhost:8080/users`.
+
+Adding Submit Form
+^^^^^^^^^^^^^^^^^^^
+
+Let's start by splitting the :code:`simple_rest.js` file into two and call the second file :code:`simple_repo.js`. This way, 
+have the repository separate from the rest endpoints, and thereby both file can evolve independently. Let's slightly refector
+the :code:`simple_repo.js` source code so that it is importable in other modules.::
+
+    let Dao = {};
+
+    ;(function(){
+
+        let AtomicInteger = Java.type('java.util.concurrent.atomic.AtomicInteger');
+
+        function UserDao() {
+
+            this.users = {
+                0: {name: "James", email: "james@jjs.io", id: 0},
+                1: {name: "Steve", email: "steve@jjs.io", id: 1},
+                2: {name: "Carol", email: "carol@jjs.io", id: 2},
+                3: {name: "Becky", email: "becky@jjs.io", id: 3}
+            }
+            
+            this.lastId = new AtomicInteger(this.users.size - 1);   
+
+            this.save = (name, email) => {
+                let id = this.lastId.incrementAndGet()
+                this.users[id] = {name: name, email: email, id: id}
+                return this.users[id];
+            }
+
+            this.findById = (id) => {
+                return this.users[id]
+            }
+
+            this.findByEmail = (email) => {
+                return Object.values(this.users).find(it => it.email == email )
+            }
+
+            this.update = (id, name, email) => {
+                this.users[id] = {name: name, email: email, id: id}
+            }
+
+            this.delete = (id) => {
+                delete this.users[id]
+            }
+        }
+
+        //export the class through the Dao scope
+        Dao.UserDao = UserDao;
+    })();
+
+With the split done, now simply import the repository to be used by the endpoints in :code:`simple_rest.js`.::
+
+    load('./simple_repo.js');
+
+    let dao = new Dao.UserDao();
+
+    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let app = zesty.provide({
+        appctx: '/users',
+        assets: 'www',
+        engine: "freemarker"
+    });    
+
+    let router = app.router();
+    router.get('/', function (req, res) {
+        res.render('users', {users: dao.users});
+    });
+
+    router.get('/{id}', function (req, res) {
+        let id = req.param('id');
+        res.json(dao.findById(parseInt(id)))
+    });
+
+    router.get('/email/{email}', function (req, res) {
+        let email = req.param('email');
+        res.json(dao.findByEmail(email));
+    });
+
+    router.post('/create', function (req, res) {
+        let name = req.param('name');
+        let email = req.param('email');
+        dao.save(name, email);
+        res.status(201);
+    });
+
+    router.put('/update/{id}', function (req, res) {
+        let id = req.param('id')
+        let name = req.param('name');
+        let email = req.param('email');
+        dao.update(parseInt(id), name, email);
+        res.status(204);
+    });
+
+    router.delete('/delete/{id}', function (req, res) {
+        let id = req.param('id')
+        dao.delete(parseInt(id))
+        res.status(205);
+    });
+
+    let port = 8080, host = 'localhost';
+    router.listen(port, host, function(result){
+        print(result);
+    });
+
+With this done, we need to slightly refactor the :code:`users.ftl` file so that we can have a seperate template for a single user.
+Call this new template :code:`user.ftl` and add this markup.::
+
+    <#macro user user>
+    <div class="content" data-key="${user.id}">
+        <p class="name">${user.name}</p>
+        <p class="email">${user.email}</p>
+        <p class="link">
+            <a href="#" onclick="removeUser(event, '${user.id}')">delete</a>
+        </p>
+    </div>
+    </#macro>
+
+This macro takes a :code:`user` object as a parameter and renders the user attributes in it. This template will come in handy when 
+creating a new user or even editing an existing user. Now we need to import and use this template in the :code:`users.ftl` file. And
+while doing so, add another block element for the form to submit user data for persistence in the repository.::
+
+    <#import "index.ftl" as l>
+    <#import "user.ftl" as u>
+    <@l.page>
+    <div class="content" data-key="create">
+        <form action="/users/create" onsubmit="saveUser(event, this)">
+            <input type="hidden" name="id"/>
+            <div class="input-row"><span class="title">Name</span><input type="text" name="name"/></div>
+            <div class="input-row"><span class="title">Email</span><input type="text" name="email"/></div>
+            <div class="input-row"><input class="button" type="submit" value="Save"/></div>
+        </form>
+    </div>
+    <#list users?values as user>
+        <@u.user user/>
+    </#list>
+    <script>
+        function removeUser(e, id){
+            e.preventDefault();
+            fetch('/users/delete/' + id, {method: 'DELETE'})
+                .then(res=> {
+                    let user = document.querySelector("[data-key='" + id + "']");
+                    user.remove();
+                })
+                .catch(err=>console.log(err));
+        }
+        </script>
+        </@l.page>
+
+The :code:`import` statements now use *l* for layout and *u* for user, just for some clarity. The form also references a
+:code:`saveUser(event, this)` method. Add the implementation in the :code:`script` section beneath the :code:`removeUser(e, id)`
+function.::
+
+    function saveUser(e, form){
+            e.preventDefault();
+            let id = form.id;
+            return id? updateUser(id, form) : createUser(form);
+    }
+    function createUser(form){
+        fetch('/user/create', {method: 'POST', body: form.body()})
+            .then(res=>{})
+            .catch(err=>{})
+    }
+    function updateUser(id, form){
+        fetch('/user/update/' + id, {method: 'PUT', body: form.body()})
+            .then(res=>{})
+            .catch(err=>{})
+    }
+
+We'll add the function bodies in a moment. But before that, add some styling for the form component we just added.::
+
+    #wrapper .content form {
+        padding: 5px;
+    }
+    #wrapper .content form .input-row {
+        display: flex;
+        padding: 5px;
+    }
+    #wrapper .content form .title{
+        margin: 5px;
+    }
+    #wrapper .content form input[type=text]{
+        padding: 5px 10px;
+        border-radius: 10px;
+        line-height: 1.5em;
+    }
+    #wrapper .content form input.button{
+        padding: 8px 10px;
+        min-width: 70px;
+        margin: 5px;
+    }
+
+To accomodate these new features, we need to slightly modify the repository in :code:`simple_repo.js`. Let's begin with the
+:code:`router.get('/{id}'...)` function. Instead of returning a json object, let's have it return a rendered user fragment.
+This will be useful for both :code:`create` and :code:`update` operations.::
+
+    router.get('/{id}', function (req, res) {
+        let id = req.param('id');
+        let user = dao.findById(parseInt(id));
+        res.render('user', user);
+    });
+
+Next, modify the :code:`router.post('/create'...)` to redirect after *POST* instead of returning just the status code.::
+
+    router.post('/create', function (req, res) {
+        let name = req.param('name');
+        let email = req.param('email');
+        let user = dao.save(name, email);
+        res.redirect(app.resolve("/" + user.id));
+    });
+
+Do the same for the :code:`router.put('/update/{id}'...)` function as well.::
+
+    router.put('/update/{id}', function (req, res) {
+        let id = req.param('id')
+        let name = req.param('name');
+        let email = req.param('email');
+        dao.update(parseInt(id), name, email);
+        res.redirect(app.resolve("/" + id));
+    });
+
+Now let's add the body for the :code:`createUser(form)` function.::
 
 ::
 

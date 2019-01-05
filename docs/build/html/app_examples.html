@@ -98,6 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#simple-rest-app">Simple REST App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#adding-a-page">Adding a Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#a-freemarker-template">A Freemarker Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-submit-form">Adding Submit Form</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
@@ -251,6 +252,7 @@ does not use the <code class="code docutils literal notranslate"><span class="pr
     <span class="n">this</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">()</span>
         <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">];</span>
     <span class="p">}</span>
 
     <span class="n">this</span><span class="o">.</span><span class="n">findById</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -509,8 +511,8 @@ This will be layout page for other pages. Let’s begin with extracting the css 
     <span class="n">display</span><span class="p">:</span> <span class="n">grid</span><span class="p">;</span>
     <span class="n">justify</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
     <span class="n">align</span><span class="o">-</span><span class="n">content</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
-    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">columns</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="n">vmin</span><span class="p">);</span>
-    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">rows</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="n">vmin</span><span class="p">);</span>
+    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">columns</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">40</span><span class="n">vmin</span><span class="p">);</span>
+    <span class="n">grid</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">rows</span><span class="p">:</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">40</span><span class="n">vmin</span><span class="p">);</span>
     <span class="n">grid</span><span class="o">-</span><span class="n">gap</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="c1">#wrapper .content {</span>
@@ -584,9 +586,233 @@ element from the page when clicked. Now create a route to render this <code clas
 </pre></div>
 </div>
 <p>Restart the application and navigate to the root context <code class="code docutils literal notranslate"><span class="pre">http://localhost:8080/users</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Please</span> <span class="n">check</span> <span class="n">again</span> <span class="n">soon</span><span class="o">.</span> <span class="n">The</span> <span class="n">material</span> <span class="ow">is</span> <span class="n">continually</span> <span class="n">getting</span> <span class="n">updated</span><span class="o">**</span>
+</div>
+<div class="section" id="adding-submit-form">
+<h2>Adding Submit Form<a class="headerlink" href="#adding-submit-form" title="Permalink to this headline">¶</a></h2>
+<p>Let’s start by splitting the <code class="code docutils literal notranslate"><span class="pre">simple_rest.js</span></code> file into two and call the second file <code class="code docutils literal notranslate"><span class="pre">simple_repo.js</span></code>. This way,
+have the repository separate from the rest endpoints, and thereby both file can evolve independently. Let’s slightly refector
+the <code class="code docutils literal notranslate"><span class="pre">simple_repo.js</span></code> source code so that it is importable in other modules.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">Dao</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="p">;(</span><span class="n">function</span><span class="p">(){</span>
+
+    <span class="n">let</span> <span class="n">AtomicInteger</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.concurrent.atomic.AtomicInteger&#39;</span><span class="p">);</span>
+
+    <span class="n">function</span> <span class="n">UserDao</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">0</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;James&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;james@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Steve&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;steve@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Carol&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;carol@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Becky&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;becky@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">()</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+            <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">findById</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">findByEmail</span> <span class="o">=</span> <span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Object</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">it</span> <span class="o">=&gt;</span> <span class="n">it</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span> <span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">id</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">this</span><span class="o">.</span><span class="n">delete</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="n">delete</span> <span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="o">//</span><span class="n">export</span> <span class="n">the</span> <span class="k">class</span> <span class="nc">through</span> <span class="n">the</span> <span class="n">Dao</span> <span class="n">scope</span>
+    <span class="n">Dao</span><span class="o">.</span><span class="n">UserDao</span> <span class="o">=</span> <span class="n">UserDao</span><span class="p">;</span>
+<span class="p">})();</span>
 </pre></div>
 </div>
+<p>With the split done, now simply import the repository to be used by the endpoints in <code class="code docutils literal notranslate"><span class="pre">simple_rest.js</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./simple_repo.js&#39;</span><span class="p">);</span>
+
+<span class="n">let</span> <span class="n">dao</span> <span class="o">=</span> <span class="n">new</span> <span class="n">Dao</span><span class="o">.</span><span class="n">UserDao</span><span class="p">();</span>
+
+<span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s1">&#39;/users&#39;</span><span class="p">,</span>
+    <span class="n">assets</span><span class="p">:</span> <span class="s1">&#39;www&#39;</span><span class="p">,</span>
+    <span class="n">engine</span><span class="p">:</span> <span class="s2">&quot;freemarker&quot;</span>
+<span class="p">});</span>
+
+<span class="n">let</span> <span class="n">router</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="p">();</span>
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">users</span><span class="p">:</span> <span class="n">dao</span><span class="o">.</span><span class="n">users</span><span class="p">});</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">)))</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/email/</span><span class="si">{email}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="n">dao</span><span class="o">.</span><span class="n">findByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">));</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">201</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/update/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">204</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">router</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/delete/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="mi">205</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="n">let</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">router</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">result</span><span class="p">){</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>With this done, we need to slightly refactor the <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> file so that we can have a seperate template for a single user.
+Call this new template <code class="code docutils literal notranslate"><span class="pre">user.ftl</span></code> and add this markup.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;#macro user user&gt;
+&lt;div class=&quot;content&quot; data-key=&quot;${user.id}&quot;&gt;
+    &lt;p class=&quot;name&quot;&gt;${user.name}&lt;/p&gt;
+    &lt;p class=&quot;email&quot;&gt;${user.email}&lt;/p&gt;
+    &lt;p class=&quot;link&quot;&gt;
+        &lt;a href=&quot;#&quot; onclick=&quot;removeUser(event, &#39;${user.id}&#39;)&quot;&gt;delete&lt;/a&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+&lt;/#macro&gt;
+</pre></div>
+</div>
+<p>This macro takes a <code class="code docutils literal notranslate"><span class="pre">user</span></code> object as a parameter and renders the user attributes in it. This template will come in handy when
+creating a new user or even editing an existing user. Now we need to import and use this template in the <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> file. And
+while doing so, add another block element for the form to submit user data for persistence in the repository.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="c1">#import &quot;index.ftl&quot; as l&gt;</span>
+<span class="o">&lt;</span><span class="c1">#import &quot;user.ftl&quot; as u&gt;</span>
+<span class="o">&lt;</span><span class="nd">@l</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;content&quot;</span> <span class="n">data</span><span class="o">-</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;create&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/users/create&quot;</span> <span class="n">onsubmit</span><span class="o">=</span><span class="s2">&quot;saveUser(event, this)&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;input-row&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="o">&gt;</span><span class="n">Name</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;name&quot;</span><span class="o">/&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;input-row&quot;</span><span class="o">&gt;&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;title&quot;</span><span class="o">&gt;</span><span class="n">Email</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;email&quot;</span><span class="o">/&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;input-row&quot;</span><span class="o">&gt;&lt;</span><span class="nb">input</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;button&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;submit&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Save&quot;</span><span class="o">/&gt;&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="c1">#list users?values as user&gt;</span>
+    <span class="o">&lt;</span><span class="nd">@u</span><span class="o">.</span><span class="n">user</span> <span class="n">user</span><span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="c1">#list&gt;</span>
+<span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+    <span class="n">function</span> <span class="n">removeUser</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="nb">id</span><span class="p">){</span>
+        <span class="n">e</span><span class="o">.</span><span class="n">preventDefault</span><span class="p">();</span>
+        <span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;/users/delete/&#39;</span> <span class="o">+</span> <span class="nb">id</span><span class="p">,</span> <span class="p">{</span><span class="n">method</span><span class="p">:</span> <span class="s1">&#39;DELETE&#39;</span><span class="p">})</span>
+            <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">res</span><span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="n">let</span> <span class="n">user</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">&quot;[data-key=&#39;&quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s2">&quot;&#39;]&quot;</span><span class="p">);</span>
+                <span class="n">user</span><span class="o">.</span><span class="n">remove</span><span class="p">();</span>
+            <span class="p">})</span>
+            <span class="o">.</span><span class="n">catch</span><span class="p">(</span><span class="n">err</span><span class="o">=&gt;</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nd">@l</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="code docutils literal notranslate"><span class="pre">import</span></code> statements now use <em>l</em> for layout and <em>u</em> for user, just for some clarity. The form also references a
+<code class="code docutils literal notranslate"><span class="pre">saveUser(event,</span> <span class="pre">this)</span></code> method. Add the implementation in the <code class="code docutils literal notranslate"><span class="pre">script</span></code> section beneath the <code class="code docutils literal notranslate"><span class="pre">removeUser(e,</span> <span class="pre">id)</span></code>
+function.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>function saveUser(e, form){
+        e.preventDefault();
+        let id = form.id;
+        return id? updateUser(id, form) : createUser(form);
+}
+function createUser(form){
+    fetch(&#39;/user/create&#39;, {method: &#39;POST&#39;, body: form.body()})
+        .then(res=&gt;{})
+        .catch(err=&gt;{})
+}
+function updateUser(id, form){
+    fetch(&#39;/user/update/&#39; + id, {method: &#39;PUT&#39;, body: form.body()})
+        .then(res=&gt;{})
+        .catch(err=&gt;{})
+}
+</pre></div>
+</div>
+<p>We’ll add the function bodies in a moment. But before that, add some styling for the form component we just added.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#wrapper .content form {</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="mi">5</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content form .input-row {</span>
+    <span class="n">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="mi">5</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content form .title{</span>
+    <span class="n">margin</span><span class="p">:</span> <span class="mi">5</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content form input[type=text]{</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="mi">5</span><span class="n">px</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+    <span class="n">border</span><span class="o">-</span><span class="n">radius</span><span class="p">:</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+    <span class="n">line</span><span class="o">-</span><span class="n">height</span><span class="p">:</span> <span class="mf">1.5</span><span class="n">em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">#wrapper .content form input.button{</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="mi">8</span><span class="n">px</span> <span class="mi">10</span><span class="n">px</span><span class="p">;</span>
+    <span class="nb">min</span><span class="o">-</span><span class="n">width</span><span class="p">:</span> <span class="mi">70</span><span class="n">px</span><span class="p">;</span>
+    <span class="n">margin</span><span class="p">:</span> <span class="mi">5</span><span class="n">px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To accomodate these new features, we need to slightly modify the repository in <code class="code docutils literal notranslate"><span class="pre">simple_repo.js</span></code>. Let’s begin with the
+<code class="code docutils literal notranslate"><span class="pre">router.get('/{id}'...)</span></code> function. Instead of returning a json object, let’s have it return a rendered user fragment.
+This will be useful for both <code class="code docutils literal notranslate"><span class="pre">create</span></code> and <code class="code docutils literal notranslate"><span class="pre">update</span></code> operations.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">user</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="n">findById</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">));</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Next, modify the <code class="code docutils literal notranslate"><span class="pre">router.post('/create'...)</span></code> to redirect after <em>POST</em> instead of returning just the status code.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">user</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Do the same for the <code class="code docutils literal notranslate"><span class="pre">router.put('/update/{id}'...)</span></code> function as well.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/update/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+    <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
+    <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">id</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Now let’s add the body for the <code class="code docutils literal notranslate"><span class="pre">createUser(form)</span></code> function.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">::</span>
+</pre></div>
+</div>
+<blockquote>
+<div><strong>Please check again soon. The material is continually getting updated</strong></div></blockquote>
 </div>
 </div>
 

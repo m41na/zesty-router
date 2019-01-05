@@ -8,8 +8,8 @@
     display: grid;
     justify-content: center;
     align-content: center;
-    grid-template-columns: repeat(3, 20vmin);
-    grid-template-rows: repeat(5, 20vmin);
+    grid-template-columns: repeat(3, 40vmin);
+    grid-template-rows: repeat(5, 40vmin);
     grid-gap: 10px;
 }
 #wrapper .content {
@@ -19,3 +19,24 @@
 }
 #wrapper .content:nth-child(even) {background: #eee}
 #wrapper .content:nth-child(odd) {background: #ccc}
+
+#wrapper .content form {
+    padding: 5px;
+}
+#wrapper .content form .input-row {
+    display: flex;
+    padding: 5px;
+}
+#wrapper .content form .title{
+    margin: 5px;
+}
+#wrapper .content form input[type=text]{
+    padding: 5px 10px;
+    border-radius: 10px;
+    line-height: 1.5em;
+}
+#wrapper .content form input.button{
+    padding: 8px 10px;
+    min-width: 70px;
+    margin: 5px;
+}
