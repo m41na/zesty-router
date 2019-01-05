@@ -44,6 +44,11 @@ If configuring the application for :code:`wordpress`, this will hold the configu
         return this;
     }
 
+corsconetxt: Map
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This map holds the request headers' attributes that the application will use to configure the :code:`CorsFilter`.
+
 servlets: ServletContextHandler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

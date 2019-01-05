@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
 router.get('/{id}', function (req, res) {
     let id = req.param('id');
     let user = dao.findById(parseInt(id));
-    res.render('wrap', {user: user});
+    res.render('user', {user: user});
 });
 
 router.get('/email/{email}', function (req, res) {
@@ -33,11 +33,11 @@ router.post('/create', function (req, res) {
 });
 
 router.put('/update/{id}', function (req, res) {
-    let id = req.param('id')
+    let id = req.param('id');
     let name = req.param('name');
     let email = req.param('email');
     dao.update(parseInt(id), name, email);
-    res.redirect(app.resolve("/" + id));
+    res.render('user', {user: {id, name, email}});
 });
 
 router.delete('/delete/{id}', function (req, res) {

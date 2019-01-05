@@ -247,7 +247,7 @@ does not use the <code class="code docutils literal notranslate"><span class="pr
         <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Becky&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;becky@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="o">//</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="n">this</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">()</span>
@@ -607,7 +607,7 @@ the <code class="code docutils literal notranslate"><span class="pre">simple_rep
             <span class="mi">3</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s2">&quot;Becky&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s2">&quot;becky@jjs.io&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">this</span><span class="o">.</span><span class="n">lastId</span> <span class="o">=</span> <span class="n">new</span> <span class="n">AtomicInteger</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="o">//</span><span class="n">this</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="n">this</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">lastId</span><span class="o">.</span><span class="n">incrementAndGet</span><span class="p">()</span>
@@ -691,25 +691,22 @@ the <code class="code docutils literal notranslate"><span class="pre">simple_rep
 <span class="p">});</span>
 </pre></div>
 </div>
-<p>With this done, we need to slightly refactor the <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> file so that we can have a seperate template for a single user.
+<p>With this done, we need to slightly refactor the <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> file so that we can have a separate template for a single user.
 Call this new template <code class="code docutils literal notranslate"><span class="pre">user.ftl</span></code> and add this markup.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;#macro user user&gt;
-&lt;div class=&quot;content&quot; data-key=&quot;${user.id}&quot;&gt;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;div class=&quot;content&quot; data-key=&quot;${user.id}&quot;&gt;
     &lt;p class=&quot;name&quot;&gt;${user.name}&lt;/p&gt;
     &lt;p class=&quot;email&quot;&gt;${user.email}&lt;/p&gt;
     &lt;p class=&quot;link&quot;&gt;
         &lt;a href=&quot;#&quot; onclick=&quot;removeUser(event, &#39;${user.id}&#39;)&quot;&gt;delete&lt;/a&gt;
     &lt;/p&gt;
 &lt;/div&gt;
-&lt;/#macro&gt;
 </pre></div>
 </div>
-<p>This macro takes a <code class="code docutils literal notranslate"><span class="pre">user</span></code> object as a parameter and renders the user attributes in it. This template will come in handy when
+<p>This template expects a <code class="code docutils literal notranslate"><span class="pre">user</span></code> object in its context and renders the user attributes in it. This template will come in handy when
 creating a new user or even editing an existing user. Now we need to import and use this template in the <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code> file. And
 while doing so, add another block element for the form to submit user data for persistence in the repository.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="c1">#import &quot;index.ftl&quot; as l&gt;</span>
-<span class="o">&lt;</span><span class="c1">#import &quot;user.ftl&quot; as u&gt;</span>
-<span class="o">&lt;</span><span class="nd">@l</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="c1">#import &quot;index.ftl&quot; as u&gt;</span>
+<span class="o">&lt;</span><span class="nd">@u</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;content&quot;</span> <span class="n">data</span><span class="o">-</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;create&quot;</span><span class="o">&gt;</span>
     <span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;/users/create&quot;</span> <span class="n">onsubmit</span><span class="o">=</span><span class="s2">&quot;saveUser(event, this)&quot;</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="nb">input</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;hidden&quot;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="o">/&gt;</span>
@@ -719,7 +716,7 @@ while doing so, add another block element for the form to submit user data for p
     <span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
 <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="c1">#list users?values as user&gt;</span>
-    <span class="o">&lt;</span><span class="nd">@u</span><span class="o">.</span><span class="n">user</span> <span class="n">user</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="c1">#include &quot;user.ftl&quot;/&gt;</span>
 <span class="o">&lt;/</span><span class="c1">#list&gt;</span>
 <span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
     <span class="n">function</span> <span class="n">removeUser</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="nb">id</span><span class="p">){</span>
@@ -732,24 +729,23 @@ while doing so, add another block element for the form to submit user data for p
             <span class="o">.</span><span class="n">catch</span><span class="p">(</span><span class="n">err</span><span class="o">=&gt;</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">));</span>
     <span class="p">}</span>
     <span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nd">@l</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nd">@u</span><span class="o">.</span><span class="n">page</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>The <code class="code docutils literal notranslate"><span class="pre">import</span></code> statements now use <em>l</em> for layout and <em>u</em> for user, just for some clarity. The form also references a
-<code class="code docutils literal notranslate"><span class="pre">saveUser(event,</span> <span class="pre">this)</span></code> method. Add the implementation in the <code class="code docutils literal notranslate"><span class="pre">script</span></code> section beneath the <code class="code docutils literal notranslate"><span class="pre">removeUser(e,</span> <span class="pre">id)</span></code>
-function.:</p>
+<p>The new data entry component we added contains a form which references a <code class="code docutils literal notranslate"><span class="pre">saveUser(event,</span> <span class="pre">this)</span></code> method.
+Add the implementation in the <code class="code docutils literal notranslate"><span class="pre">script</span></code> section beneath the <code class="code docutils literal notranslate"><span class="pre">removeUser(e,</span> <span class="pre">id)</span></code> function.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>function saveUser(e, form){
         e.preventDefault();
-        let id = form.id;
+        let id = form.get(&#39;id&#39;);
         return id? updateUser(id, form) : createUser(form);
 }
 function createUser(form){
-    fetch(&#39;/user/create&#39;, {method: &#39;POST&#39;, body: form.body()})
+    fetch(&#39;/user/create&#39;, {method: &#39;POST&#39;, body: form})
         .then(res=&gt;{})
         .catch(err=&gt;{})
 }
 function updateUser(id, form){
-    fetch(&#39;/user/update/&#39; + id, {method: &#39;PUT&#39;, body: form.body()})
+    fetch(&#39;/user/update/&#39; + id, {method: &#39;PUT&#39;, body: form})
         .then(res=&gt;{})
         .catch(err=&gt;{})
 }
@@ -797,22 +793,116 @@ This will be useful for both <code class="code docutils literal notranslate"><sp
 <span class="p">});</span>
 </pre></div>
 </div>
-<p>Do the same for the <code class="code docutils literal notranslate"><span class="pre">router.put('/update/{id}'...)</span></code> function as well.:</p>
+<p>Next, modify the <code class="code docutils literal notranslate"><span class="pre">router.put('/update/{id}'...)</span></code> function to return a rendered component directly. Since the behaviour
+of a redirect on <em>PUT</em> or <em>DELETE</em> is not standard across all servers, and because the update does not create a new resource, it
+makes more sense to respond with the markup instead of redirecting like we did with <em>POST</em>.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">router</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/update/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">let</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
     <span class="n">let</span> <span class="n">name</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
     <span class="n">let</span> <span class="n">email</span> <span class="o">=</span> <span class="n">req</span><span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">);</span>
     <span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseInt</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">);</span>
-    <span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">id</span><span class="p">));</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="p">{</span><span class="n">user</span><span class="p">:</span> <span class="p">{</span><span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">}});</span>
 <span class="p">});</span>
 </pre></div>
 </div>
 <p>Now let’s add the body for the <code class="code docutils literal notranslate"><span class="pre">createUser(form)</span></code> function.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">::</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">createUser</span><span class="p">(</span><span class="n">form</span><span class="p">){</span>
+    <span class="n">const</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">method</span><span class="p">:</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-www-form-urlencoded; charset=UTF-8&#39;</span>
+        <span class="p">},</span>
+        <span class="n">body</span><span class="p">:</span> <span class="n">encodeFormData</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;/users/create&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">res</span><span class="o">=&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">html</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="n">let</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&quot;wrapper&quot;</span><span class="p">);</span>
+            <span class="n">let</span> <span class="n">element</span> <span class="o">=</span> <span class="n">htmlToElement</span><span class="p">(</span><span class="n">html</span><span class="p">);</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span><span class="n">element</span><span class="p">);</span>
+        <span class="p">})</span>
+        <span class="o">.</span><span class="n">catch</span><span class="p">(</span><span class="n">err</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="p">})</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<blockquote>
-<div><strong>Please check again soon. The material is continually getting updated</strong></div></blockquote>
+<p>We added an options parameter to describe the request data. We called a new method <code class="code docutils literal notranslate"><span class="pre">encodeFormData()</span></code> to convert the form data
+into a <code class="code docutils literal notranslate"><span class="pre">form-urlencoded</span></code> string. Without this step, the data would be sent as <code class="code docutils literal notranslate"><span class="pre">multipart-data</span></code> which is not the format
+we want. In the response, we also called a new method <code class="code docutils literal notranslate"><span class="pre">htmlToElement()</span></code> which parses the response into a document element. The
+implementations for these two helper methods is shown below.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">encodeFormData</span><span class="p">(</span><span class="n">data</span><span class="p">){</span>
+    <span class="n">var</span> <span class="n">urlEncodedData</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="n">var</span> <span class="n">urlEncodedDataPairs</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">var</span> <span class="n">name</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">const</span> <span class="n">name</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">urlEncodedDataPairs</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">encodeURIComponent</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="n">encodeURIComponent</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">urlEncodedDataPairs</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">/%</span><span class="mi">20</span><span class="o">/</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">function</span> <span class="n">htmlToElement</span><span class="p">(</span><span class="n">html</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">var</span> <span class="n">template</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">createElement</span><span class="p">(</span><span class="s1">&#39;template&#39;</span><span class="p">);</span>
+    <span class="n">template</span><span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">trim</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">firstChild</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now let’s add the body for the <code class="code docutils literal notranslate"><span class="pre">updateUser(id,</span> <span class="pre">form)</span></code> function. Just like we did with the <code class="code docutils literal notranslate"><span class="pre">createUser</span></code> method, we define
+an options parameter to describe the request data, and we use both the <code class="code docutils literal notranslate"><span class="pre">encodeFormData()</span></code> and <code class="code docutils literal notranslate"><span class="pre">htmlToElement()</span></code> methods in
+the same way. For the response, this time we replace the existing component with the updated one instead of appending a new one.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">updateUser</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">form</span><span class="p">){</span>
+    <span class="n">const</span> <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">method</span><span class="p">:</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/x-www-form-urlencoded; charset=UTF-8&#39;</span>
+        <span class="p">},</span>
+        <span class="n">body</span><span class="p">:</span> <span class="n">encodeFormData</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;/users/update/&#39;</span> <span class="o">+</span> <span class="nb">id</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">res</span><span class="o">=&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="o">.</span><span class="n">then</span><span class="p">(</span><span class="n">html</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="n">let</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">getElementById</span><span class="p">(</span><span class="s2">&quot;wrapper&quot;</span><span class="p">);</span>
+            <span class="n">let</span> <span class="n">element</span> <span class="o">=</span> <span class="n">htmlToElement</span><span class="p">(</span><span class="n">html</span><span class="p">);</span>
+            <span class="n">let</span> <span class="n">target</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">&quot;[data-key=&#39;&quot;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s2">&quot;&#39;]&quot;</span><span class="p">);</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">replaceChild</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">target</span><span class="p">);</span>
+            <span class="n">resetForm</span><span class="p">();</span>
+        <span class="p">})</span>
+        <span class="o">.</span><span class="n">catch</span><span class="p">(</span><span class="n">err</span><span class="o">=&gt;</span><span class="p">{</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For the <code class="code docutils literal notranslate"><span class="pre">updateUser()</span></code> to work, we need a way to select a user whom to edit. So we will add a link to the user component that selects
+the clicked user . In the <code class="code docutils literal notranslate"><span class="pre">user.ftl</span></code>, add an edit link like shown below.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;link&quot;</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&quot;selectUser(event, &#39;$</span><span class="si">{user.id}</span><span class="s2">&#39;, &#39;$</span><span class="si">{user.name}</span><span class="s2">&#39;, &#39;$</span><span class="si">{user.email}</span><span class="s2">&#39;)&quot;</span><span class="o">&gt;</span><span class="n">edit</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&quot;removeUser(event, &#39;$</span><span class="si">{user.id}</span><span class="s2">&#39;)&quot;</span><span class="o">&gt;</span><span class="n">delete</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Now we need to add a <code class="code docutils literal notranslate"><span class="pre">selectUser(event,</span> <span class="pre">id,</span> <span class="pre">name,</span> <span class="pre">email)</span></code> method in the script section of <code class="code docutils literal notranslate"><span class="pre">users.ftl</span></code>. For completeness, let’s
+also add another method, <code class="code docutils literal notranslate"><span class="pre">resetForm()</span></code> to clear the form when an update is completed.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">selectUser</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span><span class="p">){</span>
+    <span class="n">e</span><span class="o">.</span><span class="n">preventDefault</span><span class="p">();</span>
+    <span class="n">let</span> <span class="n">form</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">&quot;[data-key=&#39;edit&#39;] form&quot;</span><span class="p">);</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">id</span><span class="p">;</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">email</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">function</span> <span class="n">resetForm</span><span class="p">(){</span>
+    <span class="n">let</span> <span class="n">form</span> <span class="o">=</span> <span class="n">document</span><span class="o">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">&quot;[data-key=&#39;edit&#39;] form&quot;</span><span class="p">);</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+    <span class="n">form</span><span class="o">.</span><span class="n">elements</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This method populates the <em>form</em> component which makes the <em>Save</em> operation an update instead of a create operation. At this
+point, restart the application again and navigate to the <code class="code docutils literal notranslate"><span class="pre">/users</span></code> context <a class="reference external" href="http://localhost:8080/users">http://localhost:8080/users</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span><span class="n">Please</span> <span class="n">check</span> <span class="n">again</span> <span class="n">soon</span><span class="o">.</span> <span class="n">The</span> <span class="n">material</span> <span class="ow">is</span> <span class="n">continually</span> <span class="n">getting</span> <span class="n">updated</span><span class="o">**</span>
+</pre></div>
+</div>
 </div>
 </div>
 

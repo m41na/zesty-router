@@ -100,6 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#resolve-path-string-string">resolve(path: String) : String</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#locals-set-string">locals() : Set&lt;String&gt;</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#locals-param-string-object">locals(param: String) : Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cors-params-map-appserver">cors(params: Map) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#router-appserver">router() : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#router-supplier-supplier-appserver">router(supplier: Supplier) : AppServer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
@@ -274,6 +275,12 @@
 <h2>locals(param: String) : Object<a class="headerlink" href="#locals-param-string-object" title="Permalink to this headline">¶</a></h2>
 <p>Return a value from the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object using the given key</p>
 </div>
+<div class="section" id="cors-params-map-appserver">
+<h2>cors(params: Map) : AppServer<a class="headerlink" href="#cors-params-map-appserver" title="Permalink to this headline">¶</a></h2>
+<p>Enable and provide request headers to configure <em>cors</em> for the application. If an empty or <em>null</em> map is provided, the application will use default values
+to configure the <em>cors</em> filter, which are generously open. You can equally turn <em>cors</em> on/off through passing a <em>cors</em> true/false attribute to the
+<code class="code docutils literal notranslate"><span class="pre">locals</span></code> map.</p>
+</div>
 <div class="section" id="router-appserver">
 <h2>router() : AppServer<a class="headerlink" href="#router-appserver" title="Permalink to this headline">¶</a></h2>
 <p>Create the <code class="code docutils literal notranslate"><span class="pre">AppRoutes</span></code> object and return the current instance on <code class="code docutils literal notranslate"><span class="pre">AppServer</span></code> to allow method chaining.</p>
@@ -294,7 +301,7 @@ This filter is applied to all incoming requests</p>
 </div>
 <div class="section" id="route-method-string-path-string-handler-handlerservlet-appserver">
 <h2>route(method: String, path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Add a route to handle request that match the specified <em>path</em> and <em>method</em>. This API is targeted for <em>Java</em> users.</p>
+<p>Add a route to handle requests that match the specified <em>path</em> and <em>method</em>. This API is targeted for <em>Java</em> users.</p>
 </div>
 <div class="section" id="route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">
 <h2>route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>

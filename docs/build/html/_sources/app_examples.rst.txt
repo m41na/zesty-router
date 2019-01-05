@@ -73,7 +73,7 @@ does not use the :code:`class` keyword, we will use the :code:`function` syntax 
             3: {name: "Becky", email: "becky@jjs.io", id: 3}
         }
 
-        this.lastId = new AtomicInteger(this.users.size - 1)
+        this.lastId = new AtomicInteger(3); //this.users.size() - 1
 
         this.save = (name, email) => {
             let id = this.lastId.incrementAndGet()
@@ -435,7 +435,7 @@ the :code:`simple_repo.js` source code so that it is importable in other modules
                 3: {name: "Becky", email: "becky@jjs.io", id: 3}
             }
             
-            this.lastId = new AtomicInteger(this.users.size - 1);   
+            this.lastId = new AtomicInteger(3); //this.users.size() - 1
 
             this.save = (name, email) => {
                 let id = this.lastId.incrementAndGet()
@@ -475,7 +475,7 @@ With the split done, now simply import the repository to be used by the endpoint
         appctx: '/users',
         assets: 'www',
         engine: "freemarker"
-    });    
+    });
 
     let router = app.router();
     router.get('/', function (req, res) {
@@ -518,10 +518,9 @@ With the split done, now simply import the repository to be used by the endpoint
         print(result);
     });
 
-With this done, we need to slightly refactor the :code:`users.ftl` file so that we can have a seperate template for a single user.
+With this done, we need to slightly refactor the :code:`users.ftl` file so that we can have a separate template for a single user.
 Call this new template :code:`user.ftl` and add this markup.::
 
-    <#macro user user>
     <div class="content" data-key="${user.id}">
         <p class="name">${user.name}</p>
         <p class="email">${user.email}</p>
@@ -529,15 +528,13 @@ Call this new template :code:`user.ftl` and add this markup.::
             <a href="#" onclick="removeUser(event, '${user.id}')">delete</a>
         </p>
     </div>
-    </#macro>
 
-This macro takes a :code:`user` object as a parameter and renders the user attributes in it. This template will come in handy when 
+This template expects a :code:`user` object in its context and renders the user attributes in it. This template will come in handy when 
 creating a new user or even editing an existing user. Now we need to import and use this template in the :code:`users.ftl` file. And
 while doing so, add another block element for the form to submit user data for persistence in the repository.::
 
-    <#import "index.ftl" as l>
-    <#import "user.ftl" as u>
-    <@l.page>
+    <#import "index.ftl" as u>
+    <@u.page>
     <div class="content" data-key="create">
         <form action="/users/create" onsubmit="saveUser(event, this)">
             <input type="hidden" name="id"/>
@@ -547,7 +544,7 @@ while doing so, add another block element for the form to submit user data for p
         </form>
     </div>
     <#list users?values as user>
-        <@u.user user/>
+        <#include "user.ftl"/>
     </#list>
     <script>
         function removeUser(e, id){
@@ -560,24 +557,23 @@ while doing so, add another block element for the form to submit user data for p
                 .catch(err=>console.log(err));
         }
         </script>
-        </@l.page>
+        </@u.page>
 
-The :code:`import` statements now use *l* for layout and *u* for user, just for some clarity. The form also references a
-:code:`saveUser(event, this)` method. Add the implementation in the :code:`script` section beneath the :code:`removeUser(e, id)`
-function.::
+The new data entry component we added contains a form which references a :code:`saveUser(event, this)` method. 
+Add the implementation in the :code:`script` section beneath the :code:`removeUser(e, id)` function.::
 
     function saveUser(e, form){
             e.preventDefault();
-            let id = form.id;
+            let id = form.get('id');
             return id? updateUser(id, form) : createUser(form);
     }
     function createUser(form){
-        fetch('/user/create', {method: 'POST', body: form.body()})
+        fetch('/user/create', {method: 'POST', body: form})
             .then(res=>{})
             .catch(err=>{})
     }
     function updateUser(id, form){
-        fetch('/user/update/' + id, {method: 'PUT', body: form.body()})
+        fetch('/user/update/' + id, {method: 'PUT', body: form})
             .then(res=>{})
             .catch(err=>{})
     }
@@ -624,17 +620,113 @@ Next, modify the :code:`router.post('/create'...)` to redirect after *POST* inst
         res.redirect(app.resolve("/" + user.id));
     });
 
-Do the same for the :code:`router.put('/update/{id}'...)` function as well.::
+Next, modify the :code:`router.put('/update/{id}'...)` function to return a rendered component directly. Since the behaviour
+of a redirect on *PUT* or *DELETE* is not standard across all servers, and because the update does not create a new resource, it
+makes more sense to respond with the markup instead of redirecting like we did with *POST*.::
 
     router.put('/update/{id}', function (req, res) {
         let id = req.param('id')
         let name = req.param('name');
         let email = req.param('email');
         dao.update(parseInt(id), name, email);
-        res.redirect(app.resolve("/" + id));
+        res.render('user', {user: {id, name, email}});
     });
 
 Now let's add the body for the :code:`createUser(form)` function.::
+
+    function createUser(form){
+        const options = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: encodeFormData(form)
+        }
+        fetch('/users/create', options)
+            .then(res=> res.text())
+            .then(html=>{
+                let parent = document.getElementById("wrapper");
+                let element = htmlToElement(html);
+                parent.appendChild(element);
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+    }
+
+We added an options parameter to describe the request data. We called a new method :code:`encodeFormData()` to convert the form data
+into a :code:`form-urlencoded` string. Without this step, the data would be sent as :code:`multipart-data` which is not the format
+we want. In the response, we also called a new method :code:`htmlToElement()` which parses the response into a document element. The
+implementations for these two helper methods is shown below.::
+
+    function encodeFormData(data){
+        var urlEncodedData = "";
+        var urlEncodedDataPairs = [];
+        var name;
+        for(const name of data.keys()) {
+            urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(data.get(name)));
+        }
+        return urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+    }
+    function htmlToElement(html) {
+        var template = document.createElement('template');
+        template.innerHTML = html.trim();
+        return template.content.firstChild;
+    }
+
+Now let's add the body for the :code:`updateUser(id, form)` function. Just like we did with the :code:`createUser` method, we define
+an options parameter to describe the request data, and we use both the :code:`encodeFormData()` and :code:`htmlToElement()` methods in 
+the same way. For the response, this time we replace the existing component with the updated one instead of appending a new one.::
+
+    function updateUser(id, form){
+        const options = {
+            method: 'put',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: encodeFormData(form)
+        }
+        fetch('/users/update/' + id, options)
+            .then(res=> res.text())
+            .then(html=>{
+                let parent = document.getElementById("wrapper");
+                let element = htmlToElement(html);
+                let target = parent.querySelector("[data-key='" + id + "']");
+                parent.replaceChild(element, target);
+                resetForm();
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+    }
+
+For the :code:`updateUser()` to work, we need a way to select a user whom to edit. So we will add a link to the user component that selects
+the clicked user . In the :code:`user.ftl`, add an edit link like shown below.::
+
+    <p class="link">
+        <a href="#" onclick="selectUser(event, '${user.id}', '${user.name}', '${user.email}')">edit</a>
+        <a href="#" onclick="removeUser(event, '${user.id}')">delete</a>
+    </p>
+
+Now we need to add a :code:`selectUser(event, id, name, email)` method in the script section of :code:`users.ftl`. For completeness, let's
+also add another method, :code:`resetForm()` to clear the form when an update is completed.::
+
+    function selectUser(e, id, name, email){
+        e.preventDefault();
+        let form = document.querySelector("[data-key='edit'] form");
+        form.elements["id"].value = id;
+        form.elements["name"].value = name;
+        form.elements["email"].value = email;
+    }
+    function resetForm(){
+        let form = document.querySelector("[data-key='edit'] form");
+        form.elements["id"].value = "";
+        form.elements["name"].value = "";
+        form.elements["email"].value = "";
+    }
+
+This method populates the *form* component which makes the *Save* operation an update instead of a create operation. At this 
+point, restart the application again and navigate to the :code:`/users` context http://localhost:8080/users.
 
 ::
 

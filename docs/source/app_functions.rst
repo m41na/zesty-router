@@ -58,6 +58,13 @@ locals(param: String) : Object
 
 Return a value from the :code:`locals` object using the given key
 
+cors(params: Map) : AppServer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Enable and provide request headers to configure *cors* for the application. If an empty or *null* map is provided, the application will use default values
+to configure the *cors* filter, which are generously open. You can equally turn *cors* on/off through passing a *cors* true/false attribute to the 
+:code:`locals` map.
+
 router() : AppServer
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -83,7 +90,7 @@ Similar to :code:`filter(filter: HandlerFilter)` but this filter is only applied
 route(method: String, path: String, handler: HandlerServlet) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Add a route to handle request that match the specified *path* and *method*. This API is targeted for *Java* users.
+Add a route to handle requests that match the specified *path* and *method*. This API is targeted for *Java* users.
 
 route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

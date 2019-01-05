@@ -2,8 +2,10 @@ package com.practicaldime.zesty.app;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
@@ -69,6 +71,7 @@ public class AppServer {
 	private final Properties locals = new Properties();
 	private final ThreadPoolExecutor threadPoolExecutor;
 	private final Map<String, String> wpcontext = new HashMap<>();
+	private final Map<String, String> corscontext = new HashMap<>();
 	private final LifecycleSubscriber lifecycle = new LifecycleSubscriber();
 	private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
 	private static ViewEngine engine;
@@ -140,6 +143,12 @@ public class AppServer {
 
 	public Object locals(String param) {
 		return locals.get(param);
+	}
+	
+	public AppServer cors(Map<String, String> cors) {
+		this.locals.put("cors", true);
+		if(cors != null) this.corscontext.putAll(cors);
+		return this;
 	}
 
 	public AppServer lifecycle(String event, Consumer<String> callback) {
@@ -573,20 +582,32 @@ public class AppServer {
 
 			// TODO: configure secure connector
 			// enable CORS
-			FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
-			corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
-			corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
-					"GET,POST,HEAD,PUT,TRACE,OPTIONS,DELETE");
-			corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
-					"X-Requested-With,Content-Type,Accept,Origin");
-			corsFilter.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, "true");
-			corsFilter.setInitParameter(CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM, "728000");
-			corsFilter.setName("cross-origin");
-
-			FilterMapping corsMapping = new FilterMapping();
-			corsMapping.setFilterName("cross-origin");
-			corsMapping.setPathSpec("*");
-			servlets.addFilter(corsFilter, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+			if(Boolean.valueOf(this.locals.getProperty("cors", "false"))){
+				FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
+				//add default values
+				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, 
+						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_ORIGINS_PARAM)).orElse("*"));
+				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
+						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_METHODS_PARAM)).orElse("GET,POST,HEAD,PUT,TRACE,OPTIONS,DELETE"));
+				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
+						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_HEADERS_PARAM)).orElse("X-Requested-With,Content-Type,Accept,Origin"));
+				corsFilter.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, 
+						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM)).orElse("true"));
+				corsFilter.setInitParameter(CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM, 
+						Optional.ofNullable(corscontext.get(CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM)).orElse("728000"));
+				//add other user defined values that are not in the list of default keys
+				List<String> skipKeys = Arrays.asList(CrossOriginFilter.ALLOWED_ORIGINS_PARAM,CrossOriginFilter.ALLOWED_METHODS_PARAM,
+						CrossOriginFilter.ALLOWED_HEADERS_PARAM, CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM);
+				corscontext.keySet().stream().filter(key-> !skipKeys.contains(key)).forEach(key->{
+					corsFilter.setInitParameter(key, corscontext.get(key));
+				});
+				corsFilter.setName("zesty-cors-filter");
+	
+				FilterMapping corsMapping = new FilterMapping();
+				corsMapping.setFilterName("cross-origin");
+				corsMapping.setPathSpec("*");
+				servlets.addFilter(corsFilter, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+			}
 			// add routes filter
 			servlets.addFilter(new FilterHolder(new ReRouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
 

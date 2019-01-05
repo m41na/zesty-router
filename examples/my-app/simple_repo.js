@@ -13,7 +13,7 @@ let Dao = {};
             3: {name: "Becky", email: "becky@jjs.io", id: 3}
         }
         
-        this.lastId = new AtomicInteger(this.users.size - 1);   
+        this.lastId = new AtomicInteger(3);   
 
         this.save = (name, email) => {
             let id = this.lastId.incrementAndGet()
