@@ -540,12 +540,12 @@ public class AppServer {
 	}
 
 	// ************* WORDPRESS *****************//
-	public AppServer wordpress(String home, String fcgi_proxy) {
+	public AppServer wordpress(String home, String proxyTo) {
 		this.wpcontext.put("activate", "true");
-		this.wpcontext.put("resource_base", home);
-		this.wpcontext.put("welcome_file", "index.php");
-		this.wpcontext.put("fcgi_proxy", fcgi_proxy);
-		this.wpcontext.put("script_root", home);
+		this.wpcontext.put("resourceBase", home);
+		this.wpcontext.put("welcomeFile", "index.php");
+		this.wpcontext.put("proxyTo", proxyTo);
+		this.wpcontext.put("scriptRoot", home);
 		return this;
 	}
 
@@ -627,11 +627,11 @@ public class AppServer {
 
 			// collect all context handlers
 			ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
-			contextHandlers.addHandler(servlets);
+			//contextHandlers.addHandler(servlets);
 			
 			// add activated context handler (say, for php with fgci)
 			if (Boolean.valueOf(this.wpcontext.get("activate"))) {
-				contextHandlers.addHandler(create_fcgi_php(this.wpcontext));
+				contextHandlers.addHandler(createFcgiHandler(this.wpcontext));
 			}
 
 			// add handlers to the server
@@ -682,11 +682,11 @@ public class AppServer {
 		return defaultServlet;
 	}
 
-	protected ServletContextHandler create_fcgi_php(Map<String, String> phpctx) {
+	protected ServletContextHandler createFcgiHandler(Map<String, String> phpctx) {
 		ServletContextHandler php_ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		php_ctx.setContextPath("/");
-		php_ctx.setResourceBase(phpctx.get("resource_base"));
-		php_ctx.setWelcomeFiles(new String[] { phpctx.get("welcome_file") });
+		php_ctx.setResourceBase(phpctx.get("resourceBase"));
+		php_ctx.setWelcomeFiles(new String[] { phpctx.get("welcomeFile") });
 
 		// add try filter
 		FilterHolder tryHolder = new FilterHolder(new TryFilesFilter());
@@ -700,9 +700,9 @@ public class AppServer {
 
 		// add fcgi servlet for php scripts
 		ServletHolder fgciHolder = new ServletHolder("fcgi", new FastCGIProxyServlet());
-		fgciHolder.setInitParameter("proxyTo", phpctx.get("fcgi_proxy"));
+		fgciHolder.setInitParameter("proxyTo", phpctx.get("proxyTo"));
 		fgciHolder.setInitParameter("prefix", "/");
-		fgciHolder.setInitParameter("scriptRoot", phpctx.get("script_root"));
+		fgciHolder.setInitParameter("scriptRoot", phpctx.get("scriptRoot"));
 		fgciHolder.setInitParameter("scriptPattern", "(.+?\\\\.php)");
 		php_ctx.addServlet(fgciHolder, "*.php");
 		return php_ctx;

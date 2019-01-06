@@ -14,6 +14,8 @@ in zesty yet. However, using either Javascript or Java with zesty is handled usi
    handler_response
    app_functions
    app_examples
+   app_wordpress
+   app_websocket
    license
    help
 

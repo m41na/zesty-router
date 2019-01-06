@@ -23,7 +23,7 @@ public class MethodRouter implements Router{
 		if(type != null) {
 			this.routers.get(type).accept(input);
 			//if a matching route is found, set the method value in the result
-			if(input.requestAttrs != null) {
+			if(input.result != null) {
 				input.result.method = type.name();
 			}
 		}

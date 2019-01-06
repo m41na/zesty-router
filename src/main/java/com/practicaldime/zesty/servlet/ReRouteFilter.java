@@ -47,7 +47,7 @@ public class ReRouteFilter implements Filter {
         HandlerResponse httpResponse = new HandlerResponse((HttpServletResponse)response);        
         //set additional properties in response wrapper
         httpResponse.context(httpRequest.getContextPath());
-
+        
         RouteSearch route = routes.search(httpRequest);
         if (route.result != null) {
         	LOG.info("matched route -> {}", gson.toJson(route));

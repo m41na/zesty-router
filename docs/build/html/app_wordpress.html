@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WordPress Example &mdash; zesty-router 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Websocket App Example" href="app_websocket.html" />
+    <link rel="prev" title="App Examples" href="app_examples.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> zesty-router
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">WordPress Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket App Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zesty-router</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>WordPress Example</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app_wordpress.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="wordpress-example">
+<h1>WordPress Example<a class="headerlink" href="#wordpress-example" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how you can configure zesty-router to serve WordPress via FastCGI. The first step is to have WordPress
+installed on your server machine, for example under /var/www/wordpress. For more information about how to install WordPress,
+please refer to the <a class="reference external" href="https://codex.wordpress.org/Installing_WordPress">WordPress Installation Guide</a>.</p>
+<p>This example assumes you are on a Linux system, but there will be a section later on for a Windows system as well. The points below are simply a checklist, and cannot by any measure replace the steps outlined in the wordpress documentation.</p>
+<blockquote>
+<div><ul>
+<li><p class="first">create a holder for the wordpress application <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">mkdir</span> <span class="pre">-p</span> <span class="pre">/var/www</span></code> with sudo permissions.</p>
+</li>
+<li><p class="first">Assuming you have downloaded and unpacked the wordpress application into your home’s Download folder, move the wordpress folder to the the <em>www</em> directory created in the previous step - <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">mv</span> <span class="pre">~/Downloads/wordpress</span> <span class="pre">/var/www</span></code>.</p>
+</li>
+<li><p class="first">Install <code class="code docutils literal notranslate"><span class="pre">php-fpm</span></code> in your machine using your system’s package manager - <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">pacman</span> <span class="pre">-S</span> <span class="pre">php-fpm</span></code>. This is a <em>FastCGI Process Manager</em> for PHP which will bridge the wordpress application to <code class="code docutils literal notranslate"><span class="pre">zesty-router</span></code> application.</p>
+</li>
+<li><p class="first">Configure <code class="code docutils literal notranslate"><span class="pre">php-fpm</span></code> to listen on a TCP port. In some systems, the default configuration is set to listen on a unix socket file which would not work in this case.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Listen on localhost port 9000</span>
+<span class="n">Listen</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">9000</span>
+<span class="c1"># Ensure only localhost can connect to PHP-FPM</span>
+<span class="n">listen</span><span class="o">.</span><span class="n">allowed_clients</span> <span class="o">=</span> <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">A quick check using <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">php-fpm</span> <span class="pre">-t</span></code> should give an indication as to whether it is configured correctly.</p>
+</li>
+<li><p class="first">Start the <em>php-fpm</em> process - <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">php-fpm</span></code>. You can use <em>restart</em> if it was already running.</p>
+</li>
+<li><p class="first">You could optionally choose to run <em>php-fpm</em> as a service as well if you haven’t - <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">php-fpm</span></code>.</p>
+</li>
+<li><p class="first">To verify that the process is running at any time, use <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">ps</span> <span class="pre">-ef</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">php-fpm</span></code></p>
+</li>
+<li><p class="first">Create a database for the wordpress application, say <code class="code docutils literal notranslate"><span class="pre">db_wordpress</span></code>’.</p>
+</li>
+<li><p class="first">Configure your database settings in the <code class="code docutils literal notranslate"><span class="pre">wp-config.php</span></code> file.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>With these steps covered on the wordpress side, let’s now configure the <code class="code docutils literal notranslate"><span class="pre">zesty-router</span></code> side of the equation. Create your
+application folder and in it create an <code class="code docutils literal notranslate"><span class="pre">app.js</span></code> file. Add this to your new file.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({});</span>
+
+<span class="n">let</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span><span class="p">,</span> <span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+<span class="n">app</span><span class="o">.</span><span class="n">router</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">wordpress</span><span class="p">(</span><span class="s2">&quot;/var/www/wordpress&quot;</span><span class="p">,</span> <span class="s2">&quot;http://127.0.0.1:9000&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">result</span><span class="p">){</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+    <span class="p">});</span>
+</pre></div>
+</div>
+<p>We created the app with an empty config to the <code class="code docutils literal notranslate"><span class="pre">AppProvider</span></code>, which implies that the root context is <em>/</em>. We have <em>php-fpm</em>
+listening on port 9000 and wordpress installed at <code class="code docutils literal notranslate"><span class="pre">/var/www/wordpress</span></code>. Fire up the app at this point.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jjs</span> <span class="o">--</span><span class="n">language</span><span class="o">=</span><span class="n">es6</span> <span class="o">-</span><span class="n">ot</span> <span class="o">-</span><span class="n">scripting</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Dlogback</span><span class="o">.</span><span class="n">configurationFile</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">logback</span><span class="o">.</span><span class="n">xml</span> \
+<span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="n">Djava</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">path</span><span class="o">=../</span><span class="n">lib</span><span class="o">/</span><span class="n">zesty</span><span class="o">-</span><span class="n">router</span><span class="o">-</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">shaded</span><span class="o">.</span><span class="n">jar</span> <span class="n">app</span><span class="o">.</span><span class="n">js</span>
+</pre></div>
+</div>
+<p>When the app starts, navigate to <a class="reference external" href="http://localhost:8080/wp-admin/install.php">http://localhost:8080/wp-admin/install.php</a> to begin setting up wordpress.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="app_websocket.html" class="btn btn-neutral float-right" title="Websocket App Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="app_examples.html" class="btn btn-neutral" title="App Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stephen Maina
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
