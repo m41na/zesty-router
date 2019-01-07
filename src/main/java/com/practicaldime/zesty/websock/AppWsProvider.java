@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.extras;
+package com.practicaldime.zesty.websock;
 
 public interface AppWsProvider {
     

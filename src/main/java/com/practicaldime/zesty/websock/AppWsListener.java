@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.extras;
+package com.practicaldime.zesty.websock;
 
 import java.io.IOException;
 import org.eclipse.jetty.websocket.api.Session;

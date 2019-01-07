@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.extras;
+package com.practicaldime.zesty.websock;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;

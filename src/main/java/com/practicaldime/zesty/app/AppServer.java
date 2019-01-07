@@ -45,8 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.practicaldime.zesty.basics.AppRoutes;
-import com.practicaldime.zesty.extras.AppWsProvider;
-import com.practicaldime.zesty.extras.AppWsServlet;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.Router;
@@ -60,6 +58,8 @@ import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.string.StringViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
+import com.practicaldime.zesty.websock.AppWsProvider;
+import com.practicaldime.zesty.websock.AppWsServlet;
 
 public class AppServer {
 

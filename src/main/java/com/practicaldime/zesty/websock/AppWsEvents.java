@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.extras;
+package com.practicaldime.zesty.websock;
 
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -16,16 +16,26 @@ public class AppWsEvents implements AppWsListener {
     private static final Gson GSON = new Gson();
     private String user;
     private Session sess;
+    private final String topic;
+    
+    public AppWsEvents() {
+		this(null);
+	}
+    
+    public AppWsEvents(String topic) {
+		super();
+		this.topic = topic;
+	}
 
-    @Override
+	@Override
     public void onConnect(Session sess) throws IOException {
-        String from = null, to = null;
+        String from = null;
         String url = sess.getUpgradeRequest().getRequestURI().toString();
-        Pattern pattern = Pattern.compile("(/events/(.+?)/to/(.*))$");
+        String regex = String.format("/%s/(.+?)/to/(.+))$", topic != null? topic : "events");
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(url);
         if (matcher.find()) {
             from = matcher.group(2);
-            to = matcher.group(3);
         }
 
         AppWsMessage msg = new AppWsMessage("server", from, timestamp(), "Hi " + from + "! You are now online");

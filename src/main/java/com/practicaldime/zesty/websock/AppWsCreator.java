@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.extras;
+package com.practicaldime.zesty.websock;
 
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
