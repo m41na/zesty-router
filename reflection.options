@@ -31,5 +31,16 @@
     "allPublicFields": true,
     "allDeclaredMethods": true,
     "allPublicMethods": true
+  },
+  {
+    "name": "org.eclipse.jetty.servlet.DefaultServlet",
+    "allDeclaredFields": true,
+    "allPublicFields": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] },
+      { "name" : "<init>", "parameterTypes" : ["org.eclipse.jetty.server.ResourceService"] }
+    ]
   }
 ]

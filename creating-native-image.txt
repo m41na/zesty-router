@@ -47,7 +47,26 @@ add option -H:ReflectionConfigurationFiles=reflection.options
   }
 ]
 
-$GRAALVM_HOME/bin/native-image -jar target/zesty-router-0.1.0-shaded.jar \
--H:+JNI \
---report-unsupported-elements-at-runtime \
--H:ReflectionConfigurationFiles=reflection.options
+$GRAALVM_HOME/bin/native-image -jar target/zesty-router-0.1.0-shaded.jar -H:+JNI --report-unsupported-elements-at-runtime -H:ReflectionConfigurationFiles=reflection.options
+
+Upon creating new image and executing, this exception occurs:
+javax.servlet.ServletException: default@5c13d641==org.eclipse.jetty.servlet.DefaultServlet,jsp=null,order=-1,inst=false,async=true
+	at java.lang.Throwable.<init>(Throwable.java:287)
+	at java.lang.Exception.<init>(Exception.java:84)
+	at javax.servlet.ServletException.<init>(ServletException.java:128)
+	
+4. Add another option for Servlet
+
+  {
+    "name": "org.eclipse.jetty.servlet.DefaultServlet",
+    "allDeclaredFields": true,
+    "allPublicFields": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true,
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] },
+      { "name" : "<init>", "parameterTypes" : ["org.eclipse.jetty.server.ResourceService"] }
+    ]
+  }
+  
+ 

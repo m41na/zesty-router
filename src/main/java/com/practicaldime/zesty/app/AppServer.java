@@ -1,7 +1,6 @@
 package com.practicaldime.zesty.app;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -17,14 +16,11 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import javax.management.remote.JMXServiceURL;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
-import org.eclipse.jetty.jmx.ConnectorServer;
-import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -570,15 +566,6 @@ public class AppServer {
 			http.setPort(port);
 			http.setIdleTimeout(3000);
 			server.addConnector(http);
-			
-			// Setup JMX
-			MBeanContainer mbeanContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
-			server.addBean(mbeanContainer);
-			
-			// Setup ConnectorServer
-			JMXServiceURL jmxURL = new JMXServiceURL("rmi", null, 1976, "/jndi/rmi:///jmxrmi");
-			ConnectorServer jmxServer = new ConnectorServer(jmxURL, "org.eclipse.jetty.jmx:name=rmiconnectorserver");
-			server.addBean(jmxServer);
 
 			// TODO: configure secure connector
 			// enable CORS
