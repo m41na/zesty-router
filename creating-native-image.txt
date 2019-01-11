@@ -1,0 +1,53 @@
+set JAVA_HOME to GRAALVM_HOME
+mvn install:install-file 
+-Dfile=${JAVA_HOME}/jre/lib/svm/builder/svm.jar 
+-DgroupId=com.oracle.substratevm 
+-DartifactId=svm -Dversion=GraalVM-1.0.0-rc10 
+-Dpackaging=jar
+
+1. log4j is used by freemarker, so include log4j-over-slf4j to redirect to logback
+2. error: com.oracle.graal.pointsto.constraints.UnsupportedFeatureException: Unsupported field java.lang.System.props is reachable
+add option --report-unsupported-elements-at-runtime
+3. image created successfully. however, upon executing
+Exception in thread "main" java.lang.IllegalArgumentException: Class org.eclipse.jetty.servlet.ServletMapping[] is instantiated reflectively but was never registered. Register the class by using org.graalvm.nativeimage.RuntimeReflection
+add option -H:ReflectionConfigurationFiles=reflection.options
+[
+  {
+    "name" : "java.lang.Class",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  },
+  {
+    "name" : "java.lang.String",
+    "fields" : [
+      { "name" : "value", "allowWrite" : true },
+      { "name" : "hash" }
+    ],
+    "methods" : [
+      { "name" : "<init>", "parameterTypes" : [] },
+      { "name" : "<init>", "parameterTypes" : ["char[]"] },
+      { "name" : "charAt" },
+      { "name" : "format", "parameterTypes" : ["java.lang.String", "java.lang.Object[]"] }
+    ]
+  },
+  {
+    "name" : "java.lang.String$CaseInsensitiveComparator",
+    "methods" : [
+      { "name" : "compare" }
+    ]
+  },
+  {
+    "name": "[Lorg.eclipse.jetty.servlet.ServletMapping;",
+    "allDeclaredFields": true,
+    "allPublicFields": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true
+  }
+]
+
+$GRAALVM_HOME/bin/native-image -jar target/zesty-router-0.1.0-shaded.jar \
+-H:+JNI \
+--report-unsupported-elements-at-runtime \
+-H:ReflectionConfigurationFiles=reflection.options

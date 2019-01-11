@@ -627,7 +627,7 @@ public class AppServer {
 
 			// collect all context handlers
 			ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
-			//contextHandlers.addHandler(servlets);
+			contextHandlers.addHandler(servlets);
 			
 			// add activated context handler (say, for php with fgci)
 			if (Boolean.valueOf(this.wpcontext.get("activate"))) {

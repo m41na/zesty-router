@@ -114,6 +114,13 @@
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
 		</dependency>
+		
+		<!-- log4j is used in freemarker, so redirect to slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.25</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -215,7 +222,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>com.practicaldime.zesty.app.ZestyJs</Main-Class>
+										<Main-Class>com.practicaldime.zesty.app.BasicApp</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>
