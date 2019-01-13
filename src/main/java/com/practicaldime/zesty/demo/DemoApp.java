@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.servlet.HandlerRequest;
 import com.practicaldime.zesty.servlet.HandlerResponse;
-import com.practicaldime.zesty.servlet.HandlerServlet;
 
 public class DemoApp {
 
@@ -27,13 +26,9 @@ public class DemoApp {
 
 		AppServer app = new AppServer(props);
 
-		app.router().get("/", new HandlerServlet() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				response.send(String.format("incoming request: '%s'", request.getRequestURI()));
-			}
+		app.router().get("/", (HandlerRequest request, HandlerResponse response) -> {
+			response.send(String.format("incoming request: '%s'", request.getRequestURI()));
+			return null;
 		}).listen(port, host, (msg)-> LOG.info(msg));
 	}
 }

@@ -68,7 +68,7 @@ public class StringViewEngine implements ViewEngine{
     	Value result = context.eval(Source.newBuilder("js", script, template).build());
 		
     	//page markup
-    	String regex = "<div id=\"app\"></div>";
+    	String regex = model.get("view-regex").toString();
     	String markup = result.asString().replaceFirst(regex, result.asString());
     	return markup;
 	}
