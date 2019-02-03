@@ -64,6 +64,15 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	public void status(int status) {
 		setStatus(status);
 	}
+	
+	public void ok(Object payload) {
+		status(200);
+		json(payload);
+	}
+	
+	public void accepted() {
+		sendStatus(201);
+	}
 
 	@Override
 	public void sendStatus(int status) {

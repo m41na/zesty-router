@@ -27,6 +27,8 @@ public interface RouteRequest {
     
     String header(String name);
     
+    <T>T attribute(String name, Class<T> type);
+    
     boolean error();
     
     String message();

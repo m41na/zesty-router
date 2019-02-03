@@ -16,6 +16,10 @@ public interface RouteResponse {
     
     void sendStatus(int status);
     
+    void ok(Object payload);
+    
+    void accepted();
+    
     void send(String payload);
     
     void json(Object payload);
