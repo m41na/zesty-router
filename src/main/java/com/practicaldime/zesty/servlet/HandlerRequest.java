@@ -11,6 +11,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -38,9 +39,11 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 	protected String message;
 	protected byte[] body;
 	protected Cookie[] cookies;
+	protected Supplier<Gson> gson;
 
 	public HandlerRequest(HttpServletRequest request) {
 		super(request);
+		this.gson = new GsonSupplier();
 	}
 
 	@Override
@@ -120,7 +123,10 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 
 	@Override
 	public byte[] body() {
-		return this.body;
+		if(capture() > 0) {
+			return this.body;
+		}
+		return null;
 	}
 
 	@Override
@@ -128,15 +134,14 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 		String contentType = header("Content-Type");
 		if (contentType.contains("application/json")) {
 			Reader reader = new InputStreamReader(new ByteArrayInputStream(body()));
-			Gson gson = new Gson();
-			return gson.fromJson(reader, type);
+			return this.gson.get().fromJson(reader, type);
 		}
 		if (contentType.contains("application/xml")) {
 			try {
 				Reader reader = new InputStreamReader(new ByteArrayInputStream(body()));
 				JAXBContext context = JAXBContext.newInstance(type);
 				Unmarshaller un = context.createUnmarshaller();
-				return (T) un.unmarshal(reader);
+				return type.cast(un.unmarshal(reader));
 			} catch (JAXBException e) {
 				LOG.error(e.getMessage());
 			}
@@ -146,7 +151,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 
 	@Override
 	public <T> T body(BodyReader<T> provider) {
-		String type = header("ContentType");
+		String type = header("Content-Type");
 		return provider.transform(type, body());
 	}
 

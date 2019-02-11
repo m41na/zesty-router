@@ -83,21 +83,18 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	@Override
 	public void send(String payload) {
 		this.content = payload.getBytes(StandardCharsets.UTF_8);
-		setContentLength(this.content.length);
 	}
 
 	@Override
 	public void json(Object payload) {
 		setContentType("application/json");
 		this.content = new Gson().toJson(payload).getBytes(StandardCharsets.UTF_8);
-		setContentLength(this.content.length);
 	}
 
 	@Override
 	public void jsonp(Object payload) {
 		setContentType("application/json");
 		this.content = new Gson().toJson(payload).getBytes(StandardCharsets.UTF_8);
-		setContentLength(this.content.length);
 	}
 
 	@Override
@@ -112,7 +109,6 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 		} catch (JAXBException e) {
 			LOG.error("Could not transform content to response body");
 		}
-		setContentLength(bytes.size());
 		this.content = bytes.toByteArray();
 	}
 
@@ -128,7 +124,6 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 		ViewEngine engine = AppServer.engine();
 		try {
 			this.content = engine.merge(template, model).getBytes(StandardCharsets.UTF_8);
-			setContentLength(this.content.length);
 		} catch (Exception e) {
 			this.content = e.getMessage().getBytes(StandardCharsets.UTF_8);
 			setStatus(SC_NOT_ACCEPTABLE);
@@ -185,7 +180,6 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 		// modifies response
 		setContentType(mimeType);
-		setContentLength((int) downloadFile.length());
 
 		// forces download
 		String headerKey = "Content-Disposition";
@@ -206,7 +200,6 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 			return;
 		}
 		this.content = baos.toByteArray();
-		setContentLength(this.content.length);
 
 		if (status != null) {
 			status.send();
