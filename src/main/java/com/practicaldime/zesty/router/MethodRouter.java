@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MethodRouter implements Router{
 
-	public static enum Method {POST, GET, PUT, DELETE};
+	public static enum Method {POST, GET, PUT, DELETE, OPTIONS, HEAD, PATCH};
 	private Map<Method, Router> routers = new EnumMap<>(Method.class);
 	
 	public MethodRouter() {
@@ -13,7 +13,10 @@ public class MethodRouter implements Router{
 		routers.put(Method.GET, new PathPartsRouter());
 		routers.put(Method.PUT, new PathPartsRouter());
 		routers.put(Method.POST, new PathPartsRouter());
+		routers.put(Method.OPTIONS, new PathPartsRouter());
 		routers.put(Method.DELETE, new PathPartsRouter());
+		routers.put(Method.PATCH, new PathPartsRouter());
+		routers.put(Method.HEAD, new PathPartsRouter());
 	}
 
 	@Override

@@ -56,6 +56,7 @@ import com.practicaldime.zesty.view.string.StringViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 public class AppServer {
 
@@ -142,7 +143,7 @@ public class AppServer {
 	}
 	
 	public AppServer cors(Map<String, String> cors) {
-		this.locals.put("cors", true);
+		this.locals.put("cors", "true");
 		if(cors != null) this.corscontext.putAll(cors);
 		return this;
 	}
@@ -572,19 +573,18 @@ public class AppServer {
 			if(Boolean.valueOf(this.locals.getProperty("cors", "false"))){
 				FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
 				//add default values
-				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, 
-						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_ORIGINS_PARAM)).orElse("*"));
-				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM,
-						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_METHODS_PARAM)).orElse("GET,POST,HEAD,PUT,TRACE,OPTIONS,DELETE"));
-				corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM,
-						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOWED_HEADERS_PARAM)).orElse("X-Requested-With,Content-Type,Accept,Origin"));
-				corsFilter.setInitParameter(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, 
-						Optional.ofNullable(corscontext.get(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM)).orElse("true"));
-				corsFilter.setInitParameter(CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM, 
-						Optional.ofNullable(corscontext.get(CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM)).orElse("728000"));
+				corsFilter.setInitParameter(ALLOWED_ORIGINS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_ORIGINS_PARAM)).orElse("*"));
+				corsFilter.setInitParameter(ALLOWED_METHODS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_METHODS_PARAM)).orElse("GET,POST,PUT,PATCH,OPTIONS,DELETE"));
+				corsFilter.setInitParameter(ALLOWED_HEADERS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_HEADERS_PARAM)).orElse("Content-Type,Accept,Origin"));
+				corsFilter.setInitParameter(ALLOW_CREDENTIALS_PARAM, Optional.ofNullable(corscontext.get(ALLOW_CREDENTIALS_PARAM)).orElse("true"));
+				corsFilter.setInitParameter(PREFLIGHT_MAX_AGE_PARAM, Optional.ofNullable(corscontext.get(PREFLIGHT_MAX_AGE_PARAM)).orElse("728000"));
 				//add other user defined values that are not in the list of default keys
-				List<String> skipKeys = Arrays.asList(CrossOriginFilter.ALLOWED_ORIGINS_PARAM,CrossOriginFilter.ALLOWED_METHODS_PARAM,
-						CrossOriginFilter.ALLOWED_HEADERS_PARAM, CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM);
+				List<String> skipKeys = Arrays.asList(
+						ALLOWED_ORIGINS_PARAM, 
+						ALLOWED_METHODS_PARAM,
+						ALLOWED_HEADERS_PARAM, 
+						ALLOW_CREDENTIALS_PARAM, 
+						PREFLIGHT_MAX_AGE_PARAM);
 				corscontext.keySet().stream().filter(key-> !skipKeys.contains(key)).forEach(key->{
 					corsFilter.setInitParameter(key, corscontext.get(key));
 				});
