@@ -3,8 +3,13 @@ package com.practicaldime.zesty.servlet;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -209,5 +214,29 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	@Override
 	public byte[] getContent() {
 		return this.content;
+	}
+
+	@Override
+	public String readContent(String folder, String file) {
+		Path path = Paths.get(folder, file);
+		try {
+			StringWriter sw = new StringWriter();
+			Files.lines(path).forEach(sw::write);
+			return sw.toString();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public Reader getReader(String folder, String file) {
+		Path path = Paths.get(folder, file);
+		try {
+			return new FileReader(path.toFile());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

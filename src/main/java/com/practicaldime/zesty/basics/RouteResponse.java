@@ -1,5 +1,6 @@
 package com.practicaldime.zesty.basics;
 
+import java.io.Reader;
 import java.util.Map;
 
 import com.practicaldime.zesty.servlet.HandlerStatus;
@@ -47,4 +48,8 @@ public interface RouteResponse {
     void download(String path, String filename, String mimeType, HandlerStatus status);
     
     byte[] getContent();
+    
+    String readContent(String folder, String file);
+    
+    Reader getReader(String folder, String file);
 }

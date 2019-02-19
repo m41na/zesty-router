@@ -185,6 +185,8 @@ public class AppServer {
 			return post(path, "", "", config, handler);
 		case "put":
 			return put(path, "", "", config, handler);
+		case "patch":
+			return patch(path, "", "", config, handler);
 		case "delete":
 			return delete(path, "", "", config, handler);
 		case "options":
@@ -417,7 +419,7 @@ public class AppServer {
 		return put(path, "", "", null, handler);
 	}
 	
-	public AppServer out(String path,  HandlerConfig config, HandlerServlet handler) {
+	public AppServer put(String path,  HandlerConfig config, HandlerServlet handler) {
 		return put(path, "", "", config, handler);
 	}
 
@@ -438,6 +440,46 @@ public class AppServer {
 
 	public AppServer put(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
 		Route route = new Route(resolve(path), "put", accept, type);
+		route.setId();
+		routes.addRoute(route);
+		// add servlet handler
+		handler.setExecutor(threadPoolExecutor);
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
+		return this;
+	}
+	
+	// ************* PATCH *****************//
+	public AppServer patch(String path, HandlerServlet handler) {
+		return patch(path, "", "", null, handler);
+	}
+
+	public AppServer patch(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+		return patch(path, "", "", null, handler);
+	}
+	
+	public AppServer patch(String path,  HandlerConfig config, HandlerServlet handler) {
+		return patch(path, "", "", config, handler);
+	}
+
+	public AppServer patch(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+		return patch(path, "", "", config, handler);
+	}
+
+	public AppServer patch(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+		return patch(path, accept, type, config, new HandlerServlet() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void handle(HandlerRequest request, HandlerResponse response) {
+				handler.apply(request, response);
+			}
+		});
+	}
+
+	public AppServer patch(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
+		Route route = new Route(resolve(path), "patch", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
