@@ -52,7 +52,7 @@ import com.practicaldime.zesty.servlet.HandlerServlet;
 import com.practicaldime.zesty.servlet.ReRouteFilter;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
-import com.practicaldime.zesty.view.string.StringViewEngine;
+import com.practicaldime.zesty.view.string.DefaultViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
@@ -80,7 +80,7 @@ public class AppServer {
 	public AppServer(Map<String, String> props) {
 		this.assets(Optional.ofNullable(props.get("assets")).orElse("www"));
 		this.appctx(Optional.ofNullable(props.get("appctx")).orElse("/"));
-		this.engine(Optional.ofNullable(props.get("engine")).orElse("jtwig"));
+		this.engine(Optional.ofNullable(props.get("engine")).orElse("*"));
 		this.threadPoolExecutor = createThreadPoolExecutor();
 	}
 
@@ -112,11 +112,9 @@ public class AppServer {
 			case "freemarker":
 				engine = FtlViewEngine.create(locals.getProperty("assets"), "ftl");
 				break;
-			case "string":
-				engine = StringViewEngine.create(locals.getProperty("assets"), "js");
-				break;
 			default:
-				throw new RuntimeException("specified engine not supported");
+				LOG.error("specified engine not supported. defaulting to 'none' instead");
+				engine = DefaultViewEngine.create(locals.getProperty("assets"));
 			}
 			this.locals.put("engine", view);
 		} catch (IOException e) {
@@ -185,8 +183,6 @@ public class AppServer {
 			return post(path, "", "", config, handler);
 		case "put":
 			return put(path, "", "", config, handler);
-		case "patch":
-			return patch(path, "", "", config, handler);
 		case "delete":
 			return delete(path, "", "", config, handler);
 		case "options":
@@ -449,46 +445,6 @@ public class AppServer {
 		servlets.addServlet(holder, route.rid);
 		return this;
 	}
-	
-	// ************* PATCH *****************//
-	public AppServer patch(String path, HandlerServlet handler) {
-		return patch(path, "", "", null, handler);
-	}
-
-	public AppServer patch(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
-		return patch(path, "", "", null, handler);
-	}
-	
-	public AppServer patch(String path,  HandlerConfig config, HandlerServlet handler) {
-		return patch(path, "", "", config, handler);
-	}
-
-	public AppServer patch(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
-		return patch(path, "", "", config, handler);
-	}
-
-	public AppServer patch(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
-		return patch(path, accept, type, config, new HandlerServlet() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
-			}
-		});
-	}
-
-	public AppServer patch(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-		Route route = new Route(resolve(path), "patch", accept, type);
-		route.setId();
-		routes.addRoute(route);
-		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
-		ServletHolder holder = new ServletHolder(handler);
-		if(config != null) config.configure(holder);
-		servlets.addServlet(holder, route.rid);
-		return this;
-	}
 
 	// ************* DELETE *****************//
 	public AppServer delete(String path, HandlerServlet handler) {
@@ -616,7 +572,7 @@ public class AppServer {
 				FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
 				//add default values
 				corsFilter.setInitParameter(ALLOWED_ORIGINS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_ORIGINS_PARAM)).orElse("*"));
-				corsFilter.setInitParameter(ALLOWED_METHODS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_METHODS_PARAM)).orElse("GET,POST,PUT,PATCH,OPTIONS,DELETE"));
+				corsFilter.setInitParameter(ALLOWED_METHODS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_METHODS_PARAM)).orElse("GET,POST,PUT,DELETE,OPTIONS,HEAD"));
 				corsFilter.setInitParameter(ALLOWED_HEADERS_PARAM, Optional.ofNullable(corscontext.get(ALLOWED_HEADERS_PARAM)).orElse("Content-Type,Accept,Origin"));
 				corsFilter.setInitParameter(ALLOW_CREDENTIALS_PARAM, Optional.ofNullable(corscontext.get(ALLOW_CREDENTIALS_PARAM)).orElse("true"));
 				corsFilter.setInitParameter(PREFLIGHT_MAX_AGE_PARAM, Optional.ofNullable(corscontext.get(PREFLIGHT_MAX_AGE_PARAM)).orElse("728000"));

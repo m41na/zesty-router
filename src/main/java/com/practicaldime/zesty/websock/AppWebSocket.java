@@ -6,6 +6,12 @@ import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Not to be used directly as it has no business logic. Instead, use it to wrap around an implementation of
+ * AppWsListener, where you can handle your, for instance AppWsEvents specific business requirements
+ * @author Mainas
+ *
+ */
 public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
 
     private static final Logger LOG = LoggerFactory.getLogger(AppWebSocket.class);
@@ -48,9 +54,15 @@ public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
 
     @Override
     public void onWebSocketError(Throwable cause) {
+    	try {
+    		LOG.error("Socket error", cause);
+            this.wsEvents.onError(cause);
+    	}
+    	catch (IOException ex) {
+            LOG.error("onWebSocketText() error", ex);
+        }
         super.onWebSocketError(cause);
-        LOG.error("Socket error", cause);
-        this.wsEvents.onError(cause);
+        
     }
 
     @Override
@@ -75,7 +87,7 @@ public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
     }
 
     @Override
-    public void onError(Throwable cause) {
+    public void onError(Throwable cause) throws IOException{
         this.wsEvents.onError(cause);
     }
 

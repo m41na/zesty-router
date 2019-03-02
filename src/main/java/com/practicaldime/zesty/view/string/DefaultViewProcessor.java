@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class StringViewProcessor implements ViewProcessor{
+public class DefaultViewProcessor implements ViewProcessor{
 
 	@Override
 	public String resolve(String templateDir, String template) throws Exception {

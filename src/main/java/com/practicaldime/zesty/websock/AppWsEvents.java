@@ -1,6 +1,5 @@
 package com.practicaldime.zesty.websock;
 
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +7,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.eclipse.jetty.websocket.api.Session;
+
+import com.google.gson.Gson;
 
 public class AppWsEvents implements AppWsListener {
 

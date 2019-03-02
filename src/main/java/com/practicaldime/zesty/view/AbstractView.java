@@ -18,7 +18,7 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.resource.reference.ResourceReference;
 
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
-import com.practicaldime.zesty.view.string.StringViewEngine;
+import com.practicaldime.zesty.view.string.DefaultViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
 
 import freemarker.template.Template;
@@ -96,7 +96,7 @@ public abstract class AbstractView implements ViewBuilder {
                     JtwigModel viewModel = JtwigModel.newModel(getModel());
                     return jtwigTemplate.render(viewModel);
                 case "string":
-                	return StringViewEngine.instance().merge(markup, getModel());
+                	return DefaultViewEngine.instance().merge(markup, getModel());
                 default:
                     throw new ViewException("unsupported template engine");
             }
