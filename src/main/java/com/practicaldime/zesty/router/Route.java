@@ -30,4 +30,10 @@ public class Route {
     public void setId(){
         this.rid = "/" + UUID.randomUUID().toString();
     }
+
+	@Override
+	public String toString() {
+		return "Route [path=" + path + ", method=" + method + ", accept=" + accept + ", contentType="
+				+ contentType + ", headers=" + headers + "]";
+	}
 }

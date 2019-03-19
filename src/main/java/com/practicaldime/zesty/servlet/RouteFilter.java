@@ -15,18 +15,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.practicaldime.zesty.basics.AppRoutes;
+import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.router.RouteSearch;
 
-public class ReRouteFilter implements Filter {
+public class RouteFilter implements Filter {
 
-    public static final Logger LOG = LoggerFactory.getLogger(ReRouteFilter.class);
+    public static final Logger LOG = LoggerFactory.getLogger(RouteFilter.class);
 
     protected FilterConfig fConfig;
-    private final AppRoutes routes;
+    private final AppRouter routes;
     private final Gson gson = new Gson();
 
-    public ReRouteFilter(AppRoutes routes) {
+    public RouteFilter(AppRouter routes) {
         super();
         this.routes = routes;
     }

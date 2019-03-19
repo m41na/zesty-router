@@ -1,5 +1,11 @@
 package com.practicaldime.zesty.app;
 
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_HEADERS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_METHODS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
+import static org.eclipse.jetty.servlets.CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -18,6 +24,7 @@ import java.util.function.Supplier;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.HttpServlet;
 
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
@@ -40,7 +47,7 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.practicaldime.zesty.basics.AppRoutes;
+import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.Router;
@@ -49,21 +56,20 @@ import com.practicaldime.zesty.servlet.HandlerFilter;
 import com.practicaldime.zesty.servlet.HandlerRequest;
 import com.practicaldime.zesty.servlet.HandlerResponse;
 import com.practicaldime.zesty.servlet.HandlerServlet;
-import com.practicaldime.zesty.servlet.ReRouteFilter;
+import com.practicaldime.zesty.servlet.RouteFilter;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.string.DefaultViewEngine;
 import com.practicaldime.zesty.view.twig.TwigViewEngine;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 public class AppServer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AppServer.class);
 
 	private Server server;
-	private AppRoutes routes;
+	private AppRouter routes;
 	private String status = "stopped";
 	private final Properties locals = new Properties();
 	private final ThreadPoolExecutor threadPoolExecutor;
@@ -152,12 +158,12 @@ public class AppServer {
 	}
 
 	public AppServer router() {
-		this.routes = new AppRoutes(new MethodRouter());
+		this.routes = new AppRouter(new MethodRouter());
 		return this;
 	}
 	
 	public AppServer router(Supplier<Router> supplier) {
-		this.routes = new AppRoutes(supplier.get());
+		this.routes = new AppRouter(supplier.get());
 		return this;
 	}
 
@@ -168,6 +174,17 @@ public class AppServer {
 	public AppServer filter(String context, HandlerFilter filter) {
 		FilterHolder holder = new FilterHolder(filter);
 		servlets.addFilter(holder, context, EnumSet.of(DispatcherType.REQUEST));
+		return this;
+	}
+
+	public AppServer servlet(String path, HandlerConfig config, HttpServlet handler) {
+		Route route = new Route(resolve(path), "all", "*", "*");
+		route.setId();
+		routes.addRoute(route);
+		// add servlet handler
+		ServletHolder holder = new ServletHolder(handler);
+		if(config != null) config.configure(holder);
+		servlets.addServlet(holder, route.rid);
 		return this;
 	}
 
@@ -515,7 +532,7 @@ public class AppServer {
 	}
 
 	public AppServer all(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-		Route route = new Route(resolve(path), "*", accept, type);
+		Route route = new Route(resolve(path), "all", accept, type);
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
@@ -594,7 +611,7 @@ public class AppServer {
 				servlets.addFilter(corsFilter, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
 			}
 			// add routes filter
-			servlets.addFilter(new FilterHolder(new ReRouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
+			servlets.addFilter(new FilterHolder(new RouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
 
 			// configure resource handlers
 			String resourceBase = this.locals.getProperty("assets");

@@ -13,15 +13,15 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.eclipse.jetty.server.Request;
 import org.junit.Test;
 
-import com.practicaldime.zesty.basics.AppRoutes;
+import com.practicaldime.zesty.basics.AppRouter;
 
 public class AppRoutesTest {
 
-	private AppRoutes router;
+	private AppRouter router;
 	private final RandomStringGenerator rand = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
 	
 	public AppRoutesTest() {
-		router = new AppRoutes(new MethodRouter());		
+		router = new AppRouter(new MethodRouter());		
 		//add todo routes
 		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos", "get", null, "application/json"));
 		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos", "post", "application/x-www-form-urlencoded", "application/json"));
@@ -53,7 +53,7 @@ public class AppRoutesTest {
         router.addRoute(RouteBuilder.create(rand.generate(10), "/book/{id}/author/{uid}/name", "get", "application/json", ""));
         router.addRoute(RouteBuilder.create(rand.generate(10), "/book/{id}/author/{uid}/address/{city}", "get", "application/json", ""));
         
-        router.addRoute(RouteBuilder.create(rand.generate(10), "/book", "post", "application/json", "application/json"));
+        router.addRoute(RouteBuilder.create(rand.generate(10), "/book/new", "post", "application/json", "application/json"));
         router.addRoute(RouteBuilder.create(rand.generate(10), "/book/{id}", "post", "application/json", "application/json"));
         router.addRoute(RouteBuilder.create(rand.generate(10), "/book/{id}/author", "post", "application/json", ""));
         router.addRoute(RouteBuilder.create(rand.generate(10), "/book/{id}/author/{uid}", "post", "application/json", ""));
@@ -129,7 +129,7 @@ public class AppRoutesTest {
     }    
 
     @Test
-    public void testMatchBookPathWithDifferentMathods() {
+    public void testMatchBookPathWithDifferentMethods() {
         Route incoming = new Route("/book", "get", "application/json", "application/json");
         Request request = new MockRoute(null, null, incoming);
         RouteSearch match = router.search(request);

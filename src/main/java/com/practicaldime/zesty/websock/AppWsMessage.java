@@ -18,9 +18,7 @@ public class AppWsMessage {
     }
     
     public AppWsMessage(String from, String to, String time, String error, int status) {
-        this.from = from;
-        this.to = to;
-        this.time = time;
+        this(from, to, time, null);
         this.error = error;
         this.status = status;
     }

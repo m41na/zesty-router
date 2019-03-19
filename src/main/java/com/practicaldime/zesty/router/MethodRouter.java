@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MethodRouter implements Router{
 
-	public static enum Method {POST, GET, PUT, DELETE, OPTIONS, HEAD};
+	public static enum Method {POST, GET, PUT, DELETE, OPTIONS, HEAD, ALL};
 	private Map<Method, Router> routers = new EnumMap<>(Method.class);
 	
 	public MethodRouter() {
@@ -16,6 +16,7 @@ public class MethodRouter implements Router{
 		routers.put(Method.HEAD, new PathPartsRouter());
 		routers.put(Method.DELETE, new PathPartsRouter());
 		routers.put(Method.OPTIONS, new PathPartsRouter());
+		routers.put(Method.ALL, new PathPartsRouter());
 	}
 
 	@Override
@@ -24,6 +25,10 @@ public class MethodRouter implements Router{
 		Method type = method != null? Method.valueOf(method.toUpperCase()) : null;
 		if(type != null) {
 			this.routers.get(type).accept(input);
+			//if no match if found for the specific request method, look into 'all' methods
+			if(input.result == null) {
+				this.routers.get(Method.ALL).accept(input);
+			}
 			//if a matching route is found, set the method value in the result
 			if(input.result != null) {
 				input.result.method = type.name();

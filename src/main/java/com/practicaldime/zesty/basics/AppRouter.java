@@ -9,11 +9,11 @@ import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.RouteSearch;
 import com.practicaldime.zesty.router.Router;
 
-public class AppRoutes implements Router{
+public class AppRouter implements Router{
 
 	private final Router routeTree;
 	
-	public AppRoutes(Router routeTree) {
+	public AppRouter(Router routeTree) {
 		super();
 		this.routeTree = routeTree;
 	}

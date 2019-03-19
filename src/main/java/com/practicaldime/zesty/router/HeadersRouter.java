@@ -15,32 +15,46 @@ public class HeadersRouter implements Router{
 		for(Iterator<Route> iter = pool.iterator(); iter.hasNext();) {
 			Route mapping = iter.next();
 			//is 'content-type' declared in mapping route?
+			String contentTypeHeader = input.requestAttrs.getHeader("Content-Type");
 			if(mapping.contentType != null && mapping.contentType.trim().length() > 0) {
-				String reqHeader = input.requestAttrs.getHeader("Content-Type");
-				if(reqHeader != null) {
-					if(!reqHeader.contains(mapping.contentType)) {
+				if(contentTypeHeader != null) {
+					if(!contentTypeHeader.contains(mapping.contentType)) {
 						iter.remove();
 						continue;
 					}
+				}
+				else if (mapping.contentType.equals("") || mapping.contentType.equals("*")) {
+					continue;
 				}
 				else {
 					iter.remove();
 					continue;
 				}
 			}
+			else if(contentTypeHeader != null && contentTypeHeader.trim().length() > 0) {
+				iter.remove();
+				continue;
+			}
 			//is 'accept' declared in mapping route?
+			String acceptHeader = input.requestAttrs.getHeader("Accept");
 			if(mapping.accept != null && mapping.accept.trim().length() > 0) {
-				String reqHeader = input.requestAttrs.getHeader("Accept");
-				if(reqHeader != null) {
-					if(!reqHeader.contains(mapping.accept)) {
+				if(acceptHeader != null) {
+					if(!acceptHeader.contains(mapping.accept)) {
 						iter.remove();
 						continue;
 					}
+				}
+				else if(mapping.accept.equals("") || mapping.accept.equals("*")) {
+					continue;
 				}
 				else {
 					iter.remove();
 					continue;
 				}
+			}
+			else if(acceptHeader != null && acceptHeader.trim().length() > 0) {
+				iter.remove();
+				continue;
 			}
 			//are there headers in the mapping route that match the inputs?
 			if(!mapping.headers.isEmpty()) {
@@ -54,8 +68,16 @@ public class HeadersRouter implements Router{
 					}
 				}
 			}
-			//set first matched route if it exists in the input object
-			input.result = pool.size() > 0? pool.get(0) : null;
+		}
+		//set first matched route if it exists in the input object
+		if(pool.size() > 1) {
+			throw new RuntimeException("Matched more than one route. You need more specificity with these matched routes -> " + pool.toString());
+		}
+		else if(pool.size() == 0) {
+			throw new RuntimeException("No match was matched for against incoming inputs -> " + input.requestAttrs.toString());
+		}
+		else{
+			input.result = pool.get(0);
 		}
 	}
 

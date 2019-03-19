@@ -12,4 +12,9 @@ public class RequestAttrs {
 	public String getHeader(String name) {
 		return headers.keySet().contains(name)? headers.get(name) : null;
 	}
+
+	@Override
+	public String toString() {
+		return "RequestAttrs [path=" + url + ", method=" + method + ", headers=" + headers + "]";
+	}
 }
