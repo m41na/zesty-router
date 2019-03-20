@@ -17,19 +17,22 @@ public class HeadersRouter implements Router{
 			//is 'content-type' declared in mapping route?
 			String contentTypeHeader = input.requestAttrs.getHeader("Content-Type");
 			if(mapping.contentType != null && mapping.contentType.trim().length() > 0) {
-				if(contentTypeHeader != null) {
+				if(mapping.contentType.equals("*")) {
+					continue;
+				}
+				else if(contentTypeHeader != null) {
 					if(!contentTypeHeader.contains(mapping.contentType)) {
 						iter.remove();
 						continue;
 					}
 				}
-				else if (mapping.contentType.equals("") || mapping.contentType.equals("*")) {
-					continue;
-				}
 				else {
 					iter.remove();
 					continue;
 				}
+			}
+			else if (mapping.contentType != null && mapping.contentType.equals("")) {
+				continue;
 			}
 			else if(contentTypeHeader != null && contentTypeHeader.trim().length() > 0) {
 				iter.remove();
@@ -38,19 +41,22 @@ public class HeadersRouter implements Router{
 			//is 'accept' declared in mapping route?
 			String acceptHeader = input.requestAttrs.getHeader("Accept");
 			if(mapping.accept != null && mapping.accept.trim().length() > 0) {
-				if(acceptHeader != null) {
+				if(mapping.accept.equals("*")) {
+					continue;
+				}
+				else if(acceptHeader != null) {
 					if(!acceptHeader.contains(mapping.accept)) {
 						iter.remove();
 						continue;
 					}
 				}
-				else if(mapping.accept.equals("") || mapping.accept.equals("*")) {
-					continue;
-				}
 				else {
 					iter.remove();
 					continue;
 				}
+			}
+			else if(mapping.accept != null && mapping.accept.equals("")) {
+				continue;
 			}
 			else if(acceptHeader != null && acceptHeader.trim().length() > 0) {
 				iter.remove();
