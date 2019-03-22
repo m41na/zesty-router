@@ -89,6 +89,11 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	public void send(String payload) {
 		this.content = payload.getBytes(StandardCharsets.UTF_8);
 	}
+	
+	@Override
+	public void bytes(byte[] payload) {
+		this.content = payload;
+	}
 
 	@Override
 	public void json(Object payload) {

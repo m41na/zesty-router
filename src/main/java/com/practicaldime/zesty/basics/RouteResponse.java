@@ -23,6 +23,8 @@ public interface RouteResponse {
     
     void send(String payload);
     
+    void bytes(byte[] payload);
+    
     void json(Object payload);
     
     void jsonp(Object payload);
