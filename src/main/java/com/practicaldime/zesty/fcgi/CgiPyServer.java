@@ -1,6 +1,5 @@
 package com.practicaldime.zesty.fcgi;
 
-import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;

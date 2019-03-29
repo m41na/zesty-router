@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.servlet;
+package com.practicaldime.zesty.basics;
 
 public interface HandlerStatus {
     

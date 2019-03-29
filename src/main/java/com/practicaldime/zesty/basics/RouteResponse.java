@@ -3,8 +3,6 @@ package com.practicaldime.zesty.basics;
 import java.io.Reader;
 import java.util.Map;
 
-import com.practicaldime.zesty.servlet.HandlerStatus;
-
 public interface RouteResponse {
     
     void header(String header, String value);

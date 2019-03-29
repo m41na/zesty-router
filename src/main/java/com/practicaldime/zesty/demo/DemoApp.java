@@ -1,11 +1,11 @@
 package com.practicaldime.zesty.demo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
 import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.servlet.HandlerRequest;
 import com.practicaldime.zesty.servlet.HandlerResponse;
@@ -19,7 +19,7 @@ public class DemoApp {
 		int port = 8080;
 		String host = "localhost";
 
-		Map<String, String> props = Maps.newHashMap();
+		Map<String, String> props = new HashMap<>();
 		props.put("appctx", "/app");
 		props.put("assets", ""); 
 		props.put("engine", "freemarker");
