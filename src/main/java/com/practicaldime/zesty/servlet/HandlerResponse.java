@@ -30,7 +30,6 @@ import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.basics.BodyWriter;
 import com.practicaldime.zesty.basics.HandlerStatus;
 import com.practicaldime.zesty.basics.RouteResponse;
-import com.practicaldime.zesty.view.ViewEngine;
 
 public class HandlerResponse extends HttpServletResponseWrapper implements RouteResponse {
 
@@ -132,9 +131,8 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 	@Override
 	public void render(String template, Map<String, Object> model) {
-		ViewEngine engine = AppServer.engine();
 		try {
-			this.content = engine.merge(template, model).getBytes(StandardCharsets.UTF_8);
+			this.content = AppServer.engine().merge(template, model).getBytes(StandardCharsets.UTF_8);
 		} catch (Exception e) {
 			this.content = e.getMessage().getBytes(StandardCharsets.UTF_8);
 			setStatus(SC_NOT_ACCEPTABLE);

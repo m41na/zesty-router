@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.string.ViewProcessor.Lookup;
 
 public class DefaultViewEngine implements ViewEngine{
 
@@ -11,6 +12,7 @@ public class DefaultViewEngine implements ViewEngine{
     private final ViewProcessor view;
 	private final String templateDir;
 	private final String templateExt = "*";
+	private final ViewProcessor.Lookup strategy = Lookup.FILE;
 	
 	private DefaultViewEngine(String templateDir) {
     	super();
@@ -45,8 +47,8 @@ public class DefaultViewEngine implements ViewEngine{
         return DefaultViewEngine.instance.view;
     }
 
-	@Override
+    @Override
 	public String merge(String template, Map<String, Object> model) throws Exception {	    	
-    	return view.resolve(templateDir, template);
+    	return view.resolve(templateDir, template, strategy);
 	}
 }

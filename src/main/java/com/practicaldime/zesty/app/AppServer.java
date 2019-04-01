@@ -6,7 +6,6 @@ import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM
 import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
 import static org.eclipse.jetty.servlets.CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -47,6 +46,7 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.practicaldime.zesty.basics.AppViewEngines;
 import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
@@ -58,9 +58,7 @@ import com.practicaldime.zesty.servlet.HandlerResponse;
 import com.practicaldime.zesty.servlet.HandlerServlet;
 import com.practicaldime.zesty.servlet.RouteFilter;
 import com.practicaldime.zesty.view.ViewEngine;
-import com.practicaldime.zesty.view.ftl.FtlViewEngine;
-import com.practicaldime.zesty.view.string.DefaultViewEngine;
-import com.practicaldime.zesty.view.twig.TwigViewEngine;
+import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
 
@@ -71,13 +69,14 @@ public class AppServer {
 	private Server server;
 	private AppRouter routes;
 	private String status = "stopped";
+	private static ViewEngine engine;
 	private final Properties locals = new Properties();
 	private final ThreadPoolExecutor threadPoolExecutor;
 	private final Map<String, String> wpcontext = new HashMap<>();
 	private final Map<String, String> corscontext = new HashMap<>();
 	private final LifecycleSubscriber lifecycle = new LifecycleSubscriber();
+	private final ViewEngineFactory engineFactory = new AppViewEngines();
 	private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
-	private static ViewEngine engine;
 
 	public AppServer() {
 		this(new HashMap<>());
@@ -110,22 +109,18 @@ public class AppServer {
 	}
 
 	public final void engine(String view) {
-		try {
-			switch (view) {
-			case "jtwig":
-				engine = TwigViewEngine.create(locals.getProperty("assets"), "html");
-				break;
-			case "freemarker":
-				engine = FtlViewEngine.create(locals.getProperty("assets"), "ftl");
-				break;
-			default:
-				LOG.error("specified engine not supported. defaulting to 'none' instead");
-				engine = DefaultViewEngine.create(locals.getProperty("assets"));
-			}
-			this.locals.put("engine", view);
-		} catch (IOException e) {
-			throw new RuntimeException("problem setting up view engine", e);
+		switch (view) {
+		case "jtwig":
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "html");
+			break;
+		case "freemarker":
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl");
+			break;
+		default:
+			LOG.error("specified engine not supported. defaulting to 'none' instead");
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "");
 		}
+		this.locals.put("engine", view);
 	}
 
 	public String resolve(String path) {
