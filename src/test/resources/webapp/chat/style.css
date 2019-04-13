@@ -1,0 +1,110 @@
+*{   padding: 0px;
+    margin: 0px;
+}
+
+html,body{
+    width: 100%;
+    height: 100vh;
+}
+
+#chatWidget{
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 5px 10px;
+}
+
+#chatUser{
+    width: 100%;
+    margin: 5px 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+#chatUser .user {
+    display: block;
+    padding: 5px;
+    line-height: 1.3em;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#chatActive{
+    width: 100%;
+    margin: 5px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#chatActive .active-row {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+#chatMessages{
+    margin: 5px 10px;
+    width: 100%;
+}
+
+#chatMessages .conversation {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#chatMessages .conversation .message-row.incoming{
+    margin: 5px;
+    border: 1px solid lightblue;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+#chatMessages .conversation .message-row.outgoing{
+    margin: 5px;
+    border: 1px solid lightpink;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+#chatMessages .conversation .message-row.from{
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+#chatMessages .conversation .message-row.time{
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+#chatMessages .conversation .message-row.content{
+    font-family: cursive;
+}
+
+#chatMessages textarea{
+    width: 98%;
+    min-height: 100px;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+#chatButton {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 5px 10px;
+}
+
+button.chat-control,
+button.nudge  {
+    padding: 5px 10px;
+    line-height: 1.3em;
+    border-radius: 3px;    
+}
+
+button.chat-control:hover,
+button.nudge:hover {
+    border: 1px solid #ddd;
+
+}

@@ -14,6 +14,6 @@ public class AppWsCreator implements WebSocketCreator{
     
     @Override
     public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
-        return new AppWebSocket(provider.provide());
-    }    
+        return provider.provide();
+    }
 }

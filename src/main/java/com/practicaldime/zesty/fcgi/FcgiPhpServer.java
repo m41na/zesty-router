@@ -27,23 +27,23 @@ public class FcgiPhpServer {
         context.setWelcomeFiles(new String[]{"index.php"});
         server.setHandler(context);
         
-        //add try filter
-        FilterHolder tryHolder = new FilterHolder(new TryFilesFilter());
-        tryHolder.setInitParameter("files", "$path /index.php?p=$path");
-        context.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
-        
         //Add default servlet (to serve the html/css/js)
         ServletHolder defHolder = new ServletHolder("default",new DefaultServlet());
         defHolder.setInitParameter("dirAllowed","false");
         context.addServlet(defHolder,"/");
         
+        //add try filter
+        FilterHolder tryHolder = new FilterHolder(new TryFilesFilter());
+        tryHolder.setInitParameter("files", "$path /index.php?p=$path");
+        context.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
+        
         //add fcgi servlet for php scripts
-        ServletHolder fgciHolder = new ServletHolder("fcgi",new FastCGIProxyServlet());
-        fgciHolder.setInitParameter("proxyTo","http://localhost:9000");
-        fgciHolder.setInitParameter("prefix","/");
-        fgciHolder.setInitParameter("scriptRoot","/var/www/wordpress");
-        fgciHolder.setInitParameter("scriptPattern","(.+?\\\\.php)");
-        context.addServlet(fgciHolder,"*.php");
+        ServletHolder fcgiHolder = new ServletHolder("fcgi",new FastCGIProxyServlet());
+        fcgiHolder.setInitParameter("proxyTo","http://localhost:9000");
+        fcgiHolder.setInitParameter("prefix","/");
+        fcgiHolder.setInitParameter("scriptRoot","/var/www/wordpress");
+        fcgiHolder.setInitParameter("scriptPattern","(.+?\\\\.php)");
+        context.addServlet(fcgiHolder,"*.php");
 
         try {
             server.start();

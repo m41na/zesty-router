@@ -46,8 +46,8 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.practicaldime.zesty.basics.AppViewEngines;
 import com.practicaldime.zesty.basics.AppRouter;
+import com.practicaldime.zesty.basics.AppViewEngines;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.Router;
@@ -59,6 +59,7 @@ import com.practicaldime.zesty.servlet.HandlerServlet;
 import com.practicaldime.zesty.servlet.RouteFilter;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewEngineFactory;
+import com.practicaldime.zesty.websock.AppWsPolicy;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
 
@@ -539,9 +540,9 @@ public class AppServer {
 	}
 
 	// ************* WEBSOCKETS *****************//
-	public AppServer websocket(String ctx, AppWsProvider provider) {
+	public AppServer websocket(String ctx, AppWsProvider provider, AppWsPolicy policy) {
 		// Add a websocket to a specific path spec
-		ServletHolder holderEvents = new ServletHolder("ws-events", new AppWsServlet(provider));
+		ServletHolder holderEvents = new ServletHolder("ws-events", new AppWsServlet(provider, policy.getPolicy()));
 		servlets.addServlet(holderEvents, ctx);
 		return this;
 	}

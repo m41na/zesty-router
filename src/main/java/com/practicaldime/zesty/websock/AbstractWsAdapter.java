@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.websock;
 
 import java.io.IOException;
+
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.slf4j.Logger;
@@ -12,14 +13,10 @@ import org.slf4j.LoggerFactory;
  * @author Mainas
  *
  */
-public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
+public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppWsListener{
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppWebSocket.class);
-    private AppWsListener wsEvents;
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractWsAdapter.class);
 
-    public AppWebSocket(AppWsListener wsEvents) {
-        this.wsEvents = wsEvents;
-    }
 
     @Override
     public void onWebSocketConnect(Session sess) {
@@ -33,12 +30,12 @@ public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
 
     @Override
     public void onWebSocketText(String json) {
-        super.onWebSocketText(json);
         try {
             onString(getSession(), json);
         } catch (IOException ex) {
             LOG.error("onWebSocketText() error", ex);
         }
+        super.onWebSocketText(json);
     }
 
     @Override
@@ -56,40 +53,23 @@ public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
     public void onWebSocketError(Throwable cause) {
     	try {
     		LOG.error("Socket error", cause);
-            this.wsEvents.onError(cause);
+            onError(getSession(), cause);
     	}
     	catch (IOException ex) {
             LOG.error("onWebSocketText() error", ex);
         }
         super.onWebSocketError(cause);
-        
-    }
-
-    @Override
-    public void onConnect(Session sess) throws IOException {
-        this.wsEvents.onConnect(sess);
-    }
-
-    @Override
-    public void onString(Session sess, String message) throws IOException {
-        this.wsEvents.onString(sess, message);
     }
 
     @Override
     public void onBinary(Session sess, byte[] payload, int offset, int len) throws IOException {
-        this.wsEvents.onBinary(sess, payload, offset, len);
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void onClose(Session sess, int statusCode, String reason) throws IOException {
-        this.wsEvents.onClose(sess, statusCode, reason);
-        this.wsEvents = null;
-    }
-
-    @Override
-    public void onError(Throwable cause) throws IOException{
-        this.wsEvents.onError(cause);
-    }
+	public String sessionId() {
+		return sessionIdStrategy().apply(getSession());
+	}
 
     @Override
     public void sendString(String message) throws IOException {
@@ -102,12 +82,40 @@ public class AppWebSocket extends WebSocketAdapter implements AppWsListener{
     }
 
     @Override
-    public String timestamp() {
-        return this.wsEvents.timestamp();
-    }
-
-    @Override
     public void close() {
         getSession().close();
+    }
+    
+    protected void log(String message) {
+    	log("info", message);
+    }
+    
+    protected void log(String level, String message) {
+    	switch(level) {
+	    	case "error": {
+	    		LOG.error(message);
+	    		break;
+	    	}
+	    	case "warn": {
+	    		LOG.warn(message);
+	    		break;
+	    	}
+	    	case "info": {
+	    		LOG.info(message);
+	    		break;
+	    	}
+	    	case "debug": {
+	    		LOG.debug(message);
+	    		break;
+	    	}
+	    	case "trace": {
+	    		LOG.trace(message);
+	    		break;
+	    	}
+	    	default: {
+	    		System.out.println(message);
+	    		break;
+	    	}
+    	}
     }
 }

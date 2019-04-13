@@ -1,13 +1,19 @@
 package com.practicaldime.zesty.fcgi;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
+import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
+import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.CGI;
 
-public class CgiPyServer {
+public class FcgiPyServer {
 
     public static void main(String[] args) {
         Server server = new Server();
@@ -19,7 +25,7 @@ public class CgiPyServer {
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        context.setResourceBase("/var/www/pypress");
+        context.setResourceBase("src/test/resources/fcgi");
         context.setWelcomeFiles(new String[]{"index.html"});
         server.setHandler(context);
         
@@ -28,15 +34,18 @@ public class CgiPyServer {
         defHolder.setInitParameter("dirAllowed","false");
         context.addServlet(defHolder,"/");
         
+        //add try filter
+        FilterHolder tryHolder = new FilterHolder(new TryFilesFilter());
+        tryHolder.setInitParameter("files", "$path /index.php?p=$path");
+        context.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
+        
         //add fcgi servlet
-        ServletHolder cgiHolder = new ServletHolder("cgi",new CGI());
-        cgiHolder.setInitParameter("path","/bin:/usr/bin:/usr/local/bin");
-        cgiHolder.setInitParameter("cgibinResourceBaseIsRelative","true");
-        cgiHolder.setInitParameter("commandPrefix","/usr/bin/python");
-        cgiHolder.setInitParameter("cgibinResourceBase","/cgi-bin");
-        cgiHolder.setInitOrder(1);
-        cgiHolder.setAsyncSupported(true);
-        context.addServlet(cgiHolder,"/cgi-bin/*");
+        ServletHolder fcgiHolder = new ServletHolder("vcgi",new FastCGIProxyServlet());
+        fcgiHolder.setInitParameter("proxyTo","http://localhost:9000");
+        fcgiHolder.setInitParameter("prefix","/");
+        fcgiHolder.setInitParameter("scriptRoot","src/test/resources/fcgi");
+        fcgiHolder.setInitParameter("scriptPattern","(.+?\\\\.py)");
+        context.addServlet(fcgiHolder,"*.py");
 
         try {
             server.start();
