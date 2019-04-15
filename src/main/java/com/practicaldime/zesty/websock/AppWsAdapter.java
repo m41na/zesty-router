@@ -13,16 +13,16 @@ import org.slf4j.LoggerFactory;
  * @author Mainas
  *
  */
-public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppWsListener{
+public abstract class AppWsAdapter extends WebSocketAdapter implements AppWsListener{
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractWsAdapter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppWsAdapter.class);
 
 
     @Override
     public void onWebSocketConnect(Session sess) {
         super.onWebSocketConnect(sess);
         try {
-            onConnect(sess);
+            onConnect();
         } catch (IOException ex) {
             LOG.error("onWebSocketConnect () error", ex);
         }
@@ -31,7 +31,7 @@ public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppW
     @Override
     public void onWebSocketText(String json) {
         try {
-            onString(getSession(), json);
+            onString(json);
         } catch (IOException ex) {
             LOG.error("onWebSocketText() error", ex);
         }
@@ -42,7 +42,7 @@ public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppW
     public void onWebSocketClose(int statusCode, String reason) {
         try {
             LOG.warn("Socket Closed: {}", reason);
-            onClose(getSession(), statusCode, reason);
+            onClose(statusCode, reason);
         } catch (IOException ex) {
             LOG.error("onWebSocketText() error", ex);
         }
@@ -53,7 +53,7 @@ public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppW
     public void onWebSocketError(Throwable cause) {
     	try {
     		LOG.error("Socket error", cause);
-            onError(getSession(), cause);
+            onError(cause);
     	}
     	catch (IOException ex) {
             LOG.error("onWebSocketText() error", ex);
@@ -62,13 +62,13 @@ public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppW
     }
 
     @Override
-    public void onBinary(Session sess, byte[] payload, int offset, int len) throws IOException {
+    public void onBinary(byte[] payload, int offset, int len) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
 	public String sessionId() {
-		return sessionIdStrategy().apply(getSession());
+		return idStrategy().apply(getSession());
 	}
 
     @Override
@@ -90,26 +90,26 @@ public abstract class AbstractWsAdapter extends WebSocketAdapter implements AppW
     	log("info", message);
     }
     
-    protected void log(String level, String message) {
+    protected void log(String level, String message, Object...args) {
     	switch(level) {
 	    	case "error": {
-	    		LOG.error(message);
+	    		LOG.error(message, args);
 	    		break;
 	    	}
 	    	case "warn": {
-	    		LOG.warn(message);
+	    		LOG.warn(message, args);
 	    		break;
 	    	}
 	    	case "info": {
-	    		LOG.info(message);
+	    		LOG.info(message, args);
 	    		break;
 	    	}
 	    	case "debug": {
-	    		LOG.debug(message);
+	    		LOG.debug(message, args);
 	    		break;
 	    	}
 	    	case "trace": {
-	    		LOG.trace(message);
+	    		LOG.trace(message, args);
 	    		break;
 	    	}
 	    	default: {

@@ -5,8 +5,7 @@ import java.util.Map;
 
 import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
-import com.practicaldime.zesty.websock.AppWsPolicy;
-import com.practicaldime.zesty.websock.AppWsHandler;
+import com.practicaldime.zesty.websock.SimpleWsHandler;
 
 public class SimpleSock {
 
@@ -19,7 +18,7 @@ public class SimpleSock {
 		
 		AppServer app = AppProvider.provide(props);
 		app.router()
-		.websocket("/events/*", () -> new AppWsHandler("events"), () -> AppWsPolicy.defaultConfig())
+		.websocket("/events/*", () -> new SimpleWsHandler("events"))
 		.listen(8080, "localhost", (result) -> {
 			System.out.println(result);
 		});

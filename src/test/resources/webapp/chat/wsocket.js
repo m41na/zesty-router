@@ -1,4 +1,4 @@
-// small helper function for selecting element by id
+// get a reference to the necessary elements
 let userInput = document.querySelector("input[name='user']");
 let connectBtn = document.querySelector("button[name='connect']");
 let sendBtn = document.querySelector("button[name='send']");
@@ -36,7 +36,8 @@ let connectUser = (user) => {
     //Establish the WebSocket connection and set up event handlers
     let ws = new WebSocket("ws://" + location.hostname + ":" + location.port + "/events/" + user);
     ws.onmessage = msg => updateChat(msg);
-    ws.onclose = () => console.log("WebSocket connection closed");
+    ws.onclose = resetChat;
+    ws.onerror = (err) => console.log(`${err || 'websocket error occured'}`);
 
     // Add event listeners to button and input field
     sendBtn.addEventListener("click", () => sendAndClear(messageBox.value));
@@ -58,6 +59,17 @@ let connectUser = (user) => {
         console.log(msg);
         let data = JSON.parse(msg.data);
         conversation.appendChild(createMessage(data));
+    }
+
+    function resetChat(){
+        console.log("WebSocket connection closed");
+        connectBtn.setAttribute('disabled', true);
+        sendBtn.removeAttribute('disabled');
+        messageBox.value = "";
+        //empty out conversation nodes
+        while (conversation.lastChild) {
+            conversation.removeChild(conversation.lastChild);
+        }
     }
 
     function createMessage(msg){

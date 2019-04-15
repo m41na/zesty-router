@@ -540,6 +540,10 @@ public class AppServer {
 	}
 
 	// ************* WEBSOCKETS *****************//
+	public AppServer websocket(String ctx, AppWsProvider provider) {
+		return websocket(ctx, provider, AppWsPolicy::defaultConfig);
+	}
+	
 	public AppServer websocket(String ctx, AppWsProvider provider, AppWsPolicy policy) {
 		// Add a websocket to a specific path spec
 		ServletHolder holderEvents = new ServletHolder("ws-events", new AppWsServlet(provider, policy.getPolicy()));
@@ -566,7 +570,7 @@ public class AppServer {
 		try {
 			status = "starting";
 			// create server with thread pool
-			QueuedThreadPool threadPool = new QueuedThreadPool(500, 5, 3000);
+			QueuedThreadPool threadPool = new QueuedThreadPool(500, 5, 30000);
 			server = new Server(threadPool);
 
 			// Scheduler
@@ -576,7 +580,7 @@ public class AppServer {
 			ServerConnector http = new ServerConnector(server);
 			http.setHost(host);
 			http.setPort(port);
-			http.setIdleTimeout(3000);
+			http.setIdleTimeout(30000); //milliseconds
 			server.addConnector(http);
 
 			// TODO: configure secure connector
