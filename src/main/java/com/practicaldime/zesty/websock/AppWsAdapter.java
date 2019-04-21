@@ -2,6 +2,7 @@ package com.practicaldime.zesty.websock;
 
 import java.io.IOException;
 
+import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AppWsAdapter extends WebSocketAdapter implements AppWsListener{
 
     private static final Logger LOG = LoggerFactory.getLogger(AppWsAdapter.class);
-
 
     @Override
     public void onWebSocketConnect(Session sess) {
@@ -40,24 +40,15 @@ public abstract class AppWsAdapter extends WebSocketAdapter implements AppWsList
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
-        try {
             LOG.warn("Socket Closed: {}", reason);
             onClose(statusCode, reason);
-        } catch (IOException ex) {
-            LOG.error("onWebSocketText() error", ex);
-        }
         super.onWebSocketClose(statusCode, reason);
     }
 
     @Override
     public void onWebSocketError(Throwable cause) {
-    	try {
     		LOG.error("Socket error", cause);
             onError(cause);
-    	}
-    	catch (IOException ex) {
-            LOG.error("onWebSocketText() error", ex);
-        }
         super.onWebSocketError(cause);
     }
 
@@ -67,8 +58,8 @@ public abstract class AppWsAdapter extends WebSocketAdapter implements AppWsList
     }
 
     @Override
-	public String sessionId() {
-		return idStrategy().apply(getSession());
+	public <T>T sessionId() {
+		return (T)idStrategy().apply(getSession());
 	}
 
     @Override
@@ -85,7 +76,7 @@ public abstract class AppWsAdapter extends WebSocketAdapter implements AppWsList
     public void close() {
         getSession().close();
     }
-    
+
     protected void log(String message) {
     	log("info", message);
     }

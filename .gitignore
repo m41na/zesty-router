@@ -6,6 +6,7 @@ nbproject
 **/upload
 .project
 .classpath
+.idea/**
 
 # npm artifacts
 **/node_modules

@@ -9,12 +9,12 @@ import org.eclipse.jetty.websocket.api.Session;
 public interface AppWsListener {
 	
 	String getContext();
-    
+
     String timestamp();
 	
-	String sessionId();
+	<T>T sessionId();
 	
-	Function<Session, String> idStrategy();
+	<T>Function<Session, T> idStrategy();
 	
 	RemoteEndpoint getRemote();
 
@@ -30,9 +30,9 @@ public interface AppWsListener {
     
     void onBinary(byte[] payload, int offset, int len) throws IOException;
     
-    void onClose(int statusCode, String reason) throws IOException;
+    void onClose(int statusCode, String reason);
     
-    void onError(Throwable cause) throws IOException;;
+    void onError(Throwable cause);
     
     void sendString(String message) throws IOException;
     
