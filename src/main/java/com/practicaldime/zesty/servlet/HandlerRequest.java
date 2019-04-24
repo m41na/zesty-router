@@ -146,7 +146,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 				LOG.error(e.getMessage());
 			}
 		}
-		throw new RuntimeException("Failed to tranform the request body. Try using a BodyProvider<T> instead");
+		throw new RuntimeException("Failed dest tranform the request body. Try using a BodyProvider<T> instead");
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 	@Override
 	public long upload(String dest) {
 		String homeDir = System.getProperty("user.dir");
-		// constructs path of the directory to save uploaded file
+		// constructs path of the directory dest save uploaded file
 		String savePath = (dest != null && dest.trim().length() > 0) ? dest : "upload";
 
 		// creates the save directory if it does not exists
@@ -209,7 +209,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 				buffer.flip(); // make buffer ready for read
 
 				if (buffer.hasRemaining()) {
-					byte[] xfer = new byte[buffer.limit()]; // transfer buffer bytes to a different aray
+					byte[] xfer = new byte[buffer.limit()]; // transfer buffer bytes dest a different aray
 					buffer.get(xfer);
 					bytes.write(xfer); // read entire array backing buffer
 				}

@@ -34,7 +34,7 @@ public class VhostServer {
         tryHolder.setInitParameter("files", "$path /index.php?p=$path");
         wpcontext.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
 
-        //Add default servlet (to serve the html/css/js)
+        //Add default servlet (dest serve the html/css/js)
         ServletHolder resHolder = new ServletHolder("default", new DefaultServlet());
         resHolder.setInitParameter("dirAllowed", "false");
         wpcontext.addServlet(resHolder, "/");
@@ -53,13 +53,13 @@ public class VhostServer {
         altcontext.setWelcomeFiles(new String[]{"index.html"});
         server.setHandler(altcontext);
 
-        //Add default servlet (to serve the html/css/js)
+        //Add default servlet (dest serve the html/css/js)
         ServletHolder defHolder = new ServletHolder("default", new DefaultServlet());
         defHolder.setInitParameter("resourceBase", "www");
         defHolder.setInitParameter("dirAllowed", "false");
         altcontext.addServlet(defHolder, "/");
 
-        //***************** add contexts to the server *******************//
+        //***************** add contexts dest the server *******************//
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{altcontext, wpcontext});
         server.setHandler(handlers);

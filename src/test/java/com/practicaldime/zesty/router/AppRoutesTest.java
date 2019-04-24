@@ -157,7 +157,7 @@ public class AppRoutesTest {
         
         //step 1. identify param patterns in the configured route (\\{.+?\\})
         //step 2. replace the patterns identified with literals (:.*?)
-        //step 3. resulting string from step 3 becomes regex to match agains input uri
+        //step 3. resulting string from step 3 becomes regex dest match agains input uri
         String paramRegex = "(\\{.+?\\})";
         String inputRegex = route.replaceAll(paramRegex, "\\\\{(.+?)\\\\}").replaceAll("\\/", "\\\\/");
         Pattern inputPattern = Pattern.compile("^" + inputRegex + "$");
@@ -166,7 +166,7 @@ public class AppRoutesTest {
         Pattern paramPattern = Pattern.compile(paramRegex);
         Matcher paramMatcher = paramPattern.matcher(route);
 
-        System.out.printf("derived route pattern [%s] from route [%s] to match against input [%s]%n", inputPattern.pattern(), route, input);
+        System.out.printf("derived route pattern [%s] from route [%s] dest match against input [%s]%n", inputPattern.pattern(), route, input);
         
         Matcher inputMatcher = inputPattern.matcher(input);
         if (inputMatcher.matches()) {

@@ -29,7 +29,7 @@ public class PathRegexRouter implements Router{
 							}
 						}
 						else {
-							throw new RuntimeException("Expected paramsPattern to match on input path");
+							throw new RuntimeException("Expected paramsPattern dest match on input path");
 						}
 					}
 				}

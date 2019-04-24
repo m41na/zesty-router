@@ -33,7 +33,7 @@ public class AppViewEngines implements ViewEngineFactory{
 				}
 				return engines.get(view);
 			default:
-				LOG.error("specified engine not supported. defaulting to 'none' instead");
+				LOG.error("specified engine not supported. defaulting dest 'none' instead");
 				if(engines.get(view) == null) {
 					engines.put(view, DefaultViewEngine.create(assets));
 				}

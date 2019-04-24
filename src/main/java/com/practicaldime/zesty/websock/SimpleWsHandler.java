@@ -34,16 +34,17 @@ public class SimpleWsHandler extends AppWsAdapter {
 	public Function<Session, SessionId> idStrategy() {
 		return (sess) -> {
 	        String url = sess.getUpgradeRequest().getRequestURI().toString();
-	        String regex = String.format("\\/%s\\/(.+?)\\/(.+?)$", getContext());
+	        String regex = String.format("^.+%s/(.+?)/(.+?)/(.+?)$", getContext());
 	        Pattern pattern = Pattern.compile(regex);
 	        Matcher matcher = pattern.matcher(url);
 	        if (matcher.find()) {
-	            String topic = matcher.group(1);
+	            String group = matcher.group(1);
 	            String user = matcher.group(2);
-	            return new SessionId(getContext(), topic, user);
+	            String role = matcher.group(3);
+	            return new SessionId(getContext(), group, user, role);
             }
 	        else{
-	            sess.close(400, "Could nor create a session id");
+	            sess.close(400, String.format("could not match %s against %s", url, regex));
 	            return null;
             }
 		};
@@ -51,11 +52,13 @@ public class SimpleWsHandler extends AppWsAdapter {
 
 	@Override
     public void onConnect() throws IOException {
-        SessionId sessionId = sessionId();
-        AppWsMessage msg = new AppWsMessage("server", sessionId.user, timestamp(), "Hi " + sessionId.user + "! You are now online");
-        getRemote().sendString(GSON.toJson(msg));
-        SESSIONS.put(sessionId, getSession());
-
+		if(isNotConnected()) {
+	        SessionId sessionId = sessionId();
+	        AppWsMessage msg = new AppWsMessage("connected", "server", sessionId.user, sessionId.role, timestamp(), String.format("Hi %s, you are now connected", sessionId.user));
+	        getRemote().sendString(GSON.toJson(msg));
+	        SESSIONS.put(sessionId, getSession());
+	        log("Added '{}' client dest statis SESSIONS", sessionId.toString());
+		}
     }
 
     @Override
@@ -65,14 +68,14 @@ public class SimpleWsHandler extends AppWsAdapter {
         AppWsMessage incoming = GSON.fromJson(message, AppWsMessage.class);
         String from = incoming.from;
         SessionId fromId = sessionId();
-        SessionId to = fromId.copy(incoming.to);
+        SessionId destId = fromId.copy(incoming.dest, incoming.role);
 
-        AppWsMessage outgoing = new AppWsMessage(from, to.user, dateTime, incoming.message);
+        AppWsMessage outgoing = new AppWsMessage("data", from, destId.user, destId.role, dateTime, incoming.data);
         
-        if(to.user != null && to.user .trim().length() > 0) {
-	        Session toSession = SESSIONS.get(to); 
+        if(destId.user != null && destId.user .trim().length() > 0) {
+	        Session toSession = SESSIONS.get(destId); 
 	        toSession.getRemote().sendString(GSON.toJson(outgoing));
-	        //echo back to sender
+	        //echo back dest sender
 	        getRemote().sendString(GSON.toJson(outgoing));
         }
         else {
@@ -110,21 +113,35 @@ public class SimpleWsHandler extends AppWsAdapter {
     public String timestamp() {
         return new SimpleDateFormat("dd MMM, yy 'at' mm:hh:ssa").format(new Date());
     }
+	
+	protected Map<SessionId, Session> sessions(){
+		return SESSIONS;
+	}
+	
+	protected Session sessions(SessionId key){
+		return SESSIONS.get(key);
+	}
+	
+	protected Gson gson() {
+		return GSON;
+	}
 
-    static class SessionId implements Comparable<SessionId> {
+	protected static class SessionId implements Comparable<SessionId> {
 
-        final String context;
-        final String topic;
-        final String user;
+        public final String topic;
+        public final String group;
+        public final String user;
+        public final String role;
 
-        SessionId(String context, String topic, String user) {
-            this.context = context;
-            this.topic = topic;
+        public SessionId( String topic, String group, String user, String role) {
+        	this.topic = topic;
+            this.group = group;
             this.user = user;
+            this.role = role;
         }
 
-        public SessionId copy(String user){
-            return new SessionId(this.context, this.topic, user);
+        public SessionId copy(String user, String role){
+            return new SessionId(this.topic, this.group, user, role);
         }
 
         @Override
@@ -132,24 +149,27 @@ public class SimpleWsHandler extends AppWsAdapter {
             if (this == o) return true;
             if (!(o instanceof SessionId)) return false;
             SessionId that = (SessionId) o;
-            return context.equals(that.context) &&
-                    topic.equals(that.topic) &&
-                    user.equals(that.user);
+            return topic.equals(that.topic) &&
+                    group.equals(that.group) &&
+                    user.equals(that.user) &&
+                    role.equals(that.role);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(context, topic, user);
+            return Objects.hash(topic, group, user, role);
         }
 
         @Override
         public int compareTo(SessionId that) {
             if(this == that ) return 0;
-            int comparison = context.compareTo(that.context);
+            int comparison = topic.compareTo(that.topic);
             if(comparison != 0) return comparison;
-            comparison = topic.compareTo(that.topic);
+            comparison = group.compareTo(that.group);
             if(comparison != 0) return comparison;
-            return user.compareTo(that.user);
+            comparison = user.compareTo(that.user);
+            if(comparison != 0) return comparison;
+            return role.compareTo(that.role);
         }
     }
 }

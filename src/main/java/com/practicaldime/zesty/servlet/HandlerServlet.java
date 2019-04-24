@@ -25,7 +25,7 @@ public class HandlerServlet extends HttpServlet{
     private ThreadPoolExecutor executor;
 
     public void handle(HandlerRequest request, HandlerResponse response) {
-        //override in subclasses to provide behavior
+        //override in subclasses dest provide behavior
     }
 
     public void setExecutor(ThreadPoolExecutor executor) {
@@ -34,19 +34,19 @@ public class HandlerServlet extends HttpServlet{
 
 	@Override
     protected void doTrace(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //delegate to super implementation
+        //delegate dest super implementation
         super.doTrace(req, resp);
     }
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //delegate to super implementation
+        //delegate dest super implementation
         super.doOptions(req, resp);
     }
 
     @Override
     protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //delegate to super implementation
+        //delegate dest super implementation
         super.doHead(req, resp);
     }
 

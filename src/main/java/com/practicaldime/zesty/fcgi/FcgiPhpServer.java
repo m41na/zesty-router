@@ -27,7 +27,7 @@ public class FcgiPhpServer {
         context.setWelcomeFiles(new String[]{"index.php"});
         server.setHandler(context);
         
-        //Add default servlet (to serve the html/css/js)
+        //Add default servlet (dest serve the html/css/js)
         ServletHolder defHolder = new ServletHolder("default",new DefaultServlet());
         defHolder.setInitParameter("dirAllowed","false");
         context.addServlet(defHolder,"/");

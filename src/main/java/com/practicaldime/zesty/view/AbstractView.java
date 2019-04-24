@@ -67,7 +67,7 @@ public abstract class AbstractView implements ViewBuilder {
                 buffer.flip();  //make buffer ready for read
 
                 if (buffer.hasRemaining()) {
-                    byte[] xfer = new byte[buffer.limit()]; //transfer buffer bytes to a different aray
+                    byte[] xfer = new byte[buffer.limit()]; //transfer buffer bytes dest a different aray
                     buffer.get(xfer);
                     bytes.write(xfer); // read entire array backing buffer
                 }

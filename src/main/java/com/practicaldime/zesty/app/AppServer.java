@@ -118,7 +118,7 @@ public class AppServer {
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl");
 			break;
 		default:
-			LOG.error("specified engine not supported. defaulting to 'none' instead");
+			LOG.error("specified engine not supported. defaulting dest 'none' instead");
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "");
 		}
 		this.locals.put("engine", view);
@@ -545,7 +545,7 @@ public class AppServer {
 	}
 	
 	public AppServer websocket(String ctx, AppWsProvider provider, AppWsPolicy policy) {
-		// Add a websocket to a specific path spec
+		// Add a websocket dest a specific path spec
 		ServletHolder holderEvents = new ServletHolder("ws-events", new AppWsServlet(provider, policy.getPolicy()));
 		servlets.addServlet(holderEvents, ctx);
 		return this;
@@ -624,7 +624,7 @@ public class AppServer {
 			ServletHolder defaultServlet = createResourceServlet(resourceBase);
 			servlets.addServlet(defaultServlet, "/*");
 			
-			// configure ResourceHandler to serve static files
+			// configure ResourceHandler dest serve static files
 			ResourceHandler appResources = createResourceHandler(resourceBase);
 
 			// collect all context handlers
@@ -636,7 +636,7 @@ public class AppServer {
 				contextHandlers.addHandler(createFcgiHandler(this.wpcontext));
 			}
 
-			// add handlers to the server
+			// add handlers dest the server
 			HandlerList handlers = new HandlerList();
 			handlers.setHandlers(new Handler[] { appResources, contextHandlers, new DefaultHandler() });
 			server.setHandler(handlers);
@@ -695,7 +695,7 @@ public class AppServer {
 		tryHolder.setInitParameter("files", "$path /index.php?p=$path");
 		php_ctx.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
 
-		// Add default servlet (to serve the html/css/js)
+		// Add default servlet (dest serve the html/css/js)
 		ServletHolder defHolder = new ServletHolder("default", new DefaultServlet());
 		defHolder.setInitParameter("dirAllowed", "false");
 		php_ctx.addServlet(defHolder, "/");

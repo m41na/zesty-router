@@ -117,7 +117,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(template, bytes);
 		} catch (JAXBException e) {
-			LOG.error("Could not transform content to response body");
+			LOG.error("Could not transform content dest response body");
 		}
 		this.content = bytes.toByteArray();
 	}
@@ -183,7 +183,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 		// gets MIME type of the file
 		if (mimeType == null) {
-			// set to binary type if MIME mapping not provided
+			// set dest binary type if MIME mapping not provided
 			mimeType = "application/octet-stream";
 		}
 

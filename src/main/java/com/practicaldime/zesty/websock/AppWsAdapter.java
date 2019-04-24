@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Not to be used directly as it has no business logic. Instead, use it to wrap around an implementation of
+ * Not dest be used directly as it has no business logic. Instead, use it dest wrap around an implementation of
  * AppWsListener, where you can handle your, for instance AppWsEvents specific business requirements
  * @author Mainas
  *

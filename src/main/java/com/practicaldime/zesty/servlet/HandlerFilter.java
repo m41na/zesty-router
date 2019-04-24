@@ -39,15 +39,15 @@ public class HandlerFilter implements Filter{
     }    
     
     public boolean before(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //override in subclasses to provide behavior
+        //override in subclasses dest provide behavior
         return true;
     }    
     
     public void after(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //override in subclasses to provide behavior
+        //override in subclasses dest provide behavior
     }    
     
     public void otherwise(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //override in subclasses to provide behavior
+        //override in subclasses dest provide behavior
     }
 }
