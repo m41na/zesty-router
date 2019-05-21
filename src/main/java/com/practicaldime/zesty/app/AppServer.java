@@ -618,20 +618,20 @@ public class AppServer {
 
 			// configure context for servlets
 			String appctx = this.locals.getProperty("appctx");
-			servlets.setContextPath(appctx);
+			servlets.setContextPath(appctx.endsWith("/*")? appctx.substring(0, appctx.length() - 2) : appctx.endsWith("/")? appctx.substring(0, appctx.length() - 1) : appctx);
 
 			// configure default servlet for app context
 			ServletHolder defaultServlet = createResourceServlet(resourceBase);
 			servlets.addServlet(defaultServlet, "/*");
 			
-			// configure ResourceHandler dest serve static files
+			// configure ResourceHandler to serve static files
 			ResourceHandler appResources = createResourceHandler(resourceBase);
 
 			// collect all context handlers
 			ContextHandlerCollection contextHandlers = new ContextHandlerCollection();
 			contextHandlers.addHandler(servlets);
 			
-			// add activated context handler (say, for php with fgci)
+			// add activated context handler (say, for php with fcgi)
 			if (Boolean.valueOf(this.wpcontext.get("activate"))) {
 				contextHandlers.addHandler(createFcgiHandler(this.wpcontext));
 			}

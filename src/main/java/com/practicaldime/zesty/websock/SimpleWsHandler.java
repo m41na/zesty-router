@@ -13,8 +13,9 @@ import java.util.regex.Pattern;
 import org.eclipse.jetty.websocket.api.Session;
 
 import com.google.gson.Gson;
+import com.practicaldime.zesty.websock.SimpleWsHandler.SessionId;
 
-public class SimpleWsHandler extends AppWsAdapter {
+public class SimpleWsHandler extends AppWsAdapter<SessionId> {
 
     private static final Map<SessionId, Session> SESSIONS = new ConcurrentHashMap<>();
     private static final Gson GSON = new Gson();
@@ -91,7 +92,7 @@ public class SimpleWsHandler extends AppWsAdapter {
 
     @Override
     public void onClose(int statusCode, String reason) {
-    	log("info", "the client closed the connection");
+    	log("info", "the server closed the connection");
         if(isConnected()) {
         	getSession().close();
         }
@@ -101,7 +102,7 @@ public class SimpleWsHandler extends AppWsAdapter {
 
     @Override
     public void onError(Throwable cause) {
-    	log("error", "the server will close all connections now -> " + cause.getMessage());
+    	log("error", "Error encountered: '{}'. The server will now close all connections -> ", cause.getMessage());
         if(isConnected()) {
         	getSession().close(500, cause.getMessage());
         }

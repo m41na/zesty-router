@@ -6,15 +6,15 @@ import java.util.function.Function;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 
-public interface AppWsListener {
+public interface AppWsListener<T> {
 	
 	String getContext();
 
     String timestamp();
 	
-	<T>T sessionId();
+	T sessionId();
 	
-	<T>Function<Session, T> idStrategy();
+	Function<Session, T> idStrategy();
 	
 	RemoteEndpoint getRemote();
 
