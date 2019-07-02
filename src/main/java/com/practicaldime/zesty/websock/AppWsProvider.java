@@ -1,6 +1,8 @@
 package com.practicaldime.zesty.websock;
 
-public interface AppWsProvider {
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+
+public interface AppWsProvider<T extends WebSocketAdapter> {
     
-    AppWsAdapter provide();
+    T provide();
 }
