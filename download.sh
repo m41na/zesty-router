@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "
 this script will
 1. check if you have JAVA_HOME set
@@ -20,7 +21,7 @@ echo
 set -e
 
 ZESTY_HOME="zesty-router"
-if [ -d $ZESTY_HOME ] ; then
+if [ -d $ZESTY_HOME ] ; then 
 	rm -rf $ZESTY_HOME;
 fi
 
@@ -45,7 +46,7 @@ if [ -z $mavenHome ] ; then
 fi
 	
 mavenHome=$MAVEN_HOME
-if [[ -z $mavenHome ]] ; then
+if [ -z $mavenHome ] ; then
 	echo maven home not found
 	exit 1
 fi
@@ -88,7 +89,9 @@ if [ $? -ne 0 ] ; then
 	exit 1
 fi
 
-cp target/zesty*shaded.jar ..
+echo moving the built jar file to its download directory
+echo
+mv target/zesty*shaded.jar ..
 
 if [ $? -ne 0 ] ; then
 	echo the built library was not copied successsfully
