@@ -1,18 +1,13 @@
 package com.practicaldime.zesty.servlet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.basics.BodyWriter;
+import com.practicaldime.zesty.basics.HandlerStatus;
+import com.practicaldime.zesty.basics.RouteResponse;
+import org.eclipse.jetty.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -20,16 +15,13 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
-import org.eclipse.jetty.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.practicaldime.zesty.app.AppServer;
-import com.practicaldime.zesty.basics.BodyWriter;
-import com.practicaldime.zesty.basics.HandlerStatus;
-import com.practicaldime.zesty.basics.RouteResponse;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class HandlerResponse extends HttpServletResponseWrapper implements RouteResponse {
 
@@ -40,6 +32,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 	protected String routeUri;
 	protected String contextPath;
 	protected String templateDir;
+	protected Supplier<ObjectMapper> mapper;
 
 	public HandlerResponse(HttpServletResponse response) {
 		super(response);
@@ -48,6 +41,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 	private void init() {
 		setContentType("text/html;charset=utf-8");
+		this.mapper = new ObjectMapperSupplier();
 	}
 
 	@Override
@@ -97,14 +91,24 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 	@Override
 	public void json(Object payload) {
-		setContentType("application/json");
-		this.content = new Gson().toJson(payload).getBytes(StandardCharsets.UTF_8);
+		try {
+			setContentType("application/json");
+			this.content = mapper.get().writeValueAsBytes(payload);
+		}
+		catch(Exception e){
+			throw new RuntimeException("Could not write json value from java entity", e);
+		}
 	}
 
 	@Override
 	public void jsonp(Object payload) {
-		setContentType("application/json");
-		this.content = new Gson().toJson(payload).getBytes(StandardCharsets.UTF_8);
+		try{
+			setContentType("application/json");
+			this.content = mapper.get().writeValueAsBytes(payload);
+		}
+		catch(Exception e){
+			throw new RuntimeException("Could not write json value from java entity", e);
+		}
 	}
 
 	@Override

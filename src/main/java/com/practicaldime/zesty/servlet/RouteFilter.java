@@ -1,22 +1,16 @@
 package com.practicaldime.zesty.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practicaldime.zesty.basics.AppRouter;
+import com.practicaldime.zesty.router.RouteSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.practicaldime.zesty.basics.AppRouter;
-import com.practicaldime.zesty.router.RouteSearch;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.function.Supplier;
 
 public class RouteFilter implements Filter {
 
@@ -24,7 +18,7 @@ public class RouteFilter implements Filter {
 
     protected FilterConfig fConfig;
     private final AppRouter routes;
-    private final Gson gson = new Gson();
+    private final Supplier<ObjectMapper> mapper = new ObjectMapperSupplier();
 
     public RouteFilter(AppRouter routes) {
         super();
@@ -50,7 +44,7 @@ public class RouteFilter implements Filter {
         
         RouteSearch route = routes.search(httpRequest);
         if (route.result != null) {
-        	LOG.info("matched route -> {}", gson.toJson(route));
+        	LOG.info("matched route -> {}", mapper.get().writeValueAsString(route));
             httpRequest.route(route);
            httpRequest.getRequestDispatcher(route.result.rid).forward(httpRequest, httpResponse);
         } else {

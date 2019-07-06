@@ -1,35 +1,24 @@
 package com.practicaldime.zesty.servlet;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practicaldime.zesty.basics.BodyReader;
+import com.practicaldime.zesty.basics.RouteRequest;
+import com.practicaldime.zesty.router.RouteSearch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.practicaldime.zesty.basics.BodyReader;
-import com.practicaldime.zesty.basics.RouteRequest;
-import com.practicaldime.zesty.router.RouteSearch;
 
 public class HandlerRequest extends HttpServletRequestWrapper implements RouteRequest {
 
@@ -39,11 +28,11 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 	protected String message;
 	protected byte[] body;
 	protected Cookie[] cookies;
-	protected Supplier<Gson> gson;
+	protected Supplier<ObjectMapper> mapper;
 
 	public HandlerRequest(HttpServletRequest request) {
 		super(request);
-		this.gson = new GsonSupplier();
+		this.mapper = new ObjectMapperSupplier();
 	}
 
 	@Override
@@ -134,7 +123,12 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 		String contentType = header("Content-Type");
 		if (contentType.contains("application/json")) {
 			Reader reader = new InputStreamReader(new ByteArrayInputStream(body()));
-			return this.gson.get().fromJson(reader, type);
+			try {
+				return this.mapper.get().readValue(reader, type);
+			}
+			catch(Exception e){
+				throw new RuntimeException("Could not parse json body into java entity", e);
+			}
 		}
 		if (contentType.contains("application/xml")) {
 			try {
@@ -146,7 +140,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 				LOG.error(e.getMessage());
 			}
 		}
-		throw new RuntimeException("Failed dest tranform the request body. Try using a BodyProvider<T> instead");
+		throw new RuntimeException("Failed dest transform the request body. Try using a BodyProvider<T> instead");
 	}
 
 	@Override
