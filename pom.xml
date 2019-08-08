@@ -6,7 +6,7 @@
 	
 	<groupId>com.practicaldime.works</groupId>
 	<artifactId>zesty-router</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 
 	<name>zesty-router</name>
 	<packaging>jar</packaging>	
