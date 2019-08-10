@@ -1,10 +1,10 @@
 package com.practicaldime.zesty.servlet;
 
-import java.io.IOException;
-
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
+
+import java.io.IOException;
 
 public abstract class HomeSsrHandler extends HandlerServlet {
 
@@ -15,7 +15,7 @@ public abstract class HomeSsrHandler extends HandlerServlet {
 	public abstract String getSource();
 	
 	@Override
-	public void handle(HandlerRequest request, HandlerResponse response) {
+	public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
 		try {
 			Source source = Source.newBuilder("js", response.getReader(getFolder(), getSource()), "ssr-home").build();
 			Context context = Context.create();

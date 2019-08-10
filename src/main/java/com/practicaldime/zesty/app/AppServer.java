@@ -1,30 +1,16 @@
 package com.practicaldime.zesty.app;
 
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_HEADERS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_METHODS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOWED_ORIGINS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.ALLOW_CREDENTIALS_PARAM;
-import static org.eclipse.jetty.servlets.CrossOriginFilter.PREFLIGHT_MAX_AGE_PARAM;
-
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.http.HttpServlet;
-
+import com.practicaldime.zesty.basics.AppRouter;
+import com.practicaldime.zesty.basics.AppViewEngines;
+import com.practicaldime.zesty.router.MethodRouter;
+import com.practicaldime.zesty.router.Route;
+import com.practicaldime.zesty.router.Router;
+import com.practicaldime.zesty.servlet.*;
+import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.ViewEngineFactory;
+import com.practicaldime.zesty.websock.AppWsPolicy;
+import com.practicaldime.zesty.websock.AppWsProvider;
+import com.practicaldime.zesty.websock.AppWsServlet;
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
 import org.eclipse.jetty.server.Handler;
@@ -34,11 +20,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.FilterMapping;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
@@ -46,22 +28,17 @@ import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.practicaldime.zesty.basics.AppRouter;
-import com.practicaldime.zesty.basics.AppViewEngines;
-import com.practicaldime.zesty.router.MethodRouter;
-import com.practicaldime.zesty.router.Route;
-import com.practicaldime.zesty.router.Router;
-import com.practicaldime.zesty.servlet.HandlerConfig;
-import com.practicaldime.zesty.servlet.HandlerFilter;
-import com.practicaldime.zesty.servlet.HandlerRequest;
-import com.practicaldime.zesty.servlet.HandlerResponse;
-import com.practicaldime.zesty.servlet.HandlerServlet;
-import com.practicaldime.zesty.servlet.RouteFilter;
-import com.practicaldime.zesty.view.ViewEngine;
-import com.practicaldime.zesty.view.ViewEngineFactory;
-import com.practicaldime.zesty.websock.AppWsPolicy;
-import com.practicaldime.zesty.websock.AppWsProvider;
-import com.practicaldime.zesty.websock.AppWsServlet;
+import javax.servlet.DispatcherType;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.http.HttpServlet;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 
 public class AppServer {
 
@@ -216,28 +193,28 @@ public class AppServer {
 		return head(path, "", "", null, handler);
 	}
 
-	public AppServer head(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer head(String path, HandlerFunction handler) {
 		return head(path, "", "", null, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
 
-	public AppServer head(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer head(String path, HandlerConfig config, HandlerFunction handler) {
 		return head(path, "", "", config, handler);
 	}
 
-	public AppServer head(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer head(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return head(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -259,7 +236,7 @@ public class AppServer {
 		return trace(path, "", "", null, handler);
 	}
 
-	public AppServer trace(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer trace(String path, HandlerFunction handler) {
 		return trace(path, "", "", null, handler);
 	}
 	
@@ -267,17 +244,17 @@ public class AppServer {
 		return trace(path, "", "", config, handler);
 	}
 
-	public AppServer trace(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer trace(String path, HandlerConfig config, HandlerFunction handler) {
 		return trace(path, "", "", config, handler);
 	}
 
-	public AppServer trace(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer trace(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return trace(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -299,7 +276,7 @@ public class AppServer {
 		return options(path, "", "", null, handler);
 	}
 
-	public AppServer options(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer options(String path, HandlerFunction handler) {
 		return options(path, "", "", null, handler);
 	}
 	
@@ -307,17 +284,17 @@ public class AppServer {
 		return options(path, "", "", config, handler);
 	}
 
-	public AppServer options(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer options(String path, HandlerConfig config, HandlerFunction handler) {
 		return options(path, "", "", config, handler);
 	}
 
-	public AppServer options(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer options(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return options(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -339,7 +316,7 @@ public class AppServer {
 		return get(path, "", "", null, handler);
 	}
 
-	public AppServer get(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer get(String path, HandlerFunction handler) {
 		return get(path, "", "", null, handler);
 	}
 	
@@ -347,17 +324,17 @@ public class AppServer {
 		return get(path, "", "", config, handler);
 	}
 
-	public AppServer get(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer get(String path, HandlerConfig config, HandlerFunction handler) {
 		return get(path, "", "", config, handler);
 	}
 
-	public AppServer get(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer get(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return get(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -379,7 +356,7 @@ public class AppServer {
 		return post(path, "", "", null, handler);
 	}
 
-	public AppServer post(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer post(String path, HandlerFunction handler) {
 		return post(path, "", "", null, handler);
 	}
 	
@@ -387,17 +364,17 @@ public class AppServer {
 		return post(path, "", "", config, handler);
 	}
 
-	public AppServer post(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer post(String path, HandlerConfig config, HandlerFunction handler) {
 		return post(path, "", "", config, handler);
 	}
 
-	public AppServer post(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer post(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return post(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -424,7 +401,7 @@ public class AppServer {
 		return put(path, "", "", null, handler);
 	}
 
-	public AppServer put(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer put(String path, HandlerFunction handler) {
 		return put(path, "", "", null, handler);
 	}
 	
@@ -432,17 +409,17 @@ public class AppServer {
 		return put(path, "", "", config, handler);
 	}
 
-	public AppServer put(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer put(String path, HandlerConfig config, HandlerFunction handler) {
 		return put(path, "", "", config, handler);
 	}
 
-	public AppServer put(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer put(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return put(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -464,7 +441,7 @@ public class AppServer {
 		return delete(path, "", "", null, handler);
 	}
 
-	public AppServer delete(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer delete(String path, HandlerFunction handler) {
 		return delete(path, "", "", null, handler);
 	}
 	
@@ -472,17 +449,17 @@ public class AppServer {
 		return delete(path, "", "", config, handler);
 	}
 
-	public AppServer delete(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer delete(String path, HandlerConfig config, HandlerFunction handler) {
 		return delete(path, "", "", config, handler);
 	}
 
-	public AppServer delete(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer delete(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return delete(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}
@@ -504,7 +481,7 @@ public class AppServer {
 		return all(path, "", "", null, handler);
 	}
 
-	public AppServer all(String path, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer all(String path, HandlerFunction handler) {
 		return all(path, "", "", null, handler);
 	}
 	
@@ -512,17 +489,17 @@ public class AppServer {
 		return all(path, "", "", config, handler);
 	}
 
-	public AppServer all(String path, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer all(String path, HandlerConfig config, HandlerFunction handler) {
 		return all(path, "", "", config, handler);
 	}
 
-	public AppServer all(String path, String accept, String type, HandlerConfig config, BiFunction<HandlerRequest, HandlerResponse, Void> handler) {
+	public AppServer all(String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
 		return all(path, accept, type, config, new HandlerServlet() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void handle(HandlerRequest request, HandlerResponse response) {
-				handler.apply(request, response);
+			public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+				handler.apply(request, response, promise);
 			}
 		});
 	}

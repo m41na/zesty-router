@@ -1,11 +1,12 @@
 package com.practicaldime.zesty.examples;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleRest {
 	
@@ -97,40 +98,41 @@ public class SimpleRest {
 		AppServer app = AppProvider.provide(config);
 		
 		app.router()
-			.get("/", (req, res) -> {
+			.get("/", (req, res, done) -> {
 				res.json(dao.all());
-				return null;
+				done.complete();
 			})
-			.get("/{id}", (req, res) -> {
-			    String id = req.param("id");
-			    res.json(dao.findById(Integer.valueOf(id)));
-			    return null;
+			.get("/{id}", (req, res, done) -> {
+				String id = req.param("id");
+				User result = dao.findById(Integer.valueOf(id));
+				res.json(result);
+				done.complete();
 			})
-			.get("/email/{email}", (req, res) -> {
-			    String email = req.param("email");
+			.get("/email/{email}", (req, res, done) -> {
+				String email = req.param("email");
 			    res.json(dao.findByEmail(email));
-			    return null;
+				done.complete();
 			})
-			.post("/create", (req, res) -> {
+			.post("/create", (req, res, done) -> {
 			    String name = req.param("name");
 			    String email = req.param("email");
 			    dao.save(name, email);
 			    res.status(201);
-			    return null;
+				done.complete();
 			})
-			.put("/update/{id}", (req, res) -> {
+			.put("/update/{id}", (req, res, done) -> {
 			    String id = req.param("id");
 			    String name = req.param("name");
 			    String email = req.param("email");
 			    dao.update(Integer.valueOf(id), name, email);
 			    res.status(204);
-			    return null;
+				done.complete();
 			})
-			.delete("/delete/{id}", (req, res) -> {
+			.delete("/delete/{id}", (req, res, done) -> {
 			    String id = req.param("id");
 			    dao.delete(Integer.valueOf(id));
 			    res.status(205);
-			    return null;
+				done.complete();
 			})
 			.listen(8080, "localhost", (result) ->{
 				System.out.println(result);
