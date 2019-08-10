@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class HandlerServlet extends HttpServlet {
 
@@ -21,7 +22,7 @@ public class HandlerServlet extends HttpServlet {
     private final String ID = UUID.randomUUID().toString();
     private final Logger LOG = LoggerFactory.getLogger(HandlerServlet.class);
 
-    public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+    public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) throws Exception {
         //override in subclasses to handle request/response
     }
 
@@ -107,20 +108,35 @@ public class HandlerServlet extends HttpServlet {
                 e.printStackTrace(System.err);
             }
             finally{
-                LOG.info("Async request '{}' completed: {}", request.getRequestURI(), res);
+                LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
                 if(async != null) async.complete();
                 return null;
             }
         });
 
         promise.OnFailure(th -> {
-            LOG.info("Async request '{}' completed", request.getRequestURI());
-            if(async != null) async.complete();
-            //th.printStackTrace(System.err);
-            return null;
+            try {
+                int status = 500;
+                if(HandlerException.class.isAssignableFrom(th.getClass())){
+                    status = HandlerException.class.cast(th).status;
+                }
+                response.sendError(status, ((Exception)th).getMessage());
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+            finally{
+                LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
+                if(async != null) async.complete();
+                return null;
+            }
         });
 
         //handle request
-        handle(request, response, promise);
+        try {
+            handle(request, response, promise);
+        }
+        catch(Exception e){
+            promise.resolve(CompletableFuture.failedFuture(e));
+        }
     }
 }

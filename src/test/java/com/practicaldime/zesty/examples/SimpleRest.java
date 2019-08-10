@@ -2,6 +2,7 @@ package com.practicaldime.zesty.examples;
 
 import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.servlet.HandlerException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -133,6 +134,11 @@ public class SimpleRest {
 			    dao.delete(Integer.valueOf(id));
 			    res.status(205);
 				done.complete();
+			})
+			.put("/error", (req, res, done) -> {
+				//throw new RuntimeException("bad things happened");
+				//throw new HandlerException(501, "bad things happened status 501");
+				throw new UnsupportedOperationException("bad things happened will happen");
 			})
 			.listen(8080, "localhost", (result) ->{
 				System.out.println(result);

@@ -11,16 +11,26 @@ public class HandlerPromise<R, U> {
     public CompletableFuture<U> resolve(CompletableFuture<R> action) {
         return action.thenCompose(r -> success.apply(r))
                 .exceptionally(th -> {
-                    failure.apply(th);
-                    throw new RuntimeException(th);
+                    if(HandlerException.class.isAssignableFrom(th.getCause().getClass())){
+                        failure.apply(th.getCause());
+                    }
+                    else {
+                        failure.apply(new HandlerException(500, th.getCause().getMessage(), th));
+                    }
+                    return null;
                 });
     }
 
     public CompletableFuture<U> complete() {
         return success.apply(null)
                 .exceptionally(th -> {
-                    failure.apply(th);
-                    throw new RuntimeException(th);
+                    if(HandlerException.class.isAssignableFrom(th.getCause().getClass())){
+                        failure.apply(th.getCause());
+                    }
+                    else {
+                        failure.apply(new HandlerException(500, th.getCause().getMessage(), th));
+                    }
+                    return null;
                 });
     }
 
