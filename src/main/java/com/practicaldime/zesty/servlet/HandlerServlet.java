@@ -14,21 +14,15 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.UUID;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class HandlerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private final String ID = UUID.randomUUID().toString();
     private final Logger LOG = LoggerFactory.getLogger(HandlerServlet.class);
-    private ThreadPoolExecutor executor;
 
     public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
-        //override in subclasses dest provide behavior
-    }
-
-    public void setExecutor(ThreadPoolExecutor executor) {
-        this.executor = executor;
+        //override in subclasses to handle request/response
     }
 
     @Override

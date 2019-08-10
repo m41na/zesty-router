@@ -32,9 +32,6 @@ import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -49,7 +46,6 @@ public class AppServer {
 	private String status = "stopped";
 	private static ViewEngine engine;
 	private final Properties locals = new Properties();
-	private final ThreadPoolExecutor threadPoolExecutor;
 	private final Map<String, String> wpcontext = new HashMap<>();
 	private final Map<String, String> corscontext = new HashMap<>();
 	private final LifecycleSubscriber lifecycle = new LifecycleSubscriber();
@@ -64,7 +60,6 @@ public class AppServer {
 		this.assets(Optional.ofNullable(props.get("assets")).orElse("www"));
 		this.appctx(Optional.ofNullable(props.get("appctx")).orElse("/"));
 		this.engine(Optional.ofNullable(props.get("engine")).orElse("*"));
-		this.threadPoolExecutor = createThreadPoolExecutor();
 	}
 
 	public static ViewEngine engine() {
@@ -224,7 +219,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -264,7 +258,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -304,7 +297,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -344,7 +336,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -384,7 +375,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		// for multipart/form-data, customize the servlet holder
 		if (type.toLowerCase().contains("multipart/form-data")) {
@@ -429,7 +419,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -469,7 +458,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -509,7 +497,6 @@ public class AppServer {
 		route.setId();
 		routes.addRoute(route);
 		// add servlet handler
-		handler.setExecutor(threadPoolExecutor);
 		ServletHolder holder = new ServletHolder(handler);
 		if(config != null) config.configure(holder);
 		servlets.addServlet(holder, route.rid);
@@ -547,7 +534,7 @@ public class AppServer {
 		try {
 			status = "starting";
 			// create server with thread pool
-			QueuedThreadPool threadPool = new QueuedThreadPool(500, 5, 30000);
+			QueuedThreadPool threadPool = createThreadPool();
 			server = new Server(threadPool);
 
 			// Scheduler
@@ -637,12 +624,11 @@ public class AppServer {
 		}
 	}
 	
-	protected ThreadPoolExecutor createThreadPoolExecutor() {
-		int poolSize = Integer.valueOf(this.locals.getProperty("poolSize", "100"));
+	protected QueuedThreadPool createThreadPool() {
+		int poolSize = Integer.valueOf(this.locals.getProperty("poolSize", "5"));
 		int maxPoolSize = Integer.valueOf(this.locals.getProperty("maxPoolSize", "200"));
-		Long keepAliveTime = Long.valueOf(this.locals.getProperty("keepAliveTime", "5000"));
-		return new ThreadPoolExecutor(poolSize, maxPoolSize, keepAliveTime,
-				TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(poolSize));
+		int keepAliveTime = Integer.valueOf(this.locals.getProperty("keepAliveTime", "30000"));
+		return new QueuedThreadPool(maxPoolSize, poolSize, keepAliveTime);
 	}
 
 	protected ResourceHandler createResourceHandler(String resourceBase) {
