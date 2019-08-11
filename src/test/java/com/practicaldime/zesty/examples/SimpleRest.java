@@ -2,11 +2,9 @@ package com.practicaldime.zesty.examples;
 
 import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
-import com.practicaldime.zesty.servlet.HandlerException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleRest {
@@ -99,7 +97,7 @@ public class SimpleRest {
 		AppServer app = AppProvider.provide(config);
 		
 		app.router()
-			.get("/", (req, res, done) -> {
+			.get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
 				res.json(dao.all());
 				done.complete();
 			})

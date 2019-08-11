@@ -547,7 +547,7 @@ public class AppServer {
 			http.setIdleTimeout(30000); //milliseconds
 			server.addConnector(http);
 
-			// TODO: configure secure connector
+			// TODO: configure secure connector (if need be)
 			// enable CORS
 			if(Boolean.valueOf(this.locals.getProperty("cors", "false"))){
 				FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
