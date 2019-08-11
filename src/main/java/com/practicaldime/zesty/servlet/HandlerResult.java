@@ -2,19 +2,20 @@ package com.practicaldime.zesty.servlet;
 
 public class HandlerResult {
 
-    public final Long startInMillis;
-    public Boolean status = Boolean.TRUE;
+    private final Long startInMillis;
+    private Boolean status = Boolean.TRUE;
 
     public HandlerResult() {
         this.startInMillis = System.currentTimeMillis();
     }
 
-    public Long timeSinceStart(){
-        return System.currentTimeMillis() - this.startInMillis;
-    }
-
     public Boolean isSuccess(){
         return this.status;
+    }
+
+    public Long updateStatus(Boolean status){
+        this.status = status;
+        return System.currentTimeMillis() - this.startInMillis;
     }
 
     public static HandlerResult build(Boolean status){

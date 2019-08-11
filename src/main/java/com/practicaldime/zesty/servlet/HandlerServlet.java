@@ -72,9 +72,10 @@ public class HandlerServlet extends HttpServlet {
         doProcess(request, response);
     }
 
-    protected void doProcess(HandlerRequest request, HandlerResponse response) throws ServletException, IOException {
+    protected void doProcess(HandlerRequest request, HandlerResponse response) {
         if (request.isAsyncSupported()) {
-            AsyncContext async = request.startAsync(request, response);
+            final AsyncContext async = request.startAsync(request, response);
+            final HandlerResult result = new HandlerResult();
             async.start(() -> {
                 HandlerPromise promise = new HandlerPromise();
                 promise.OnSuccess(res -> {
@@ -84,7 +85,7 @@ public class HandlerServlet extends HttpServlet {
                             try {
                                 request.getRequestDispatcher(response.routeUri).forward(request, response);
                             } catch (IOException | ServletException e) {
-                                LOG.error("Exception occured while executing 'handle()' function", e);
+                                LOG.error("Exception occurred while executing 'handle()' function", e);
                                 response.sendError(500, e.getMessage());
                             }
                         }
@@ -110,7 +111,8 @@ public class HandlerServlet extends HttpServlet {
                     } finally {
                         LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
                         if (async != null) async.complete();
-                        return HandlerResult.build(Boolean.TRUE);
+                        LOG.info("Duration of processed request -> {} ms", result.updateStatus(Boolean.TRUE));
+                        return result;
                     }
                 });
 
@@ -126,7 +128,8 @@ public class HandlerServlet extends HttpServlet {
                     } finally {
                         LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
                         if (async != null) async.complete();
-                        return HandlerResult.build(Boolean.FALSE);
+                        LOG.info("Duration of processed request -> {} ms", result.updateStatus(Boolean.FALSE));
+                        return result;
                     }
                 });
 
@@ -134,9 +137,11 @@ public class HandlerServlet extends HttpServlet {
                 try {
                     handle(request, response, promise);
                 } catch (Exception e) {
-                    promise.resolve(CompletableFuture.failedFuture(e));
+                    //log irrelevant exceptions
+                    LOG.warn("Ignorable exception: {}", e.getMessage());
                 }
             });
+            LOG.info("ASYNC MODE> Request handling started in async context");
         } else {
             LOG.warn("*****ASYNC NOT SUPPORTED. You might need to handle writing the response in your servlet handler*****");
             HandlerPromise promise = new HandlerPromise();
