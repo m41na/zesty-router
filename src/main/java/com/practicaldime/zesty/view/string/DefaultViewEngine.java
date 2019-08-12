@@ -49,6 +49,6 @@ public class DefaultViewEngine implements ViewEngine{
 
     @Override
 	public String merge(String template, Map<String, Object> model) throws Exception {	    	
-    	return view.resolve(templateDir, template, strategy);
+    	return view.resolve(templateDir, template, strategy).toString();
 	}
 }

@@ -1,6 +1,7 @@
 # Compiled class file
 *.class
 target
+build
 nbproject
 .settings
 **/upload

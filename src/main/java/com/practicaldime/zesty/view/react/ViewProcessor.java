@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.view.string;
+package com.practicaldime.zesty.view.react;
 
 public interface ViewProcessor<T> {
 

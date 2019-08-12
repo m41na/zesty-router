@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.view.string;
+package com.practicaldime.zesty.view.hbars;
 
 public interface ViewProcessor<T> {
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.practicaldime.zesty.view.hbars.HbJsViewEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.string.DefaultViewEngine;
-import com.practicaldime.zesty.view.twig.TwigViewEngine;
+import com.practicaldime.zesty.view.twig.JTwigViewEngine;
 
 public class AppViewEngines implements ViewEngineFactory{
 
@@ -24,12 +25,17 @@ public class AppViewEngines implements ViewEngineFactory{
 			switch (view) {
 			case "jtwig":
 				if(engines.get(view) == null) {
-					engines.put(view, TwigViewEngine.create(assets, suffix));
+					engines.put(view, JTwigViewEngine.create(assets, suffix));
 				}
 				return engines.get(view);
 			case "freemarker":
 				if(engines.get(view) == null) {
 					engines.put(view, FtlViewEngine.create(assets, suffix));
+				}
+				return engines.get(view);
+			case "handlebars":
+				if(engines.get(view) == null) {
+					engines.put(view, HbJsViewEngine.create(assets, suffix));
 				}
 				return engines.get(view);
 			default:

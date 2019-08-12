@@ -3,11 +3,11 @@ package com.practicaldime.zesty.view.twig;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.resource.reference.ResourceReference;
 
-public class TwigViewProcessor implements ViewProcessor{
+public class JTwigViewProcessor implements ViewProcessor{
     
     protected final ViewConfiguration factory;
 
-    public TwigViewProcessor(ViewConfiguration factory) {
+    public JTwigViewProcessor(ViewConfiguration factory) {
         this.factory = factory;
     }    
 

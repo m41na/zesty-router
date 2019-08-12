@@ -89,6 +89,9 @@ public class AppServer {
 		case "freemarker":
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl");
 			break;
+		case "handlebars":
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "js");
+			break;
 		default:
 			LOG.error("specified engine not supported. defaulting dest 'none' instead");
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "");

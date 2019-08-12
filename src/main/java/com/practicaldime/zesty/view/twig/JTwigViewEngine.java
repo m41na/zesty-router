@@ -11,32 +11,32 @@ import org.jtwig.resource.reference.ResourceReference;
 
 import com.practicaldime.zesty.view.ViewEngine;
 
-public class TwigViewEngine implements ViewEngine{
+public class JTwigViewEngine implements ViewEngine{
 
-	private static TwigViewEngine instance;
+	private static JTwigViewEngine instance;
     private final ViewConfiguration config;
     private final ViewProcessor view;
     private final String templateDir;
 	private final String templateExt;	
 
-    private TwigViewEngine(String templateDir, String templateExt) {
+    private JTwigViewEngine(String templateDir, String templateExt) {
     	super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
-        this.config = new TwigViewConfiguration();
-        this.view = new TwigViewProcessor(config);
+        this.config = new JTwigViewConfiguration();
+        this.view = new JTwigViewProcessor(config);
     }
     
-    public static TwigViewEngine create(String templateDir, String templateExt) throws IOException {
+    public static JTwigViewEngine create(String templateDir, String templateExt) throws IOException {
         if (instance == null) {
-            synchronized (TwigViewEngine.class) {
-                instance = new TwigViewEngine(templateDir, templateExt);
+            synchronized (JTwigViewEngine.class) {
+                instance = new JTwigViewEngine(templateDir, templateExt);
             }
         }
         return instance;
     }
     
-    public static TwigViewEngine instance() throws IOException {
+    public static JTwigViewEngine instance() throws IOException {
         return instance;
     }
 
@@ -51,11 +51,11 @@ public class TwigViewEngine implements ViewEngine{
 	}
 
 	public static ViewConfiguration getConfiguration() {
-        return TwigViewEngine.instance.config;
+        return JTwigViewEngine.instance.config;
     }
 
     public static ViewProcessor getProcessor() {
-        return TwigViewEngine.instance.view;
+        return JTwigViewEngine.instance.view;
     }
 
     @Override

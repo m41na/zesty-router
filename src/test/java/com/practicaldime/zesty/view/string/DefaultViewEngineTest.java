@@ -21,19 +21,19 @@ public class DefaultViewEngineTest {
 	
 	@Test
 	public void testResolveFileLookup() throws Exception {
-		String path = DefaultViewEngine.getProcessor().resolve(fileFolder, "index-test.js", Lookup.FILE);
+		Object path = DefaultViewEngine.getProcessor().resolve(fileFolder, "index.test.js", Lookup.FILE);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 
 	@Test
 	public void testMerge() throws Exception {
-		String merged = engine.merge("index-test.js", Collections.emptyMap());
+		String merged = engine.merge("index.test.js", Collections.emptyMap());
 		System.out.printf("*******merged output: %s%n", merged);
 	}
 	
 	@Test
 	public void testResolveClasspathLookup() throws Exception {
-		String path = DefaultViewEngine.getProcessor().resolve(classpathFolder, "index-test.js", Lookup.CLASSPATH);
+		Object path = DefaultViewEngine.getProcessor().resolve(classpathFolder, "index.test.js", Lookup.CLASSPATH);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 

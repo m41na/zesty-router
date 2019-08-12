@@ -19,7 +19,7 @@ import org.jtwig.resource.reference.ResourceReference;
 
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.string.DefaultViewEngine;
-import com.practicaldime.zesty.view.twig.TwigViewEngine;
+import com.practicaldime.zesty.view.twig.JTwigViewEngine;
 
 import freemarker.template.Template;
 
@@ -92,7 +92,7 @@ public abstract class AbstractView implements ViewBuilder {
                     return output.toString();
                 case "jtwig":
                     ResourceReference resource = new ResourceReference(ResourceReference.STRING, markup);
-                    JtwigTemplate jtwigTemplate = new JtwigTemplate(TwigViewEngine.getConfiguration().getEnvironment(), resource);
+                    JtwigTemplate jtwigTemplate = new JtwigTemplate(JTwigViewEngine.getConfiguration().getEnvironment(), resource);
                     JtwigModel viewModel = JtwigModel.newModel(getModel());
                     return jtwigTemplate.render(viewModel);
                 case "string":

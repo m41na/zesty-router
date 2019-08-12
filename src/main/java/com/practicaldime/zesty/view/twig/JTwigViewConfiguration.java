@@ -5,11 +5,11 @@ import org.jtwig.environment.EnvironmentConfiguration;
 import org.jtwig.environment.EnvironmentConfigurationBuilder;
 import org.jtwig.environment.EnvironmentFactory;
 
-public class TwigViewConfiguration implements ViewConfiguration{
+public class JTwigViewConfiguration implements ViewConfiguration{
 
     protected final Environment environment;
     
-    public TwigViewConfiguration() {
+    public JTwigViewConfiguration() {
         //EnvironmentConfiguration configuration = new DefaultEnvironmentConfiguration();
         EnvironmentConfiguration configuration = EnvironmentConfigurationBuilder
                 .configuration()
