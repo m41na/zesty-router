@@ -90,6 +90,7 @@ public class AppServer {
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl");
 			break;
 		case "handlebars":
+		case "ejs":
 			engine = engineFactory.engine(view, locals.getProperty("assets"), "js");
 			break;
 		default:
