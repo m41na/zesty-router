@@ -58,12 +58,12 @@ mavenHome=$M2_HOME
 if [ -z $mavenHome ] ; then
 	echo M2_HOME not found. Try MAVEN_HOME instead
 	echo
-fi
 	
-mavenHome=$MAVEN_HOME
-if [ -z $mavenHome ] ; then
-	echo maven home not found
-	exit 1
+    mavenHome=$MAVEN_HOME
+    if [ -z $mavenHome ] ; then
+        echo maven home not found
+        exit 1
+    fi
 fi
 
 echo maven version found $mavenHome
