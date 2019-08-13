@@ -15,6 +15,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class HandlerServlet extends HttpServlet {
 
@@ -75,64 +77,69 @@ public class HandlerServlet extends HttpServlet {
     protected void doProcess(HandlerRequest request, HandlerResponse response) {
         if (request.isAsyncSupported()) {
             final AsyncContext async = request.startAsync();
-            final HandlerResult timing = new HandlerResult();
             async.start(() -> {
-                System.err.println("STARTED ASYNC OPERATION");
+                LOG.debug("STARTED ASYNC OPERATION");
                 HandlerPromise promise = new HandlerPromise();
-                promise.OnSuccess(res -> {
-                    try {
-                        LOG.info("Servlet {} handled request successfully. Now preparing response", ID);
-                        if (response.forward) {
-                            try {
-                                request.getRequestDispatcher(response.routeUri).forward(request, response);
-                            } catch (IOException | ServletException e) {
-                                LOG.error("Exception occurred while executing 'handle()' function", e);
-                                response.sendError(500, e.getMessage());
+                promise.OnSuccess(new Function<HandlerResult, HandlerResult>() {
+                    @Override
+                    public HandlerResult apply(HandlerResult res) {
+                        try {
+                            LOG.info("Servlet {} handled request successfully. Now preparing response", ID);
+                            if (response.forward) {
+                                try {
+                                    request.getRequestDispatcher(response.routeUri).forward(request, response);
+                                } catch (IOException | ServletException e) {
+                                    LOG.error("Exception occurred while executing 'handle()' function", e);
+                                    response.sendError(500, e.getMessage());
+                                }
                             }
-                        }
 
-                        if (response.redirect) {
-                            response.sendRedirect(response.routeUri);
-                        }
-
-                        if (request.error) {
-                            response.sendError(HttpStatus.BAD_REQUEST_400, request.message());
-                        }
-
-                        if (!response.isCommitted()) {
-                            //prepare response
-                            ByteBuffer content = ByteBuffer.wrap(response.getContent());
-                            //write response
-                            try (WritableByteChannel out = Channels.newChannel(response.getOutputStream())) {
-                                out.write(content);
+                            if (response.redirect) {
+                                response.sendRedirect(response.routeUri);
                             }
+
+                            if (request.error) {
+                                response.sendError(HttpStatus.BAD_REQUEST_400, request.message());
+                            }
+
+                            if (!response.isCommitted()) {
+                                //prepare response
+                                ByteBuffer content = ByteBuffer.wrap(response.getContent());
+                                //write response
+                                try (WritableByteChannel out = Channels.newChannel(response.getOutputStream())) {
+                                    out.write(content);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace(System.err);
+                        } finally {
+                            LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
+                            if (async != null) async.complete();
+                            LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                            LOG.info("Duration of processed request -> {} ms", res.updateStatus(Boolean.TRUE));
+                            return res;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace(System.err);
-                    } finally {
-                        LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
-                        if (async != null) async.complete();
-                        LOG.debug("COMPLETED ASYNC ON SUCCESS");
-                        LOG.info("Duration of processed request -> {} ms", timing.updateStatus(Boolean.TRUE));
-                        return timing;
                     }
                 });
 
-                promise.OnFailure(th -> {
-                    try {
-                        int status = 500;
-                        if (HandlerException.class.isAssignableFrom(th.getClass())) {
-                            status = HandlerException.class.cast(th).status;
+                promise.OnFailure(new BiFunction<HandlerResult, Throwable, HandlerResult>() {
+                    @Override
+                    public HandlerResult apply(HandlerResult res, Throwable th) {
+                        try {
+                            int status = 500;
+                            if (HandlerException.class.isAssignableFrom(th.getClass())) {
+                                status = HandlerException.class.cast(th).status;
+                            }
+                            response.sendError(status, ((Exception) th).getMessage());
+                        } catch (Exception e) {
+                            e.printStackTrace(System.err);
+                        } finally {
+                            LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
+                            if (async != null) async.complete();
+                            LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                            LOG.info("Duration of processed request -> {} ms", res.updateStatus(Boolean.FALSE));
+                            return res;
                         }
-                        response.sendError(status, ((Exception) th).getMessage());
-                    } catch (Exception e) {
-                        e.printStackTrace(System.err);
-                    } finally {
-                        LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
-                        if (async != null) async.complete();
-                        LOG.debug("COMPLETED ASYNC ON SUCCESS");
-                        LOG.info("Duration of processed request -> {} ms", timing.updateStatus(Boolean.FALSE));
-                        return timing;
                     }
                 });
 
