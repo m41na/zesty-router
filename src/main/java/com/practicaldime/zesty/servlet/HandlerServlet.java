@@ -74,9 +74,10 @@ public class HandlerServlet extends HttpServlet {
 
     protected void doProcess(HandlerRequest request, HandlerResponse response) {
         if (request.isAsyncSupported()) {
-            final AsyncContext async = request.startAsync(request, response);
-            final HandlerResult result = new HandlerResult();
+            final AsyncContext async = request.startAsync();
+            final HandlerResult timing = new HandlerResult();
             async.start(() -> {
+                System.err.println("STARTED ASYNC OPERATION");
                 HandlerPromise promise = new HandlerPromise();
                 promise.OnSuccess(res -> {
                     try {
@@ -111,8 +112,9 @@ public class HandlerServlet extends HttpServlet {
                     } finally {
                         LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
                         if (async != null) async.complete();
-                        LOG.info("Duration of processed request -> {} ms", result.updateStatus(Boolean.TRUE));
-                        return result;
+                        LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                        LOG.info("Duration of processed request -> {} ms", timing.updateStatus(Boolean.TRUE));
+                        return timing;
                     }
                 });
 
@@ -128,19 +130,23 @@ public class HandlerServlet extends HttpServlet {
                     } finally {
                         LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
                         if (async != null) async.complete();
-                        LOG.info("Duration of processed request -> {} ms", result.updateStatus(Boolean.FALSE));
-                        return result;
+                        LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                        LOG.info("Duration of processed request -> {} ms", timing.updateStatus(Boolean.FALSE));
+                        return timing;
                     }
                 });
 
                 //handle request
                 try {
+                    LOG.debug("DELEGATING REQUEST TO HANDLER METHOD WITH COMPLETION PROMISE");
                     handle(request, response, promise);
                 } catch (Exception e) {
                     //log irrelevant exceptions
                     LOG.warn("Ignorable exception: {}", e.getMessage());
+                    e.printStackTrace(System.err);
                 }
             });
+            LOG.debug("RETURNING THREAD TO AWAIT ASYNC COMPLETION");
             LOG.info("ASYNC MODE> Request handling started in async context");
         } else {
             LOG.warn("*****ASYNC NOT SUPPORTED. You might need to handle writing the response in your servlet handler*****");

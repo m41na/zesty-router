@@ -2,6 +2,7 @@ package com.practicaldime.zesty.demo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.practicaldime.zesty.servlet.HandlerPromise;
 import org.slf4j.Logger;
@@ -28,8 +29,28 @@ public class DemoApp {
         AppServer app = new AppServer(props);
 
         app.router().get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
-            response.send(String.format("incoming request: '%s'", request.getRequestURI()));
-            promise.complete();
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace(System.err);
+                }
+            }).thenAccept((Void) -> {
+                response.send(String.format("incoming request: '%s'", request.getRequestURI()));
+                promise.complete();
+            });
+        }).get("/a", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
+            promise.resolve(
+                    CompletableFuture.runAsync(() -> {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace(System.err);
+                        }
+                    }).thenAccept((Void) -> {
+                        response.send(String.format("incoming request: '%s'", request.getRequestURI()));
+                    })
+            );
         }).listen(port, host, (msg) -> LOG.info(msg));
     }
 }

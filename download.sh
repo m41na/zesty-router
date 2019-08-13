@@ -89,7 +89,7 @@ fi
 echo start building project artifacts
 echo 
 
-mvn clean package -U
+mvn clean package -U -DskipTests
 
 if [ $? -ne 0 ] ; then
 	echo the build did not complete successsfully
