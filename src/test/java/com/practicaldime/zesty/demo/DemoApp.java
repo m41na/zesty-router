@@ -52,7 +52,7 @@ public class DemoApp {
                     })
             );
         }).get("/b", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
-            response.git render("demo", Collections.emptyMap());
+            response.render("demo", Collections.emptyMap());
             promise.complete();
         }).listen(port, host, (msg) -> LOG.info(msg));
     }
