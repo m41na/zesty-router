@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Ignore("fix later")
 public class ReactViewEngineTest {
 
 	private String fileFolder = "src/test/resources/template/js";
@@ -20,7 +19,7 @@ public class ReactViewEngineTest {
 	
 	@Before
 	public void setup() throws IOException {
-		engine = ReactViewEngine.create(fileFolder, "js", "NONE");
+		engine = ReactViewEngine.create(fileFolder, "js", "FILE");
 	}
 	
 	@Test
@@ -30,6 +29,7 @@ public class ReactViewEngineTest {
 	}
 
 	@Test
+	@Ignore("fix this later")
 	public void testMerge() throws Exception {
 		Map<String, Object> model = new HashMap<>();
 		model.put("comments", CommentsRepo.comments());

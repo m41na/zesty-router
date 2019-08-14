@@ -1,28 +1,29 @@
 package com.practicaldime.zesty.view.react;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
+
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ReactViewConfiguration {
 
-    private final ScriptEngine nashornEngine = new ScriptEngineManager().getEngineByName("nashorn");
+    private final Context context = Context.newBuilder("js")
+            .allowAllAccess(true)
+            .allowExperimentalOptions(true).build();
     private final String POLYFILL = "/template/js/polyfill.js";
     private final String REACT_JS = "/template/js/react.production.min.js";
-    private final String REACT_JS_DOM = "/template/js/react-dom.production.min.js";
-    private final String EJS = "/template/js/ejs.min.js";
-    private final String EJS_RENDER = "/template/js/ejs.render.js";
+    private final String REACT_DOM_JS = "/template/js/react-dom.production.min.js";
+    private final String REACT_RENDER = "/template/js/react.render.js";
 
-    public ReactViewConfiguration() throws ScriptException{
-        nashornEngine.eval(new InputStreamReader(this.getClass().getResourceAsStream(POLYFILL)));
-        nashornEngine.eval(new InputStreamReader(this.getClass().getResourceAsStream(EJS)));
-        nashornEngine.eval(new InputStreamReader(this.getClass().getResourceAsStream(EJS_RENDER)));
-        nashornEngine.eval(new InputStreamReader(this.getClass().getResourceAsStream(REACT_JS)));
-        nashornEngine.eval(new InputStreamReader(this.getClass().getResourceAsStream(REACT_JS_DOM)));
+    public ReactViewConfiguration() throws IOException {
+        context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(POLYFILL)), POLYFILL).build());
+        context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_JS)), REACT_JS).build());
+        context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_DOM_JS)), REACT_DOM_JS).build());
+        context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_RENDER)), REACT_RENDER).build());
     }
 
-    public ScriptEngine getEnvironment()  {
-        return nashornEngine;
+    public Context getEnvironment()  {
+        return context;
     }
 }
