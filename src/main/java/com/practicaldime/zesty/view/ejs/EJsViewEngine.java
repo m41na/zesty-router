@@ -2,9 +2,11 @@ package com.practicaldime.zesty.view.ejs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.ViewLookup;
 import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 public class EJsViewEngine implements ViewEngine{
@@ -14,13 +16,14 @@ public class EJsViewEngine implements ViewEngine{
     private final ViewProcessor<String> view;
 	private final String templateDir;
 	private final String templateExt;
-	private final ViewProcessor.Lookup strategy = ViewProcessor.Lookup.FILE;
+	private final ViewLookup strategy;
 
-	private EJsViewEngine(String templateDir, String templateExt) throws IOException {
+	private EJsViewEngine(String templateDir, String templateExt, String lookup) throws IOException {
     	super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
         this.config = new EJsViewConfiguration();
+        this.strategy = Arrays.asList(ViewLookup.values()).stream().filter(value -> value.toString().equalsIgnoreCase(lookup)).findFirst().orElse(ViewLookup.FILE);
         this.view = new EJsViewProcessor(config);
 	}
 	
@@ -34,11 +37,11 @@ public class EJsViewEngine implements ViewEngine{
 		return this.templateExt;
 	}
 	
-	public static EJsViewEngine create(String templateDir, String templateExt)  {
+	public static EJsViewEngine create(String templateDir, String templateExt, String lookup)  {
         if (instance == null) {
             synchronized (EJsViewEngine.class) {
             	try {
-					instance = new EJsViewEngine(templateDir, templateExt);
+					instance = new EJsViewEngine(templateDir, templateExt, lookup);
 				}
             	catch(IOException e){
             		e.printStackTrace(System.err);

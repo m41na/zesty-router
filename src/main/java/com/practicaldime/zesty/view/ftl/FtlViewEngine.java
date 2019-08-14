@@ -1,12 +1,11 @@
 package com.practicaldime.zesty.view.ftl;
 
+import com.practicaldime.zesty.view.ViewEngine;
+import freemarker.template.Template;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
-
-import com.practicaldime.zesty.view.ViewEngine;
-
-import freemarker.template.Template;
 
 public class FtlViewEngine implements ViewEngine{
 

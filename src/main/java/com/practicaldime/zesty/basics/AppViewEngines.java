@@ -5,7 +5,7 @@ import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.view.ejs.EJsViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.hbars2.HbJsViewEngine;
-import com.practicaldime.zesty.view.string.DefaultViewEngine;
+import com.practicaldime.zesty.view.plain.PlainViewEngine;
 import com.practicaldime.zesty.view.twig.JTwigViewEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class AppViewEngines implements ViewEngineFactory{
 	private final Map<String, ViewEngine> engines = new HashMap<>();
 
 	@Override
-	public ViewEngine engine(String view, String assets, String suffix) {
+	public ViewEngine engine(String view, String assets, String suffix, String lookup) {
 		try {
 			switch (view) {
 			case "jtwig":
@@ -35,18 +35,18 @@ public class AppViewEngines implements ViewEngineFactory{
 				return engines.get(view);
 			case "handlebars":
 				if(engines.get(view) == null) {
-					engines.put(view, HbJsViewEngine.create(assets, suffix));
+					engines.put(view, HbJsViewEngine.create(assets, suffix, lookup));
 				}
 				return engines.get(view);
 			case "ejs":
 				if(engines.get(view) == null) {
-					engines.put(view, EJsViewEngine.create(assets, suffix));
+					engines.put(view, EJsViewEngine.create(assets, suffix, lookup));
 				}
 				return engines.get(view);
 			default:
-				LOG.error("specified engine not supported. defaulting dest 'none' instead");
+				LOG.error("specified engine not supported. defaulting to 'plain' instead");
 				if(engines.get(view) == null) {
-					engines.put(view, DefaultViewEngine.create(assets));
+					engines.put(view, PlainViewEngine.create(assets, lookup));
 				}
 				return engines.get(view);
 			}

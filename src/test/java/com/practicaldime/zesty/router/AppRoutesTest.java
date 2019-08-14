@@ -1,29 +1,26 @@
 package com.practicaldime.zesty.router;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.practicaldime.zesty.basics.AppRouter;
+import org.apache.commons.text.RandomStringGenerator;
+import org.eclipse.jetty.server.Request;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.text.RandomStringGenerator;
-import org.eclipse.jetty.server.Request;
-import org.junit.Test;
-
-import com.practicaldime.zesty.basics.AppRouter;
+import static org.junit.Assert.*;
 
 public class AppRoutesTest {
 
 	private AppRouter router;
-	private final RandomStringGenerator rand = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
-	
-	public AppRoutesTest() {
+
+    public AppRoutesTest() {
 		router = new AppRouter(new MethodRouter());		
 		//add todo routes
-		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos", "get", null, "application/json"));
+        RandomStringGenerator rand = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
+        router.addRoute(RouteBuilder.create(rand.generate(10), "/todos", "get", null, "application/json"));
 		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos", "post", "application/x-www-form-urlencoded", "application/json"));
 		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos/{id}", "get", "application/json", null));
 		router.addRoute(RouteBuilder.create(rand.generate(10), "/todos/{id}/status", "get", "application/json", null));

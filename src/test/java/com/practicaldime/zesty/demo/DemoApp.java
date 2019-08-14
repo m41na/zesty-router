@@ -1,16 +1,16 @@
 package com.practicaldime.zesty.demo;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
+import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.servlet.HandlerPromise;
+import com.practicaldime.zesty.servlet.HandlerRequest;
+import com.practicaldime.zesty.servlet.HandlerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.practicaldime.zesty.app.AppServer;
-import com.practicaldime.zesty.servlet.HandlerRequest;
-import com.practicaldime.zesty.servlet.HandlerResponse;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class DemoApp {
 
@@ -22,9 +22,9 @@ public class DemoApp {
         String host = "localhost";
 
         Map<String, String> props = new HashMap<>();
-        props.put("appctx", "/app");
-        props.put("assets", "");
-        props.put("engine", "freemarker");
+        //props.put("appctx", "/app");
+        //props.put("assets", "");
+        //props.put("engine", "freemarker");
 
         AppServer app = new AppServer(props);
 
@@ -51,6 +51,9 @@ public class DemoApp {
                         response.send(String.format("incoming request: '%s'", request.getRequestURI()));
                     })
             );
+        }).get("/b", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
+            response.git render("demo", Collections.emptyMap());
+            promise.complete();
         }).listen(port, host, (msg) -> LOG.info(msg));
     }
 }

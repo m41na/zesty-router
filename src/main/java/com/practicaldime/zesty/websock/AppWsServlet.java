@@ -1,10 +1,10 @@
 package com.practicaldime.zesty.websock;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+
+import java.util.Collections;
+import java.util.Map;
 
 public class AppWsServlet extends WebSocketServlet {
 

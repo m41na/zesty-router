@@ -1,27 +1,26 @@
-package com.practicaldime.zesty.view.string;
+package com.practicaldime.zesty.view.plain;
+
+import com.practicaldime.zesty.view.ViewLookup;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Collections;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.practicaldime.zesty.view.string.ViewProcessor.Lookup;
-
-public class DefaultViewEngineTest {
+public class PlainViewEngineTest {
 
 	private String fileFolder = "src/test/resources/template/js";
 	private String classpathFolder = "/template/js";
-	private DefaultViewEngine engine;
+	private PlainViewEngine engine;
 	
 	@Before
 	public void setup() throws IOException {
-		engine = DefaultViewEngine.create(fileFolder);
+		engine = PlainViewEngine.create(fileFolder, "NONE");
 	}
 	
 	@Test
 	public void testResolveFileLookup() throws Exception {
-		Object path = DefaultViewEngine.getProcessor().resolve(fileFolder, "index.test.js", Lookup.FILE);
+		Object path = PlainViewEngine.getProcessor().resolve(fileFolder, "index.test.js", ViewLookup.FILE);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 
@@ -33,7 +32,7 @@ public class DefaultViewEngineTest {
 	
 	@Test
 	public void testResolveClasspathLookup() throws Exception {
-		Object path = DefaultViewEngine.getProcessor().resolve(classpathFolder, "index.test.js", Lookup.CLASSPATH);
+		Object path = PlainViewEngine.getProcessor().resolve(classpathFolder, "index.test.js", ViewLookup.CLASSPATH);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 

@@ -1,8 +1,8 @@
 package com.practicaldime.zesty.view.ejs;
 
+import com.practicaldime.zesty.view.ViewLookup;
+
 public interface ViewProcessor<T> {
 
-	enum Lookup { FILE, CLASSPATH, REMOTE, ANY };
-
-	T resolve(String templatePath, String template, Lookup strategy) throws Exception;
+	T resolve(String templatePath, String template, ViewLookup strategy) throws Exception;
 }

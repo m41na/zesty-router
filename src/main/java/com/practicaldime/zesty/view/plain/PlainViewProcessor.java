@@ -1,43 +1,37 @@
-package com.practicaldime.zesty.view.hbars;
+package com.practicaldime.zesty.view.plain;
 
 import com.practicaldime.zesty.view.ViewLookup;
 
-import javax.script.Invocable;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class HbJsViewProcessor implements ViewProcessor<Object> {
-
-    private final HbJsViewConfiguration factory;
-
-    public HbJsViewProcessor(HbJsViewConfiguration factory) {
-        this.factory = factory;
-    }
+public class PlainViewProcessor implements ViewProcessor<String> {
 
     @Override
-    public Object resolve(String templateDir, String template, ViewLookup strategy) throws Exception {
-        //return a handlebars template
-        String compileHandlebars = "function compileHandlebars(source) {return Handlebars.compile(source);}";
+    public String resolve(String templateDir, String template, ViewLookup strategy) throws Exception {
         switch (strategy) {
             case FILE: {
                 String baseDir = System.getProperty("user.dir");
                 Path path = Paths.get(baseDir, templateDir);
-                String source = new String(Files.readAllBytes(path.resolve(template)));
-                factory.getEnvironment().eval(compileHandlebars);
-                return ((Invocable)factory.getEnvironment()).invokeFunction("compileHandlebars", source);
+                return (Files.exists(path)) ?
+                        new String(Files.readAllBytes(path.resolve(template))) :
+                        "File '" + template + "' does not exist";
             }
             case CLASSPATH: {
                 URL url = this.getClass().getClassLoader().getResource("");
                 String baseDir = resolveName(url.getPath());
                 Path path = Paths.get(baseDir, templateDir, template);
-                String source = new String(Files.readAllBytes(path));
-                factory.getEnvironment().eval(compileHandlebars);
-                return ((Invocable)factory.getEnvironment()).invokeFunction("compileHandlebars", source);
+                return (Files.exists(path)) ?
+                        new String(Files.readAllBytes(path)) :
+                        "Resource '" + template + "' does not exist";
+            }
+            case NONE: {
+                return template;
             }
             default: {
-                return null;
+                return "not yet implemented";
             }
         }
     }

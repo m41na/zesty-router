@@ -128,9 +128,9 @@ public class HandlerServlet extends HttpServlet {
                         try {
                             int status = 500;
                             if (HandlerException.class.isAssignableFrom(th.getClass())) {
-                                status = HandlerException.class.cast(th).status;
+                                status = ((HandlerException) th).status;
                             }
-                            response.sendError(status, ((Exception) th).getMessage());
+                            response.sendError(status, th.getMessage());
                         } catch (Exception e) {
                             e.printStackTrace(System.err);
                         } finally {

@@ -4,5 +4,5 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public interface HandlerConfig {
 
-	public void configure(ServletHolder holder);
+	void configure(ServletHolder holder);
 }

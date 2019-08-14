@@ -1,14 +1,12 @@
 package com.practicaldime.zesty.view.react;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.demo.CommentsRepo;
+import com.practicaldime.zesty.view.ViewLookup;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,12 +20,12 @@ public class ReactViewEngineTest {
 	
 	@Before
 	public void setup() throws IOException {
-		engine = ReactViewEngine.create(fileFolder, "js");
+		engine = ReactViewEngine.create(fileFolder, "js", "NONE");
 	}
 	
 	@Test
 	public void testResolveFileLookup() throws Exception {
-		Object path = ReactViewEngine.getProcessor().resolve(fileFolder, testFile, ViewProcessor.Lookup.FILE);
+		Object path = ReactViewEngine.getProcessor().resolve(fileFolder, testFile, ViewLookup.FILE);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 
@@ -41,7 +39,7 @@ public class ReactViewEngineTest {
 	
 	@Test
 	public void testResolveClasspathLookup() throws Exception {
-		Object path = ReactViewEngine.getProcessor().resolve(classpathFolder, testFile, ViewProcessor.Lookup.CLASSPATH);
+		Object path = ReactViewEngine.getProcessor().resolve(classpathFolder, testFile, ViewLookup.CLASSPATH);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 }

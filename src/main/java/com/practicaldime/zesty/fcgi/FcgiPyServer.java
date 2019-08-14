@@ -1,9 +1,5 @@
 package com.practicaldime.zesty.fcgi;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
 import org.eclipse.jetty.server.Server;
@@ -12,6 +8,9 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
 
 public class FcgiPyServer {
 

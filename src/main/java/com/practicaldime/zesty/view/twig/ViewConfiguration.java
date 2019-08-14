@@ -4,5 +4,5 @@ import org.jtwig.environment.Environment;
 
 public interface ViewConfiguration {
     
-    public Environment getEnvironment();
+    Environment getEnvironment();
 }

@@ -1,7 +1,7 @@
 package com.practicaldime.zesty.view.hbjs;
 
+import com.practicaldime.zesty.view.ViewLookup;
 import com.practicaldime.zesty.view.hbars.HbJsViewEngine;
-import com.practicaldime.zesty.view.hbars.ViewProcessor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,12 +19,12 @@ public class HbJsViewEngineTest {
 	
 	@Before
 	public void setup() throws IOException {
-		engine = HbJsViewEngine.create(fileFolder, "js");
+		engine = HbJsViewEngine.create(fileFolder, "js", "FILE");
 	}
 	
 	@Test
 	public void testResolveFileLookup() throws Exception {
-		Object path = HbJsViewEngine.getProcessor().resolve(fileFolder, testFile, ViewProcessor.Lookup.FILE);
+		Object path = HbJsViewEngine.getProcessor().resolve(fileFolder, testFile, ViewLookup.FILE);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 
@@ -38,7 +38,7 @@ public class HbJsViewEngineTest {
 	
 	@Test
 	public void testResolveClasspathLookup() throws Exception {
-		Object path = HbJsViewEngine.getProcessor().resolve(classpathFolder, testFile, ViewProcessor.Lookup.CLASSPATH);
+		Object path = HbJsViewEngine.getProcessor().resolve(classpathFolder, testFile, ViewLookup.CLASSPATH);
 		System.out.printf("*******path resolved: %s%n", path);
 	}
 

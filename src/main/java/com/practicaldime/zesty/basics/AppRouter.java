@@ -1,13 +1,12 @@
 package com.practicaldime.zesty.basics;
 
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.practicaldime.zesty.router.RequestAttrs;
 import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.RouteSearch;
 import com.practicaldime.zesty.router.Router;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 public class AppRouter implements Router{
 

@@ -1,11 +1,11 @@
 package com.practicaldime.zesty.router;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.eclipse.jetty.server.HttpChannel;
 import org.eclipse.jetty.server.HttpInput;
 import org.eclipse.jetty.server.Request;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 public class MockRoute extends Request{
     

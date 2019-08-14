@@ -87,12 +87,9 @@ public class PathRegexRouter implements Router{
 			} else if (!paramsRegex.equals(other.paramsRegex))
 				return false;
 			if (valuesRegex == null) {
-				if (other.valuesRegex != null)
-					return false;
-			} else if (!valuesRegex.equals(other.valuesRegex))
-				return false;
-			return true;
-		}
+                return other.valuesRegex == null;
+			} else return valuesRegex.equals(other.valuesRegex);
+        }
 
 		@Override
 		public int compareTo(PathPattern that) {

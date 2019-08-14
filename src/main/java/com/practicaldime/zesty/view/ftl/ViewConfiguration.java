@@ -4,5 +4,5 @@ import freemarker.template.Configuration;
 
 public interface ViewConfiguration {
     
-    public Configuration getEnvironment();
+    Configuration getEnvironment();
 }

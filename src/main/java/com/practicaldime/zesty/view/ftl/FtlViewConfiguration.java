@@ -1,14 +1,14 @@
 package com.practicaldime.zesty.view.ftl;
 
-import java.io.File;
-import java.io.IOException;
-
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Version;
+
+import java.io.File;
+import java.io.IOException;
 
 public class FtlViewConfiguration implements ViewConfiguration {
 

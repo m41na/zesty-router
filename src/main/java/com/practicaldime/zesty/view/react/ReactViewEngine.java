@@ -1,10 +1,12 @@
 package com.practicaldime.zesty.view.react;
 
 import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.ViewLookup;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ReactViewEngine implements ViewEngine{
@@ -14,14 +16,15 @@ public class ReactViewEngine implements ViewEngine{
     private final ViewProcessor<String> view;
 	private final String templateDir;
 	private final String templateExt;
-	private final ViewProcessor.Lookup strategy = ViewProcessor.Lookup.FILE;
+	private final ViewLookup strategy;
 	private final String renderFunction = "ejsRender";
 
-	private ReactViewEngine(String templateDir, String templateExt) throws ScriptException {
+	private ReactViewEngine(String templateDir, String templateExt, String lookup) throws ScriptException {
     	super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
         this.config = new ReactViewConfiguration();
+		this.strategy = Arrays.asList(ViewLookup.values()).stream().filter(value -> value.toString().equalsIgnoreCase(lookup)).findFirst().orElse(ViewLookup.FILE);
         this.view = new ReactViewProcessor(config);
 	}
 	
@@ -35,11 +38,11 @@ public class ReactViewEngine implements ViewEngine{
 		return this.templateExt;
 	}
 	
-	public static ReactViewEngine create(String templateDir, String templateExt)  {
+	public static ReactViewEngine create(String templateDir, String templateExt, String lookup)  {
         if (instance == null) {
             synchronized (ReactViewEngine.class) {
             	try {
-					instance = new ReactViewEngine(templateDir, templateExt);
+					instance = new ReactViewEngine(templateDir, templateExt, lookup);
 				}
             	catch(ScriptException e){
             		e.printStackTrace(System.err);

@@ -10,7 +10,7 @@ public class RequestAttrs {
 	public Map<String, String> headers = new HashMap<>();
 	
 	public String getHeader(String name) {
-		return headers.keySet().contains(name)? headers.get(name) : null;
+		return headers.containsKey(name)? headers.get(name) : null;
 	}
 
 	@Override

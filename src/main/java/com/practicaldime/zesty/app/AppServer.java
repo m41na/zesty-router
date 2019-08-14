@@ -41,7 +41,6 @@ public class AppServer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AppServer.class);
 
-	private Server server;
 	private AppRouter routes;
 	private String status = "stopped";
 	private static ViewEngine engine;
@@ -60,6 +59,7 @@ public class AppServer {
 		this.assets(Optional.ofNullable(props.get("assets")).orElse("www"));
 		this.appctx(Optional.ofNullable(props.get("appctx")).orElse("/"));
 		this.engine(Optional.ofNullable(props.get("engine")).orElse("*"));
+		this.engine(Optional.ofNullable(props.get("lookup")).orElse("FILE"));
 	}
 
 	public static ViewEngine engine() {
@@ -84,18 +84,18 @@ public class AppServer {
 	public final void engine(String view) {
 		switch (view) {
 		case "jtwig":
-			engine = engineFactory.engine(view, locals.getProperty("assets"), "html");
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "html", "");
 			break;
 		case "freemarker":
-			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl");
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl", "");
 			break;
 		case "handlebars":
 		case "ejs":
-			engine = engineFactory.engine(view, locals.getProperty("assets"), "js");
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "js", locals.getProperty("lookup"));
 			break;
 		default:
-			LOG.error("specified engine not supported. defaulting dest 'none' instead");
-			engine = engineFactory.engine(view, locals.getProperty("assets"), "");
+			LOG.error("specified engine not supported. defaulting to 'plain' instead");
+			engine = engineFactory.engine(view, locals.getProperty("assets"), "", locals.getProperty("lookup"));
 		}
 		this.locals.put("engine", view);
 	}
@@ -539,7 +539,7 @@ public class AppServer {
 			status = "starting";
 			// create server with thread pool
 			QueuedThreadPool threadPool = createThreadPool();
-			server = new Server(threadPool);
+			Server server = new Server(threadPool);
 
 			// Scheduler
 			server.addBean(new ScheduledExecutorScheduler());
@@ -735,7 +735,7 @@ public class AppServer {
 		}
 
 		public void subscribe(String event, Consumer<String> callback) {
-			if (subscribers.keySet().contains(event)) {
+			if (subscribers.containsKey(event)) {
 				this.subscribers.put(event, callback);
 			} else {
 				LOG.error("There is no such event as {}", event);

@@ -1,11 +1,10 @@
 package com.practicaldime.zesty.basics;
 
-import java.util.Map;
+import com.practicaldime.zesty.router.RouteSearch;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
-
-import com.practicaldime.zesty.router.RouteSearch;
+import java.util.Map;
 
 public interface RouteRequest {
     

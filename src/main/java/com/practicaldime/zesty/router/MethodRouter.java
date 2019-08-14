@@ -5,8 +5,9 @@ import java.util.Map;
 
 public class MethodRouter implements Router{
 
-	public static enum Method {POST, GET, PUT, DELETE, OPTIONS, HEAD, ALL};
-	private Map<Method, Router> routers = new EnumMap<>(Method.class);
+	public enum Method {POST, GET, PUT, DELETE, OPTIONS, HEAD, ALL}
+
+    private Map<Method, Router> routers = new EnumMap<>(Method.class);
 	
 	public MethodRouter() {
 		super();

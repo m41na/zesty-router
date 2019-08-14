@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.view.hbars;
+package com.practicaldime.zesty.view.plain;
 
 import com.practicaldime.zesty.view.ViewLookup;
 
