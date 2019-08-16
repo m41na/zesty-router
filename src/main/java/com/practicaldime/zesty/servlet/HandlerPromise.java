@@ -16,34 +16,29 @@ public class HandlerPromise<R> {
 
     public HandlerResult resolve(CompletableFuture<R> action) {
         LOG.info("Now will resolve promise");
-        return action.thenCompose(r -> CompletableFuture.completedFuture(result).thenApply(success::apply)
-                .handle((res, th) -> {
-                    if(th != null) {
-                        if (HandlerException.class.isAssignableFrom(th.getCause().getClass())) {
-                            return failure.apply(res, th.getCause());
-                        } else {
-                            return failure.apply(res, new HandlerException(500, th.getCause().getMessage(), th));
-                        }
+        return action.handle((res, th) -> {
+            if(th != null) {
+                result.updateStatus(Boolean.FALSE);
+                if (th.getCause() != null){
+                    if(HandlerException.class.isAssignableFrom(th.getCause().getClass())){
+                        return failure.apply(result, th.getCause());
                     }
-                    res.updateStatus(Boolean.FALSE);
-                    return res;
-                })).join();
+                    else {
+                        return failure.apply(result, new HandlerException(500, "promise resolver exception: " + th.getCause().getMessage(), th.getCause()));
+                    }
+                } else {
+                    return failure.apply(result, new HandlerException(500, "promise resolver exception: " + th.getMessage(), th));
+                }
+            }
+            else{
+                return success.apply(result);
+            }
+        }).join();
     }
 
     public HandlerResult complete() {
         LOG.info("Now will complete promise");
-        return CompletableFuture.completedFuture(result).thenApply(success::apply)
-                .handle((res, th) -> {
-                    if(th != null) {
-                        if (HandlerException.class.isAssignableFrom(th.getCause().getClass())) {
-                            return failure.apply(res, th.getCause());
-                        } else {
-                            return failure.apply(res, new HandlerException(500, th.getCause().getMessage(), th));
-                        }
-                    }
-                    res.updateStatus(Boolean.FALSE);
-                    return res;
-                }).join();
+        return success.apply(result);
     }
 
     public void OnSuccess(Function<HandlerResult, HandlerResult> completer) {

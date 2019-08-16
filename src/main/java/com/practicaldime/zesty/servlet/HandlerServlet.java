@@ -84,7 +84,7 @@ public class HandlerServlet extends HttpServlet {
                     @Override
                     public HandlerResult apply(HandlerResult res) {
                         try {
-                            LOG.info("Servlet {} handled request successfully. Now preparing response", ID);
+                            LOG.info("Servlet {} request resolved with success status. Now preparing response", ID);
                             if (response.forward) {
                                 try {
                                     request.getRequestDispatcher(response.routeUri).forward(request, response);
@@ -113,9 +113,8 @@ public class HandlerServlet extends HttpServlet {
                         } catch (Exception e) {
                             e.printStackTrace(System.err);
                         } finally {
-                            LOG.info("Async request '{}' completed successfully: {}", request.getRequestURI(), res);
-                            if (async != null) async.complete();
-                            LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                            LOG.info("Async request '{}' COMPLETED successfully: {}", request.getRequestURI(), res);
+                            async.complete();
                             LOG.info("Duration of processed request -> {} ms", res.updateStatus(Boolean.TRUE));
                             return res;
                         }
@@ -126,6 +125,7 @@ public class HandlerServlet extends HttpServlet {
                     @Override
                     public HandlerResult apply(HandlerResult res, Throwable th) {
                         try {
+                            LOG.info("Servlet {} request resolved with failure status. Now preparing response", ID);
                             int status = 500;
                             if (HandlerException.class.isAssignableFrom(th.getClass())) {
                                 status = ((HandlerException) th).status;
@@ -134,9 +134,8 @@ public class HandlerServlet extends HttpServlet {
                         } catch (Exception e) {
                             e.printStackTrace(System.err);
                         } finally {
-                            LOG.info("Async request '{}' completed with an exception", request.getRequestURI());
-                            if (async != null) async.complete();
-                            LOG.debug("COMPLETED ASYNC ON SUCCESS");
+                            LOG.info("Async request '{}' COMPLETED with an exception", request.getRequestURI());
+                            async.complete();
                             LOG.info("Duration of processed request -> {} ms", res.updateStatus(Boolean.FALSE));
                             return res;
                         }
@@ -148,9 +147,9 @@ public class HandlerServlet extends HttpServlet {
                     LOG.debug("DELEGATING REQUEST TO HANDLER METHOD WITH COMPLETION PROMISE");
                     handle(request, response, promise);
                 } catch (Exception e) {
-                    //log irrelevant exceptions
-                    LOG.warn("Ignorable exception: {}", e.getMessage());
+                    LOG.warn("Uncaught Exception in the promise resolver. Completing promise with failure: {}", e.getMessage());
                     e.printStackTrace(System.err);
+                    promise.resolve(CompletableFuture.failedFuture(e));
                 }
             });
             LOG.debug("RETURNING THREAD TO AWAIT ASYNC COMPLETION");
@@ -161,6 +160,8 @@ public class HandlerServlet extends HttpServlet {
             try {
                 handle(request, response, promise);
             } catch (Exception e) {
+                LOG.warn("Uncaught Exception in the promise resolver. Completing promise with failure: {}", e.getMessage());
+                e.printStackTrace(System.err);
                 promise.resolve(CompletableFuture.failedFuture(e));
             }
         }
