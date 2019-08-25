@@ -1,0 +1,43 @@
+{
+  "basedir": "",
+  "appctx": "/api",
+  "poolSize": 50,
+  "timeout": 30000,
+  "port": 8080,
+  "host": "localhost",
+  "session": {
+    "url": "jdbc:h2:~/data/sessions/zesty",
+    "driver": "org.h2.Driver"
+  },
+  "proxy": {
+    "pathspec": "/*",
+    "prefix": "/",
+    "url": "http://localhost:8080"
+  },
+  "balancer": {
+    "pathspec": "/api/*",
+    "prefix": "/",
+    "members": [
+      {
+        "name": "instance0",
+        "url": "http://localhost:8090"
+      },
+      {
+        "name": "instance1",
+        "url": "http://localhost:8091"
+      }
+    ]
+  },
+  "resources": [
+    {
+      "assets": "docs",
+      "context": "/docs",
+      "pathspec": "/docs/*"
+    },
+    {
+      "assets": "www",
+      "context": "/",
+      "pathspec": "/*"
+    }
+  ]
+}

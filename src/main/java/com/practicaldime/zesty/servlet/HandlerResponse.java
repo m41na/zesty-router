@@ -187,7 +187,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
 		// gets MIME type of the file
 		if (mimeType == null) {
-			// set dest binary type if MIME mapping not provided
+			// set dest binary type if MIME context not provided
 			mimeType = "application/octet-stream";
 		}
 

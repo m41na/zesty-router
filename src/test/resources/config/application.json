@@ -1,0 +1,19 @@
+{
+  "proxy": {
+    "pathspec": "/*",
+    "prefix": "/",
+    "url": "http://proxyhost:8081"
+  },
+  "resources": [
+    {
+      "assets": "build",
+      "context": "/build",
+      "pathspec": "/build/*"
+    },
+    {
+      "assets": "docs",
+      "context": "/",
+      "pathspec": "/*"
+    }
+  ]
+}

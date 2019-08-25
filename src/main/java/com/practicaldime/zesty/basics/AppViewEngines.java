@@ -44,7 +44,7 @@ public class AppViewEngines implements ViewEngineFactory{
 				}
 				return engines.get(view);
 			default:
-				LOG.error("specified engine not supported. defaulting to 'plain' instead");
+				LOG.warn("specified engine not supported. defaulting to 'plain' instead");
 				if(engines.get(view) == null) {
 					engines.put(view, PlainViewEngine.create(assets, lookup));
 				}
