@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 
 public class Minimalist {
@@ -41,7 +40,7 @@ public class Minimalist {
         server.join();
     }
 
-    public static void main2(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Server server = new Server(8080);
         //add handler
         ServletContextHandler servlets = new ServletContextHandler();
@@ -49,6 +48,9 @@ public class Minimalist {
         //add hello servlet
         ServletHolder holder = new ServletHolder(new HelloServlet());
         servlets.addServlet(holder, "/api/*");
+        //mount another servlet
+        ServletHolder home = new ServletHolder(new PubHomeServlet());
+        servlets.addServlet(home, "/zes/*");
         //add default servlet
         addDefaultResourceHandlers(servlets);
         server.setHandler(servlets);
@@ -57,7 +59,7 @@ public class Minimalist {
         server.join();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main3(String[] args) throws Exception {
         Server server = new Server(8080);
         //add api handler
         ServletContextHandler servlets = new ServletContextHandler();
@@ -81,7 +83,7 @@ public class Minimalist {
         // Configuration for serving /A/* from X/V/A
         DefaultServlet aServlet = new DefaultServlet();
         ServletHolder aHolder = new ServletHolder("default", DefaultServlet.class);
-        aHolder.setInitParameter("resourceBase", "docs/");
+        aHolder.setInitParameter("resourceBase", "build/public");
         aHolder.setInitParameter("welcomeFile", "index.html");
         servlets.addServlet(aHolder, "/*");
     }
@@ -89,7 +91,7 @@ public class Minimalist {
     private static ServletContextHandler createDefaultResourceHandler(String context) {
         DefaultServlet aServlet = new DefaultServlet();
         ServletHolder aHolder = new ServletHolder(aServlet);
-        aHolder.setInitParameter("resourceBase", "build/");
+        aHolder.setInitParameter("resourceBase", "docs/");
         aHolder.setInitParameter("welcomeFile", "index.html");
         ServletContextHandler handler = new ServletContextHandler(null, context);
         handler.addServlet(aHolder, "/*");
@@ -103,6 +105,14 @@ public class Minimalist {
             response.setContentType("text/html; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println("<h1>Hello from HelloServlet</h1>");
+        }
+    }
+
+    public static class PubHomeServlet extends HttpServlet {
+        @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            //request.newPushBuilder().path("favicon.ico").path("img/zesty.png"); //servlet-api 4
+            request.getRequestDispatcher("index.html").forward(request, response);
         }
     }
 
