@@ -14,9 +14,8 @@ import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.http2.HTTP2Cipher;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -24,6 +23,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
 import org.slf4j.Logger;
@@ -37,6 +37,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
+import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
 
 public class AppServer {
 
@@ -547,14 +548,39 @@ public class AppServer {
             // Scheduler
             server.addBean(new ScheduledExecutorScheduler());
 
-            // configure connector
-            ServerConnector http = new ServerConnector(server);
-            http.setHost(host);
-            http.setPort(port);
-            http.setIdleTimeout(30000); //milliseconds
-            server.addConnector(http);
+            // HTTP Configuration
+            HttpConfiguration http_config = new HttpConfiguration();
 
-            // TODO: configure secure connector (if need be)
+            // HTTP/1.1 Connection Factory
+            HttpConnectionFactory http1 = new HttpConnectionFactory(http_config);
+
+            // HTTPS Configuration
+//            http_config.setSecureScheme("https");
+//            http_config.setSecurePort(8443);
+//            HttpConfiguration https_config = new HttpConfiguration(http_config);
+//            https_config.addCustomizer(new SecureRequestCustomizer());
+
+            // HTTP/2 Connection Factory
+//            HTTP2ServerConnectionFactory h2 = new HTTP2ServerConnectionFactory(https_config);
+
+            //TODO: add alpn configuration for ssl if need be
+//            NegotiatingServerConnectionFactory.checkProtocolNegotiationAvailable();
+//            ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory("h2", "h2-17", "h2-16", "h2-15", "h2-14");
+//            alpn.setDefaultProtocol("h2");
+
+            // SSL Context Factory for HTTPS and HTTP/2
+//            SslContextFactory sslContextFactory = createSslContextFactory();
+
+            // SSL Connection Factory
+//            SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, "h2");
+//
+            // configure connector
+            ServerConnector connector = new ServerConnector(server, /*ssl, alpn h2,,*/ http1);
+            connector.setHost(host);
+            connector.setPort(port);
+            connector.setIdleTimeout(30000); //milliseconds
+            server.addConnector(connector);
+
             // enable CORS
             if (Boolean.parseBoolean(this.locals.getProperty("cors", "false"))) {
                 FilterHolder corsFilter = new FilterHolder(CrossOriginFilter.class);
@@ -668,6 +694,16 @@ public class AppServer {
         int maxPoolSize = Integer.parseInt(this.locals.getProperty("maxPoolSize"));
         int keepAliveTime = Integer.parseInt(this.locals.getProperty("keepAliveTime"));
         return new QueuedThreadPool(maxPoolSize, poolSize, keepAliveTime);
+    }
+
+    private SslContextFactory createSslContextFactory() {
+        // SSL Context Factory for HTTPS and HTTP/2
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        sslContextFactory.setKeyStoreResource(newClassPathResource("keystore"));
+        sslContextFactory.setKeyStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
+        sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+        sslContextFactory.setCipherComparator(HTTP2Cipher.COMPARATOR);
+        return sslContextFactory;
     }
 
     private ResourceHandler createResourceHandler(String resourceBase) {
