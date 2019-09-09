@@ -50,6 +50,7 @@ public class AppServer {
     private final Map<String, String> wpcontext = new HashMap<>();
     private final Map<String, String> corscontext = new HashMap<>();
     private final ViewEngineFactory engineFactory = new AppViewEngines();
+    private final String UNASSIGNED = "not.yet.assigned";
     private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
     private AppRouter routes;
     private String status = "stopped";
@@ -60,16 +61,14 @@ public class AppServer {
     }
 
     public AppServer(Map<String, String> props) {
-        this.use("assets", Optional.ofNullable(props.get("assets")).orElse("www"));
+        this.use("assets", Optional.ofNullable(props.get("assets")).orElse(UNASSIGNED));
         this.use("appctx", Optional.ofNullable(props.get("appctx")).orElse("/"));
         this.use("engine", Optional.ofNullable(props.get("engine")).orElse("*"));
         this.use("lookup", Optional.ofNullable(props.get("lookup")).orElse("FILE"));
         this.use("session.jdbc.enable", Optional.ofNullable(props.get("session.jdbc.enable")).orElse("true"));
         this.use("session.jdbc.url", Optional.ofNullable(props.get("session.jdbc.url")).orElse("jdbc:h2:~/zesty-session"));
         this.use("session.jdbc.driver", Optional.ofNullable(props.get("session.jdbc.driver")).orElse("org.h2.Driver"));
-        this.use("resources.servlet.enable", Optional.ofNullable(props.get("resources.servlet.enable")).orElse("false"));
-        this.use("resources.handler.enable", Optional.ofNullable(props.get("resources.handler.enable")).orElse("false"));
-        this.use("resources.handler.enable", Optional.ofNullable(props.get("resources.handler.enable")).orElse("false"));
+        this.use("default.servlet.enable", Optional.ofNullable(props.get("default.servlet.enable")).orElse("false"));
         this.use("poolSize", Optional.ofNullable(props.get("poolSize")).orElse("5"));
         this.use("maxPoolSize", Optional.ofNullable(props.get("maxPoolSize")).orElse("200"));
         this.use("keepAliveTime", Optional.ofNullable(props.get("keepAliveTime")).orElse("30000"));
@@ -140,6 +139,18 @@ public class AppServer {
     public AppServer cors(Map<String, String> cors) {
         this.locals.put("cors", "true");
         if (cors != null) this.corscontext.putAll(cors);
+        return this;
+    }
+
+    public final AppServer assets(String mapping, String folder){
+        if(!UNASSIGNED.equals(this.locals("assets").toString())){
+            LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
+        }
+        else {
+            ServletHolder defaultServlet = createResourceServlet(folder);
+            String pathspec = mapping.endsWith("/*")? mapping : (mapping.endsWith("/")? mapping + "*" : mapping + "/*");
+            servlets.addServlet(defaultServlet, pathspec);
+        }
         return this;
     }
 
@@ -626,23 +637,27 @@ public class AppServer {
             // add routes filter
             servlets.addFilter(new FilterHolder(new RouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
 
-            // configure resource handlers
-            String resourceBase = this.locals.getProperty("assets");
-
             // configure context for servlets
             String appctx = this.locals.getProperty("appctx");
             servlets.setContextPath(appctx.endsWith("/*") ? appctx.substring(0, appctx.length() - 2) : appctx.endsWith("/") ? appctx.substring(0, appctx.length() - 1) : appctx);
 
-            // configure default servlet for app context
-            if (Boolean.parseBoolean(this.locals.getProperty("resources.servlet.enable"))) {
-                ServletHolder defaultServlet = createResourceServlet(resourceBase);
-                servlets.addServlet(defaultServlet, "/*");
+            // configure resource handlers if resourcesBase is NOT null
+            String resourceBase = this.locals.getProperty("assets");
+
+            // configure DefaultServlet to serve static content
+            if(!UNASSIGNED.equals(resourceBase)) {
+                if(Boolean.parseBoolean(this.locals.getProperty("default.servlet.enable"))) {
+                    ServletHolder defaultServlet = createResourceServlet(resourceBase);
+                    servlets.addServlet(defaultServlet, "/*");
+                }
             }
 
-            // configure ResourceHandler to serve static files
+            // configure ResourceHandler to serve static content
             ResourceHandler appResources = null;
-            if (Boolean.parseBoolean(this.locals.getProperty("resources.handler.enable"))) {
-                appResources = createResourceHandler(resourceBase);
+            if(!UNASSIGNED.equals(resourceBase)) {
+                if(!Boolean.parseBoolean(this.locals.getProperty("default.servlet.enable"))) {
+                    appResources = createResourceHandler(resourceBase);
+                }
             }
 
             // collect all context handlers
@@ -679,7 +694,7 @@ public class AppServer {
             // add shutdown hook
             addRuntimeShutdownHook(server);
 
-            // start and access server using http://localhost:8080
+            // start and access server using ${protocol}://${host}:${port}
             server.start();
             status = "running";
 
@@ -732,10 +747,12 @@ public class AppServer {
     }
 
     private ServletHolder createResourceServlet(String resourceBase) {
-        // DefaultServlet should be named 'default'
-        ServletHolder defaultServlet = new ServletHolder("default", DefaultServlet.class);
+        // DefaultServlet should be named 'default-${resourceBase}'
+        ServletHolder defaultServlet = new ServletHolder("default-" + resourceBase, DefaultServlet.class);
         defaultServlet.setInitParameter("resourceBase", resourceBase);
         defaultServlet.setInitParameter("dirAllowed", "false");
+        defaultServlet.setInitParameter("pathInfoOnly", "true");
+        defaultServlet.setInitParameter("welcomeFile", "index.html");
         return defaultServlet;
     }
 
