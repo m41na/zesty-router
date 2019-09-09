@@ -1,9 +1,6 @@
 package com.practicaldime.zesty.router;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HeadersRouter implements Router{
 
@@ -15,7 +12,8 @@ public class HeadersRouter implements Router{
 		for(Iterator<Route> iter = pool.iterator(); iter.hasNext();) {
 			Route mapping = iter.next();
 			//is 'content-type' declared in mapping route?
-			String contentTypeHeader = input.requestAttrs.getHeader("Content-Type");
+			String contentTypeHeader = Optional.ofNullable(input.requestAttrs.getHeader("Content-Type"))
+					.orElse(input.requestAttrs.getHeader("content-type"));
 			if(mapping.contentType != null && mapping.contentType.trim().length() > 0) {
 				if(mapping.contentType.equals("*")) {
 					continue;
@@ -39,7 +37,8 @@ public class HeadersRouter implements Router{
 				continue;
 			}
 			//is 'accept' declared in mapping route?
-			String acceptHeader = input.requestAttrs.getHeader("Accept");
+			String acceptHeader = Optional.ofNullable(input.requestAttrs.getHeader("Accept"))
+					.orElse(input.requestAttrs.getHeader("accept"));
 			if(mapping.accept != null && mapping.accept.trim().length() > 0) {
 				if(mapping.accept.equals("*")) {
 					continue;
