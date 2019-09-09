@@ -12,9 +12,11 @@ import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.websock.AppWsPolicy;
 import com.practicaldime.zesty.websock.AppWsProvider;
 import com.practicaldime.zesty.websock.AppWsServlet;
+import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.fcgi.server.proxy.FastCGIProxyServlet;
 import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
 import org.eclipse.jetty.http2.HTTP2Cipher;
+import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
@@ -32,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -70,6 +73,13 @@ public class AppServer {
         this.use("poolSize", Optional.ofNullable(props.get("poolSize")).orElse("5"));
         this.use("maxPoolSize", Optional.ofNullable(props.get("maxPoolSize")).orElse("200"));
         this.use("keepAliveTime", Optional.ofNullable(props.get("keepAliveTime")).orElse("30000"));
+        this.use("https.port", Optional.ofNullable(props.get("https.port")).orElse("8443"));
+        this.use("https.idleTimeout", Optional.ofNullable(props.get("https.idleTimeout")).orElse("30000"));
+        this.use("https.outputBufferSize", Optional.ofNullable(props.get("https.outputBufferSize")).orElse("32768"));
+        this.use("https.ssl.stsMaxAge", Optional.ofNullable(props.get("https.ssl.stsMaxAge")).orElse("2000"));
+        this.use("https.ssl.includeSubDomains", Optional.ofNullable(props.get("https.ssl.includeSubDomains")).orElse("true"));
+        this.use("https.keystore.classpath", Optional.ofNullable(props.get("https.keystore.classpath")).orElse("keystore.jks"));
+        this.use("https.keystore.password", Optional.ofNullable(props.get("https.keystore.password")).orElse("OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u"));
     }
 
     public static ViewEngine engine() {
@@ -550,36 +560,44 @@ public class AppServer {
 
             // HTTP Configuration
             HttpConfiguration http_config = new HttpConfiguration();
+            http_config.setSecureScheme("https");
+            http_config.setSecurePort(Integer.parseInt(this.locals.getProperty("https.port")));
+            http_config.setOutputBufferSize(Integer.parseInt(this.locals.getProperty("https.outputBufferSize")));
 
-            // HTTP/1.1 Connection Factory
-            HttpConnectionFactory http1 = new HttpConnectionFactory(http_config);
+            //add http connector (http_1.1 connection factory)
+            ServerConnector httpConnector = new ServerConnector(server, new HttpConnectionFactory(http_config));
+            httpConnector.setHost(host);
+            httpConnector.setPort(port);
+            httpConnector.setIdleTimeout(Long.parseLong(this.locals.getProperty("https.idleTimeout"))); //milliseconds
+            server.addConnector(httpConnector);
 
             // HTTPS Configuration
-//            http_config.setSecureScheme("https");
-//            http_config.setSecurePort(8443);
-//            HttpConfiguration https_config = new HttpConfiguration(http_config);
-//            https_config.addCustomizer(new SecureRequestCustomizer());
+            HttpConfiguration https_config = new HttpConfiguration(http_config);
+            SecureRequestCustomizer customizer = new SecureRequestCustomizer();
+            customizer.setStsMaxAge(Long.parseLong(this.locals.getProperty("https.ssl.stsMaxAge")));
+            customizer.setStsIncludeSubDomains(Boolean.parseBoolean(this.locals.getProperty("https.ssl.includeSubDomains")));
+            https_config.addCustomizer(customizer);
 
-            // HTTP/2 Connection Factory
-//            HTTP2ServerConnectionFactory h2 = new HTTP2ServerConnectionFactory(https_config);
+            // configure alpn connection factory for http2
+            ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory();
+            alpn.setDefaultProtocol("h2");
 
-            //TODO: add alpn configuration for ssl if need be
-//            NegotiatingServerConnectionFactory.checkProtocolNegotiationAvailable();
-//            ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory("h2", "h2-17", "h2-16", "h2-15", "h2-14");
-//            alpn.setDefaultProtocol("h2");
-
-            // SSL Context Factory for HTTPS and HTTP/2
-//            SslContextFactory sslContextFactory = createSslContextFactory();
+            // Configure ssl context factory
+            SslContextFactory sslContextFactory = createSslContextFactory(
+                    this.locals.getProperty("https.keystore.classpath"),
+                    this.locals.getProperty("https.keystore.password")
+            );
 
             // SSL Connection Factory
-//            SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, "h2");
-//
-            // configure connector
-            ServerConnector connector = new ServerConnector(server, /*ssl, alpn h2,,*/ http1);
-            connector.setHost(host);
-            connector.setPort(port);
-            connector.setIdleTimeout(30000); //milliseconds
-            server.addConnector(connector);
+            SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
+
+            // add https connector (both http_1.1 and http_2 connection factory)
+            ServerConnector http2Connector = new ServerConnector(server, ssl, alpn,
+                    new HTTP2ServerConnectionFactory(https_config),
+                    new HttpConnectionFactory(https_config));
+            http2Connector.setPort(Integer.parseInt(this.locals.getProperty("https.port")));
+            http2Connector.setIdleTimeout(Long.parseLong(this.locals.getProperty("https.idleTimeout"))); //milliseconds
+            server.addConnector(http2Connector);
 
             // enable CORS
             if (Boolean.parseBoolean(this.locals.getProperty("cors", "false"))) {
@@ -696,12 +714,11 @@ public class AppServer {
         return new QueuedThreadPool(maxPoolSize, poolSize, keepAliveTime);
     }
 
-    private SslContextFactory createSslContextFactory() {
+    private SslContextFactory createSslContextFactory(String keyfile, String keypass) throws IOException {
         // SSL Context Factory for HTTPS and HTTP/2
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        sslContextFactory.setKeyStoreResource(newClassPathResource("keystore"));
-        sslContextFactory.setKeyStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
-        sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+        SslContextFactory sslContextFactory = new SslContextFactory.Server();
+        sslContextFactory.setKeyStoreResource(newClassPathResource(keyfile));
+        sslContextFactory.setKeyStorePassword(keypass);
         sslContextFactory.setCipherComparator(HTTP2Cipher.COMPARATOR);
         return sslContextFactory;
     }

@@ -13,3 +13,23 @@ Initialization steps that logback follows to try to configure itself:
 or to skip the lookup, configure a system property path
 
 jjs --language=es6 -ot -scripting -J-Dlogback.configurationFile=../../src/main/resources/app-logback.xml -J-Djava.class.path=../../target/zesty-router-0.1.0-shaded.jar index.js
+
+create keystore
+ keytool -genkey -alias keystore -keyalg RSA -keystore keystore.jks -keysize 2048
+convert to pkcs12 format
+ keytool -importkeystore -srckeystore zkeystore.jks -destkeystore zkeystore.jks -deststoretype pkcs12
+Generate a CSR based on the new keystore:
+ keytool -certreq -alias zkeystore -keystore zkeystore.jks -file zkeystore.csr
+import cert into jks
+ keytool -import -trustcacerts -alias root -file root.crt -keystore zkeystore.jks
+ 
+jetty obfusicate paswword
+java -cp ~/.m2/repository/org/eclipse/jetty/jetty-util/9.4.20.v20190813/jetty-util-9.4.20.v20190813.jar org.eclipse.jetty.util.security.Password "password"
+OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u
+
+jetty de-obfucisate password
+java -cp ~/.m2/repository/org/eclipse/jetty/jetty-util/9.4.20.v20190813/jetty-util-9.4.20.v20190813.jar org.eclipse.jetty.util.security.Password "OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u"
+
+error:
+org.eclipse.jetty.http.HttpParser$IllegalCharacterException: 400: Illegal character CNTL=0x16
+means use https and not http and use the correct port number

@@ -7,8 +7,9 @@ import com.practicaldime.zesty.servlet.HandlerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class DemoApp {
@@ -23,8 +24,8 @@ public class DemoApp {
 
         //evaluate params to override defaults
         List<String> params = Arrays.asList(args);
-        for(int i = 0; i < params.size(); i++){
-            switch(params.get(i)){
+        for (int i = 0; i < params.size(); i++) {
+            switch (params.get(i)) {
                 case "--port": {
                     port = Integer.parseInt(params.get(++i));
                     break;
@@ -39,15 +40,8 @@ public class DemoApp {
         start(port, host);
     }
 
-    public static void start(int port, String host){
-        Map<String, String> props = new HashMap<>();
-        //props.put("appctx", "/app");
-        //props.put("assets", "");
-        //props.put("engine", "freemarker");
-
-        AppServer app = new AppServer(props);
-
-        app.router().get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
+    public static void start(int port, String host) {
+        new AppServer().router().get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
             CompletableFuture.runAsync(() -> {
                 try {
                     Thread.sleep(2000);
