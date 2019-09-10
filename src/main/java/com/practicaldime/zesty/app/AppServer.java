@@ -65,10 +65,14 @@ public class AppServer {
         this.use("appctx", Optional.ofNullable(props.get("appctx")).orElse("/"));
         this.use("engine", Optional.ofNullable(props.get("engine")).orElse("*"));
         this.use("lookup", Optional.ofNullable(props.get("lookup")).orElse("FILE"));
+        this.use("templates", Optional.ofNullable(props.get("templates")).orElse("templates/"));
         this.use("session.jdbc.enable", Optional.ofNullable(props.get("session.jdbc.enable")).orElse("true"));
         this.use("session.jdbc.url", Optional.ofNullable(props.get("session.jdbc.url")).orElse("jdbc:h2:~/zesty-session"));
         this.use("session.jdbc.driver", Optional.ofNullable(props.get("session.jdbc.driver")).orElse("org.h2.Driver"));
-        this.use("default.servlet.enable", Optional.ofNullable(props.get("default.servlet.enable")).orElse("false"));
+        this.use("assets.default.servlet", Optional.ofNullable(props.get("assets.default.servlet")).orElse("false"));
+        this.use("assets.dirAllowed", Optional.ofNullable(props.get("assets.dirAllowed")).orElse("false"));
+        this.use("assets.pathInfoOnly", Optional.ofNullable(props.get("assets.pathInfoOnly")).orElse("true"));
+        this.use("assets.welcomeFile", Optional.ofNullable(props.get("assets.welcomeFile")).orElse("index.html"));
         this.use("poolSize", Optional.ofNullable(props.get("poolSize")).orElse("5"));
         this.use("maxPoolSize", Optional.ofNullable(props.get("maxPoolSize")).orElse("200"));
         this.use("keepAliveTime", Optional.ofNullable(props.get("keepAliveTime")).orElse("30000"));
@@ -97,23 +101,25 @@ public class AppServer {
     }
 
     public final void shutdown() {
-        this.shutdown.accept(true);
+        if(this.shutdown != null) {
+            this.shutdown.accept(true);
+        }
     }
 
     public final void engine(String view) {
         switch (view) {
             case "jtwig":
-                engine = engineFactory.engine(view, locals.getProperty("assets"), "html", "");
+                engine = engineFactory.engine(view, locals.getProperty("templates"), "html", "");
                 break;
             case "freemarker":
-                engine = engineFactory.engine(view, locals.getProperty("assets"), "ftl", "");
+                engine = engineFactory.engine(view, locals.getProperty("templates"), "ftl", "");
                 break;
             case "handlebars":
             case "ejs":
-                engine = engineFactory.engine(view, locals.getProperty("assets"), "js", locals.getProperty("lookup"));
+                engine = engineFactory.engine(view, locals.getProperty("templates"), "js", locals.getProperty("lookup"));
                 break;
             default:
-                engine = engineFactory.engine(view, locals.getProperty("assets"), "", locals.getProperty("lookup"));
+                engine = engineFactory.engine(view, locals.getProperty("templates"), "", locals.getProperty("lookup"));
         }
         this.locals.put("engine", view);
     }
@@ -646,7 +652,7 @@ public class AppServer {
 
             // configure DefaultServlet to serve static content
             if(!UNASSIGNED.equals(resourceBase)) {
-                if(Boolean.parseBoolean(this.locals.getProperty("default.servlet.enable"))) {
+                if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ServletHolder defaultServlet = createResourceServlet(resourceBase);
                     servlets.addServlet(defaultServlet, "/*");
                 }
@@ -655,7 +661,7 @@ public class AppServer {
             // configure ResourceHandler to serve static content
             ResourceHandler appResources = null;
             if(!UNASSIGNED.equals(resourceBase)) {
-                if(!Boolean.parseBoolean(this.locals.getProperty("default.servlet.enable"))) {
+                if(!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     appResources = createResourceHandler(resourceBase);
                 }
             }
@@ -740,8 +746,8 @@ public class AppServer {
 
     private ResourceHandler createResourceHandler(String resourceBase) {
         ResourceHandler appResources = new ResourceHandler();
-        appResources.setDirectoriesListed(false);
-        appResources.setWelcomeFiles(new String[]{"index.html"});
+        appResources.setDirectoriesListed(Boolean.parseBoolean(this.locals.getProperty("resources.dirAllowed")));
+        appResources.setWelcomeFiles(new String[]{this.locals.getProperty("resources.welcomeFile")});
         appResources.setResourceBase(resourceBase);
         return appResources;
     }
@@ -750,9 +756,9 @@ public class AppServer {
         // DefaultServlet should be named 'default-${resourceBase}'
         ServletHolder defaultServlet = new ServletHolder("default-" + resourceBase, DefaultServlet.class);
         defaultServlet.setInitParameter("resourceBase", resourceBase);
-        defaultServlet.setInitParameter("dirAllowed", "false");
-        defaultServlet.setInitParameter("pathInfoOnly", "true");
-        defaultServlet.setInitParameter("welcomeFile", "index.html");
+        defaultServlet.setInitParameter("dirAllowed", this.locals.getProperty("resources.dirAllowed"));
+        defaultServlet.setInitParameter("pathInfoOnly", this.locals.getProperty("resources.pathInfoOnly"));
+        defaultServlet.setInitParameter("welcomeFile", this.locals.getProperty("resources.welcomeFile"));
         return defaultServlet;
     }
 
