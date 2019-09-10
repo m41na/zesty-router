@@ -18,10 +18,7 @@ import org.eclipse.jetty.fcgi.server.proxy.TryFilesFilter;
 import org.eclipse.jetty.http2.HTTP2Cipher;
 import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -52,6 +49,7 @@ public class AppServer {
     private final ViewEngineFactory engineFactory = new AppViewEngines();
     private final String UNASSIGNED = "not.yet.assigned";
     private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
+    private final Collection<ContextHandler> contexts = new LinkedList<>();
     private AppRouter routes;
     private String status = "stopped";
     private Consumer<Boolean> shutdown;
@@ -161,9 +159,17 @@ public class AppServer {
             LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
         }
         else {
-            ServletHolder defaultServlet = createResourceServlet(folder);
-            String pathspec = mapping.endsWith("/*")? mapping : (mapping.endsWith("/")? mapping + "*" : mapping + "/*");
-            servlets.addServlet(defaultServlet, pathspec);
+            String pathspec = mapping.endsWith("/*") ? mapping : (mapping.endsWith("/") ? mapping + "*" : mapping + "/*");
+            if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+                ServletHolder defaultServlet = createResourceServlet(folder);
+                servlets.addServlet(defaultServlet, pathspec);
+            }
+            else{
+                ContextHandler context = new ContextHandler();
+                context.setContextPath(pathspec);
+                context.setHandler(createResourceHandler(folder));
+                contexts.add(context);
+            }
         }
         return this;
     }
@@ -667,10 +673,11 @@ public class AppServer {
             }
 
             // configure ResourceHandler to serve static content
-            ResourceHandler appResources = null;
             if(!UNASSIGNED.equals(resourceBase)) {
                 if(!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
-                    appResources = createResourceHandler(resourceBase);
+                    ContextHandler resourceHandler = new ContextHandler("/*");
+                    resourceHandler.setHandler(createResourceHandler(resourceBase));
+                    contexts.add(resourceHandler);
                 }
             }
 
@@ -691,12 +698,14 @@ public class AppServer {
                 sessionHandler = SessionUtil.sqlSessionHandler(driver, url);
             }
 
-            // add handlers dest the server
+            // add handlers to the server
             List<Handler> linkedHandlers = new LinkedList<>();
-            if (appResources != null) {
-                linkedHandlers.add(appResources);
+            if (contexts.size() > 0) {
+                ContextHandlerCollection resourceHandlers = new ContextHandlerCollection();
+                contexts.stream().forEach(context -> resourceHandlers.addHandler(context));
+                linkedHandlers.add(resourceHandlers);
             }
-            linkedHandlers.add(contextHandlers);
+            linkedHandlers.add(servlets);
             if (sessionHandler != null) {
                 linkedHandlers.add(sessionHandler);
             }
@@ -754,9 +763,13 @@ public class AppServer {
 
     private ResourceHandler createResourceHandler(String resourceBase) {
         ResourceHandler appResources = new ResourceHandler();
-        appResources.setDirectoriesListed(Boolean.parseBoolean(this.locals.getProperty("assets.dirAllowed")));
-        appResources.setWelcomeFiles(new String[]{this.locals.getProperty("assets.welcomeFile")});
         appResources.setResourceBase(resourceBase);
+        appResources.setDirectoriesListed(Boolean.parseBoolean(this.locals.getProperty("assets.dirAllowed")));
+        appResources.setPathInfoOnly(Boolean.parseBoolean(this.locals.getProperty("assets.pathInfoOnly")));
+        appResources.setEtags(Boolean.parseBoolean(this.locals.getProperty("assets.etags")));
+        appResources.setAcceptRanges(Boolean.parseBoolean(this.locals.getProperty("assets.acceptRanges")));
+        appResources.setCacheControl(this.locals.getProperty("assets.cacheControl"));
+        appResources.setWelcomeFiles(new String[]{this.locals.getProperty("assets.welcomeFile")});
         return appResources;
     }
 
@@ -766,10 +779,10 @@ public class AppServer {
         defaultServlet.setInitParameter("resourceBase", resourceBase);
         defaultServlet.setInitParameter("dirAllowed", this.locals.getProperty("assets.dirAllowed"));
         defaultServlet.setInitParameter("pathInfoOnly", this.locals.getProperty("assets.pathInfoOnly"));
-        defaultServlet.setInitParameter("welcomeFile", this.locals.getProperty("assets.welcomeFile"));
         defaultServlet.setInitParameter("etags", this.locals.getProperty("assets.etags"));
         defaultServlet.setInitParameter("acceptRanges", this.locals.getProperty("assets.acceptRanges"));
         defaultServlet.setInitParameter("cacheControl", this.locals.getProperty("assets.cacheControl"));
+        defaultServlet.setInitParameter("welcomeFile", this.locals.getProperty("assets.welcomeFile"));
         return defaultServlet;
     }
 
