@@ -61,21 +61,29 @@ public class AppServer {
     }
 
     public AppServer(Map<String, String> props) {
+        //basic
         this.use("assets", Optional.ofNullable(props.get("assets")).orElse(UNASSIGNED));
         this.use("appctx", Optional.ofNullable(props.get("appctx")).orElse("/"));
         this.use("engine", Optional.ofNullable(props.get("engine")).orElse("*"));
         this.use("lookup", Optional.ofNullable(props.get("lookup")).orElse("FILE"));
         this.use("templates", Optional.ofNullable(props.get("templates")).orElse("templates/"));
+        //http session
         this.use("session.jdbc.enable", Optional.ofNullable(props.get("session.jdbc.enable")).orElse("true"));
         this.use("session.jdbc.url", Optional.ofNullable(props.get("session.jdbc.url")).orElse("jdbc:h2:~/zesty-session"));
         this.use("session.jdbc.driver", Optional.ofNullable(props.get("session.jdbc.driver")).orElse("org.h2.Driver"));
+        //static resources
         this.use("assets.default.servlet", Optional.ofNullable(props.get("assets.default.servlet")).orElse("false"));
         this.use("assets.dirAllowed", Optional.ofNullable(props.get("assets.dirAllowed")).orElse("false"));
         this.use("assets.pathInfoOnly", Optional.ofNullable(props.get("assets.pathInfoOnly")).orElse("true"));
         this.use("assets.welcomeFile", Optional.ofNullable(props.get("assets.welcomeFile")).orElse("index.html"));
+        this.use("assets.acceptRanges", Optional.ofNullable(props.get("assets.acceptRanges")).orElse("true"));
+        this.use("assets.etags", Optional.ofNullable(props.get("assets.etags")).orElse("true"));
+        this.use("assets.cacheControl", Optional.ofNullable(props.get("assets.cacheControl")).orElse("public, max-age=0"));
+        //thread pool
         this.use("poolSize", Optional.ofNullable(props.get("poolSize")).orElse("5"));
         this.use("maxPoolSize", Optional.ofNullable(props.get("maxPoolSize")).orElse("200"));
         this.use("keepAliveTime", Optional.ofNullable(props.get("keepAliveTime")).orElse("30000"));
+        //https
         this.use("https.port", Optional.ofNullable(props.get("https.port")).orElse("8443"));
         this.use("https.idleTimeout", Optional.ofNullable(props.get("https.idleTimeout")).orElse("30000"));
         this.use("https.outputBufferSize", Optional.ofNullable(props.get("https.outputBufferSize")).orElse("32768"));
@@ -746,8 +754,8 @@ public class AppServer {
 
     private ResourceHandler createResourceHandler(String resourceBase) {
         ResourceHandler appResources = new ResourceHandler();
-        appResources.setDirectoriesListed(Boolean.parseBoolean(this.locals.getProperty("resources.dirAllowed")));
-        appResources.setWelcomeFiles(new String[]{this.locals.getProperty("resources.welcomeFile")});
+        appResources.setDirectoriesListed(Boolean.parseBoolean(this.locals.getProperty("assets.dirAllowed")));
+        appResources.setWelcomeFiles(new String[]{this.locals.getProperty("assets.welcomeFile")});
         appResources.setResourceBase(resourceBase);
         return appResources;
     }
@@ -756,9 +764,12 @@ public class AppServer {
         // DefaultServlet should be named 'default-${resourceBase}'
         ServletHolder defaultServlet = new ServletHolder("default-" + resourceBase, DefaultServlet.class);
         defaultServlet.setInitParameter("resourceBase", resourceBase);
-        defaultServlet.setInitParameter("dirAllowed", this.locals.getProperty("resources.dirAllowed"));
-        defaultServlet.setInitParameter("pathInfoOnly", this.locals.getProperty("resources.pathInfoOnly"));
-        defaultServlet.setInitParameter("welcomeFile", this.locals.getProperty("resources.welcomeFile"));
+        defaultServlet.setInitParameter("dirAllowed", this.locals.getProperty("assets.dirAllowed"));
+        defaultServlet.setInitParameter("pathInfoOnly", this.locals.getProperty("assets.pathInfoOnly"));
+        defaultServlet.setInitParameter("welcomeFile", this.locals.getProperty("assets.welcomeFile"));
+        defaultServlet.setInitParameter("etags", this.locals.getProperty("assets.etags"));
+        defaultServlet.setInitParameter("acceptRanges", this.locals.getProperty("assets.acceptRanges"));
+        defaultServlet.setInitParameter("cacheControl", this.locals.getProperty("assets.cacheControl"));
         return defaultServlet;
     }
 
