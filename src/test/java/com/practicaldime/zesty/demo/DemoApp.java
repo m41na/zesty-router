@@ -19,7 +19,7 @@ public class DemoApp {
     public static void main(String... args) {
         //to run multiple processes, execute from command line and pass different port numbers
         //$JAVA_HOME/bin/java -cp "target\zesty-router-0.1.1-shaded.jar;target\test-classes" com.practicaldime.zesty.demo.DemoApp --port 8090 --host localhost
-        int port = Simproxy.freePort();
+        int port = 8080;//Simproxy.freePort();
         String host = "localhost";
 
         //evaluate params to override defaults
@@ -41,7 +41,7 @@ public class DemoApp {
     }
 
     public static void start(int port, String host) {
-        new AppServer().router().get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
+        new AppServer().router().templates("target/classes/").get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
             CompletableFuture.runAsync(() -> {
                 try {
                     Thread.sleep(2000);
@@ -65,7 +65,7 @@ public class DemoApp {
                     })
             );
         }).get("/b", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
-            response.render("demo", Collections.emptyMap());
+            response.render("config/application.default.json", null);
             promise.complete();
         }).listen(port, host, (msg) -> LOG.info(msg));
     }

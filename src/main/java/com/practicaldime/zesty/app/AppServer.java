@@ -98,21 +98,8 @@ public class AppServer {
         return engine;
     }
 
-    public String status() {
-        return "server status is " + status;
-    }
-
-    public final void use(String key, String value) {
-        this.locals.put(key, value);
-    }
-
-    public final void shutdown() {
-        if(this.shutdown != null) {
-            this.shutdown.accept(true);
-        }
-    }
-
-    public final void engine(String view) {
+    private final void initEngine() {
+        String view = this.locals.getProperty("engine");
         switch (view) {
             case "jtwig":
                 engine = engineFactory.engine(view, locals.getProperty("templates"), "html", "");
@@ -127,7 +114,30 @@ public class AppServer {
             default:
                 engine = engineFactory.engine(view, locals.getProperty("templates"), "", locals.getProperty("lookup"));
         }
-        this.locals.put("engine", view);
+    }
+
+    public final void shutdown() {
+        if(this.shutdown != null) {
+            this.shutdown.accept(true);
+        }
+    }
+
+    public String status() {
+        return "server status is " + status;
+    }
+
+    public final void use(String key, String value) {
+        if(!this.locals.keySet().contains(key)) {
+            this.locals.put(key, value);
+        }
+    }
+
+    public Set<String> locals() {
+        return locals.stringPropertyNames();
+    }
+
+    public Object locals(String param) {
+        return locals.get(param);
     }
 
     public String resolve(String path) {
@@ -140,17 +150,19 @@ public class AppServer {
         return path1 + path2;
     }
 
-    public Set<String> locals() {
-        return locals.stringPropertyNames();
-    }
-
-    public Object locals(String param) {
-        return locals.get(param);
-    }
-
     public AppServer cors(Map<String, String> cors) {
         this.locals.put("cors", "true");
         if (cors != null) this.corscontext.putAll(cors);
+        return this;
+    }
+
+    public AppServer engine(String engine) {
+        this.locals.put("engine", engine);
+        return this;
+    }
+
+    public AppServer templates(String folder) {
+        this.locals.put("templates", folder);
         return this;
     }
 
@@ -583,7 +595,7 @@ public class AppServer {
         try {
             status = "starting";
             //init view engine
-            engine(this.locals.getProperty("engine"));
+            initEngine();
 
             // create server with thread pool
             QueuedThreadPool threadPool = createThreadPool();
