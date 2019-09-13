@@ -582,6 +582,9 @@ public class AppServer {
     public void listen(int port, String host, Consumer<String> result) {
         try {
             status = "starting";
+            //init view engine
+            engine(this.locals.getProperty("engine"));
+
             // create server with thread pool
             QueuedThreadPool threadPool = createThreadPool();
             Server server = new Server(threadPool);
