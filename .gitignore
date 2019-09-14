@@ -8,6 +8,7 @@ nbproject
 .project
 .classpath
 .idea/**
+**/.idea/**
 *.iml
 
 # npm artifacts
