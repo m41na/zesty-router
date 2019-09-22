@@ -5,45 +5,48 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.practicaldime.works</groupId>
-    <artifactId>zesty-stompy</artifactId>
+    <artifactId>zesty-testing</artifactId>
     <version>0.1.1</version>
 
     <properties>
         <spring.version>4.3.16.RELEASE</spring.version>
         <java.version>1.9</java.version>
-        <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>asia.stampy</groupId>
-            <artifactId>stampy</artifactId>
-            <version>1.0-RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>asia.stampy</groupId>
-            <artifactId>stampy-client-server</artifactId>
-            <version>1.0-RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>com.practicaldime.works</groupId>
+            <artifactId>zesty-router</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
