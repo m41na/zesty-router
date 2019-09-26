@@ -1,12 +1,16 @@
 package com.practicaldime.zesty.router;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PathRegexRouter implements Router{
 
+	public static final String CHAR_ENCODING = "UTF-8";
 	private Map<PathPattern, Router> routers = new HashMap<>();
 	
 	@Override
@@ -23,13 +27,20 @@ public class PathRegexRouter implements Router{
 						Matcher routeMatcher = paramsPattern.matcher(input.result.path);
 						if(routeMatcher.matches()) {
 							for(int i = 1; i <= matcher.groupCount(); i++) {
-								String paramVal = matcher.group(i);
+								String paramVal = null;
+								try {
+									paramVal = URLDecoder.decode(matcher.group(i), CHAR_ENCODING);
+								} catch (UnsupportedEncodingException e) {
+									e.printStackTrace(System.err);
+								}
 								String paramKey = routeMatcher.group(i);
-								input.pathParams.put(paramKey, paramVal);
+								if(paramKey != null) {
+									input.pathParams.put(paramKey, Optional.ofNullable(paramVal).orElse(""));
+								}
 							}
 						}
 						else {
-							throw new RuntimeException("Expected paramsPattern dest match on input path");
+							throw new RuntimeException("Expected paramsPattern does not match on input path");
 						}
 					}
 				}

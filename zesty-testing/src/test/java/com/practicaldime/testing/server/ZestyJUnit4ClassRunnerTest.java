@@ -26,7 +26,7 @@ public class ZestyJUnit4ClassRunnerTest {
         server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
-        server.listen(8080, "localhost");
+        server.listen(9099, "localhost");
         return server;
     }
 
@@ -38,7 +38,7 @@ public class ZestyJUnit4ClassRunnerTest {
 
     @Test
     public void testHelloFromServer(HttpClient client) throws InterruptedException, ExecutionException, TimeoutException {
-        ContentResponse response = client.newRequest("http://localhost:8080/hello")
+        ContentResponse response = client.newRequest("http://localhost:9099/hello")
                 .timeout(3, SECONDS)
                 .send();
         assertEquals("Contains 'hello from server'", true, response.getContentAsString().contains("hello from server"));
@@ -46,7 +46,7 @@ public class ZestyJUnit4ClassRunnerTest {
 
     @Test
     public void testHelloFromServer2(HttpClient client) throws InterruptedException, ExecutionException, TimeoutException {
-        ContentResponse response = client.newRequest("http://localhost:8080/hello")
+        ContentResponse response = client.newRequest("http://localhost:9099/hello")
                 .timeout(3, SECONDS)
                 .send();
         assertFalse("Contains 'hello from server++'", response.getContentAsString().contains("hello from server++"));

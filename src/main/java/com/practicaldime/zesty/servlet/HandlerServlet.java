@@ -77,6 +77,7 @@ public class HandlerServlet extends HttpServlet {
     protected void doProcess(HandlerRequest request, HandlerResponse response) {
         if (request.isAsyncSupported()) {
             final AsyncContext async = request.startAsync();
+            //TODO: async.setTimeout(10000L); //can this value be externally configured?
             async.start(() -> {
                 LOG.debug("STARTED ASYNC OPERATION");
                 HandlerPromise promise = new HandlerPromise();
