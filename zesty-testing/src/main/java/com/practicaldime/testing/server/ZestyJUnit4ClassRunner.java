@@ -7,7 +7,10 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
@@ -47,6 +50,16 @@ public class ZestyJUnit4ClassRunner extends BlockJUnit4ClassRunner {
             }
             return res;
         });
+    }
+
+    protected Integer freeTcpPort()  {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            socket.setReuseAddress(true);
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     protected HttpClient startClient() {

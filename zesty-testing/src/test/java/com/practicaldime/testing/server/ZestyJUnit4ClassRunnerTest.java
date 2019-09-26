@@ -6,6 +6,8 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -18,15 +20,25 @@ import static org.junit.Assert.assertFalse;
 @RunWith(ZestyJUnit4ClassRunner.class)
 public class ZestyJUnit4ClassRunnerTest {
 
+    public static final Integer PORT = 9099;
+    public static final String HOST = "127.0.0.1";
+    public static final Properties props = new Properties();
+
     private BiFunction<Integer, Integer, Integer> addition = (x, y) -> x + y;
+
+    public String getUrl(String endpoint){
+        return String.format("http://%s:%d/%s", HOST, PORT, endpoint);
+    }
 
     @ZestyProvider
     public AppServer provider() {
+        props.put("host", HOST);
+        props.put("port", PORT);
         AppServer server = new AppServer();
         server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
-        server.listen(9099, "localhost");
+        server.listen(Optional.ofNullable(Integer.parseInt(props.getProperty("port"))).orElse(PORT), props.getProperty("host", HOST));
         return server;
     }
 
@@ -38,17 +50,9 @@ public class ZestyJUnit4ClassRunnerTest {
 
     @Test
     public void testHelloFromServer(HttpClient client) throws InterruptedException, ExecutionException, TimeoutException {
-        ContentResponse response = client.newRequest("http://localhost:9099/hello")
+        ContentResponse response = client.newRequest(getUrl("hello"))
                 .timeout(3, SECONDS)
                 .send();
         assertEquals("Contains 'hello from server'", true, response.getContentAsString().contains("hello from server"));
-    }
-
-    @Test
-    public void testHelloFromServer2(HttpClient client) throws InterruptedException, ExecutionException, TimeoutException {
-        ContentResponse response = client.newRequest("http://localhost:9099/hello")
-                .timeout(3, SECONDS)
-                .send();
-        assertFalse("Contains 'hello from server++'", response.getContentAsString().contains("hello from server++"));
     }
 }
