@@ -6,6 +6,7 @@ import com.practicaldime.zesty.view.ejs.EJsViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
 import com.practicaldime.zesty.view.hbars2.HbJsViewEngine;
 import com.practicaldime.zesty.view.plain.PlainViewEngine;
+import com.practicaldime.zesty.view.react.ReactViewEngine;
 import com.practicaldime.zesty.view.twig.JTwigViewEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,11 @@ public class AppViewEngines implements ViewEngineFactory{
 			case "ejs":
 				if(engines.get(view) == null) {
 					engines.put(view, EJsViewEngine.create(assets, suffix, lookup));
+				}
+				return engines.get(view);
+			case "react":
+				if(engines.get(view) == null) {
+					engines.put(view, ReactViewEngine.create(assets, suffix, lookup));
 				}
 				return engines.get(view);
 			default:

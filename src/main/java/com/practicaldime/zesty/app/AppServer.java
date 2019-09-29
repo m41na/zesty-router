@@ -109,6 +109,7 @@ public class AppServer {
                 break;
             case "handlebars":
             case "ejs":
+            case "react":
                 engine = engineFactory.engine(view, locals.getProperty("templates"), "js", locals.getProperty("lookup"));
                 break;
             default:

@@ -14,13 +14,11 @@ public class ReactViewConfiguration {
     private final String POLYFILL = "/template/js/polyfill.js";
     private final String REACT_JS = "/template/js/react.production.min.js";
     private final String REACT_DOM_JS = "/template/js/react-dom.production.min.js";
-    private final String REACT_RENDER = "/template/js/react.render.js";
 
     public ReactViewConfiguration() throws IOException {
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(POLYFILL)), POLYFILL).build());
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_JS)), REACT_JS).build());
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_DOM_JS)), REACT_DOM_JS).build());
-        context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_RENDER)), REACT_RENDER).build());
     }
 
     public Context getEnvironment()  {
