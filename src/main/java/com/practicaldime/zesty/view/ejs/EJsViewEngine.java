@@ -3,6 +3,7 @@ package com.practicaldime.zesty.view.ejs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewLookup;
+import com.practicaldime.zesty.view.ViewProcessor;
 import org.graalvm.polyglot.Value;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class EJsViewEngine implements ViewEngine{
 
 	private static EJsViewEngine instance;
 	private final EJsViewConfiguration config;
-    private final ViewProcessor<String> view;
+    private final ViewProcessor<String, ViewLookup> view;
 	private final String templateDir;
 	private final String templateExt;
 	private final ViewLookup strategy;

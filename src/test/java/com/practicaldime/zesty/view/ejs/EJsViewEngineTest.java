@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class EJsViewEngineTest {
 
-    private String fileFolder = "src/test/resources/template/js";
+    private String fileFolder = "/src/test/resources/template/js";
     private String classpathFolder = "/template/js";
     private String testFile = "ejs.test.js";
     private EJsViewEngine engine;

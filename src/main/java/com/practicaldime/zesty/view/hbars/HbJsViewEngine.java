@@ -1,10 +1,11 @@
 package com.practicaldime.zesty.view.hbars;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewLookup;
+import com.practicaldime.zesty.view.ViewProcessor;
+import org.graalvm.polyglot.Value;
 
-import javax.script.Invocable;
-import javax.script.ScriptException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -13,12 +14,12 @@ public class HbJsViewEngine implements ViewEngine{
 
 	private static HbJsViewEngine instance;
 	private final HbJsViewConfiguration config;
-    private final ViewProcessor view;
+    private final ViewProcessor<String, ViewLookup> view;
 	private final String templateDir;
 	private final String templateExt;
 	private final ViewLookup strategy;
 
-	private HbJsViewEngine(String templateDir, String templateExt, String lookup) throws ScriptException {
+	private HbJsViewEngine(String templateDir, String templateExt, String lookup) throws IOException {
     	super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
@@ -43,7 +44,7 @@ public class HbJsViewEngine implements ViewEngine{
             	try {
 					instance = new HbJsViewEngine(templateDir, templateExt, lookup);
 				}
-            	catch(ScriptException e){
+            	catch(IOException e){
             		e.printStackTrace(System.err);
             		throw new RuntimeException("Could not create view engine", e);
 				}
@@ -62,10 +63,9 @@ public class HbJsViewEngine implements ViewEngine{
 
     @Override
 	public String merge(String template, Map<String, Object> model) throws Exception {	    	
-    	Object templateFunction = view.resolve(templateDir, template, strategy);
-		String mergeFunction = "function mergeFunction(template, context){return template(context);}";
-		config.getEnvironment().eval(mergeFunction);
-		Object result = ((Invocable)config.getEnvironment()).invokeFunction("mergeFunction", templateFunction, model);
+    	String templateFile = view.resolve(templateDir, template, strategy);
+		Value renderFunction = config.getEnvironment().getBindings("js").getMember("renderTemplate");
+		Object result = renderFunction.execute(templateFile, new ObjectMapper().writeValueAsString(model), template);
 		return result.toString();
 	}
 }

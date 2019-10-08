@@ -2,6 +2,7 @@ package com.practicaldime.zesty.view.plain;
 
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewLookup;
+import com.practicaldime.zesty.view.ViewProcessor;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Map;
 public class PlainViewEngine implements ViewEngine{
 
 	private static PlainViewEngine instance;
-    private final ViewProcessor view;
+    private final ViewProcessor<String, ViewLookup> view;
 	private final String templateDir;
 	private final String templateExt = "*";
 	private final ViewLookup strategy;
@@ -45,12 +46,12 @@ public class PlainViewEngine implements ViewEngine{
     	return instance;
     }
     
-    public static ViewProcessor getProcessor() {
-        return PlainViewEngine.instance.view;
+    public static ViewProcessor getProcessor() throws IOException {
+        return instance().view;
     }
 
     @Override
 	public String merge(String template, Map<String, Object> model) throws Exception {	    	
-    	return view.resolve(templateDir, template, strategy).toString();
+    	return view.resolve(templateDir, template, strategy);
 	}
 }

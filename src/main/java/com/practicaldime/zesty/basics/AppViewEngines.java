@@ -4,7 +4,7 @@ import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.view.ejs.EJsViewEngine;
 import com.practicaldime.zesty.view.ftl.FtlViewEngine;
-import com.practicaldime.zesty.view.hbars2.HbJsViewEngine;
+import com.practicaldime.zesty.view.hbars.HbJsViewEngine;
 import com.practicaldime.zesty.view.plain.PlainViewEngine;
 import com.practicaldime.zesty.view.react.ReactViewEngine;
 import com.practicaldime.zesty.view.twig.JTwigViewEngine;

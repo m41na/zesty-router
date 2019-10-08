@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.view.twig;
 
 import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.ViewProcessor;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.jtwig.resource.reference.ResourceReference;
@@ -14,7 +15,7 @@ public class JTwigViewEngine implements ViewEngine{
 
 	private static JTwigViewEngine instance;
     private final ViewConfiguration config;
-    private final ViewProcessor view;
+    private final ViewProcessor<JtwigTemplate, ResourceReference> view;
     private final String templateDir;
 	private final String templateExt;	
 
@@ -49,19 +50,19 @@ public class JTwigViewEngine implements ViewEngine{
 		return this.templateExt;
 	}
 
-	public static ViewConfiguration getConfiguration() {
-        return JTwigViewEngine.instance.config;
+	public static ViewConfiguration getConfiguration() throws IOException {
+        return instance().config;
     }
 
-    public static ViewProcessor getProcessor() {
-        return JTwigViewEngine.instance.view;
+    public static ViewProcessor<JtwigTemplate, ResourceReference> getProcessor() throws IOException {
+        return instance().view;
     }
 
     @Override
     public String merge(String template, Map<String, Object> model) throws Exception{
     	String baseDir = System.getProperty("user.dir");
     	Path path = Paths.get(baseDir, templateDir);
-        JtwigTemplate resolved = getProcessor().resolve(path.resolve(template + "." + templateExt).toString(), ResourceReference.file(templateDir));
+        JtwigTemplate resolved = view.resolve(path.resolve(template + "." + templateExt).toString(), "", ResourceReference.file(templateDir));
         return resolved.render(JtwigModel.newModel(model));
     }
 }

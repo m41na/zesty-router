@@ -3,6 +3,7 @@ package com.practicaldime.zesty.view.react;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewLookup;
+import com.practicaldime.zesty.view.ViewProcessor;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
@@ -14,7 +15,7 @@ public class ReactViewEngine implements ViewEngine {
 
     private static ReactViewEngine instance;
     private final ReactViewConfiguration config;
-    private final ViewProcessor<String> view;
+    private final ViewProcessor<String, ViewLookup> view;
     private final String templateDir;
     private final String templateExt;
     private final ViewLookup strategy;

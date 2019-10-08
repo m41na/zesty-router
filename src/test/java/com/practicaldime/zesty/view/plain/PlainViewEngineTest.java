@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class PlainViewEngineTest {
 
-	private String fileFolder = "src/test/resources/template/js";
+	private String fileFolder = "/src/test/resources/template/js";
 	private String classpathFolder = "/template/js";
 	private PlainViewEngine engine;
 	

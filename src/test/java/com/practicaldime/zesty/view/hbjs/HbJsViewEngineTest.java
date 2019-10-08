@@ -6,13 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HbJsViewEngineTest {
 
-	private String fileFolder = "src/test/resources/template/js";
+	private String fileFolder = "/src/test/resources/template/js";
 	private String classpathFolder = "/template/js";
 	private String testFile = "handlebars.test.js";
 	private HbJsViewEngine engine;
@@ -31,7 +30,7 @@ public class HbJsViewEngineTest {
 	@Test
 	public void testMerge() throws Exception {
 		Map<String, Object> model = new HashMap<>();
-		model.put("numbers", Arrays.asList(1,2,3,4,5));
+		model.put("numbers", new int[]{1,2,3,4,5,6});
 		String merged = engine.merge(testFile, model);
 		System.out.printf("*******merged output: %s%n", merged);
 	}

@@ -1,6 +1,8 @@
 package com.practicaldime.zesty.view.ftl;
 
 import com.practicaldime.zesty.view.ViewEngine;
+import com.practicaldime.zesty.view.ViewProcessor;
+import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 import java.io.IOException;
@@ -11,7 +13,7 @@ public class FtlViewEngine implements ViewEngine{
 
     private static FtlViewEngine instance;
     private final ViewConfiguration config;
-    private final ViewProcessor view;
+    private final ViewProcessor<Template, Configuration> view;
     private final String templateDir;
 	private final String templateExt;
 
@@ -50,14 +52,14 @@ public class FtlViewEngine implements ViewEngine{
         return instance().config;
     }
 
-    public static ViewProcessor getProcessor() throws IOException {
+    public static ViewProcessor<Template, Configuration> getProcessor() throws IOException {
         return instance().view;
     }
 
     @Override
     public String merge(String template, Map<String, Object> model) throws Exception {
         StringWriter output = new StringWriter();
-        Template resolved = view.resolve(template + "." + templateExt, config.getEnvironment());
+        Template resolved = view.resolve(template + "." + templateExt, "", config.getEnvironment());
         resolved.process(model, output);
         return output.toString();
     }
