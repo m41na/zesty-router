@@ -13,16 +13,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.PushBuilder;
 import java.io.File;
 import java.io.IOException;
-
-import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
 
 public class Http2Demo {
 
     public static void main(String... args) throws Exception {
-        String keystorePath = System.getProperty("keystore.path", "keystore.jks");
-        File keystoreFile = new File(System.getProperty("user.dir"), keystorePath);
+        String keystorePath = System.getProperty("keystore.path", "/keystore.jks");
+        File keystoreFile = new File(Http2Demo.class.getResource(keystorePath).toURI().getPath());
 
         Server server = new Server();
 
@@ -73,8 +72,9 @@ public class Http2Demo {
 
         @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            PushBuilder pushBuilder = req.newPushBuilder();
             resp.setContentType("text/plain");
-            resp.getWriter().write("Hello, World!");
+            resp.getWriter().write("Is request async? " + req.isAsyncSupported() + "\nCan server push resources using h2 push feature? " + Boolean.valueOf(pushBuilder != null));
         }
     }
 }

@@ -3,6 +3,7 @@ package com.practicaldime.zesty.view.common;
 import com.practicaldime.zesty.view.ViewLookup;
 import com.practicaldime.zesty.view.ViewProcessor;
 
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,8 +24,8 @@ public class StringViewProcessor implements ViewProcessor<String, ViewLookup> {
             }
             case CLASSPATH: {
                 URL url = this.getClass().getClassLoader().getResource("");
-                String baseDir = url.getPath();
-                Path path = Paths.get(baseDir, templateDir, template);
+                File baseDir = Paths.get(url.toURI()).toFile();
+                Path path = Paths.get(baseDir.getPath(), templateDir, template);
                 if (Files.exists(path)) {
                     return new String(Files.readAllBytes(path));
                 }

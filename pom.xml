@@ -77,6 +77,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.eclipse.jetty.http2</groupId>
+            <artifactId>http2-hpack</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-alpn-server</artifactId>
             <version>${jetty.version}</version>
