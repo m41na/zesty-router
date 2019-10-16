@@ -3,7 +3,7 @@ package com.practicaldime.zesty.router;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PathPartsRouter implements Routing.Router{
+public class SplitPathRouter implements Routing.Router{
 
 	private Map<Integer, Routing.Router> routers = new HashMap<>();
 
@@ -22,12 +22,21 @@ public class PathPartsRouter implements Routing.Router{
 
 	@Override
 	public boolean contains(Routing.Search criteria) {
+		String inputPath = criteria.attributes.url;
+		String path = inputPath != null? (inputPath.startsWith("/")? inputPath.substring(1) : inputPath) : null;
+		String[] parts = path != null? path.split("/") : null;
+		if(parts != null) {
+			Integer length = Integer.valueOf(parts.length);
+			return routers.containsKey(length) ?
+					routers.get(length).contains(criteria) : false;
+		}
 		return false;
 	}
 
 	@Override
-	public int size() {
-		return 0;
+	public void hierarchy(Map<String, Integer> map) {
+		map.put("splitPathLength", routers.size());
+		routers.entrySet().stream().forEach(entry -> entry.getValue().hierarchy(map));
 	}
 
 	@Override
@@ -46,6 +55,12 @@ public class PathPartsRouter implements Routing.Router{
 
 	@Override
 	public void remove(Routing.Route entity) {
-
+		String inputPath = entity.path;
+		String path = inputPath != null? (inputPath.startsWith("/")? inputPath.substring(1) : inputPath) : null;
+		String[] parts = path != null? path.split("/") : null;
+		if(parts != null) {
+			Integer length = Integer.valueOf(parts.length);
+			routers.get(length).remove(entity);
+		}
 	}
 }

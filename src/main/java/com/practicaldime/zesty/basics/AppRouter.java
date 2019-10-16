@@ -4,6 +4,7 @@ import com.practicaldime.zesty.router.Routing;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
+import java.util.Map;
 
 public class AppRouter implements Routing.Router {
 
@@ -38,12 +39,12 @@ public class AppRouter implements Routing.Router {
 
     @Override
     public boolean contains(Routing.Search criteria) {
-        return false;
+        return routeTree.contains(criteria);
     }
 
     @Override
-    public int size() {
-        return 0;
+    public void hierarchy(Map<String, Integer> map) {
+        routeTree.hierarchy(map);
     }
 
     @Override
@@ -53,6 +54,6 @@ public class AppRouter implements Routing.Router {
 
     @Override
     public void remove(Routing.Route entity) {
-
+        routeTree.remove(entity);
     }
 }

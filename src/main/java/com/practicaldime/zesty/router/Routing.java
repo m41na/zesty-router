@@ -14,7 +14,7 @@ public interface Routing {
 
         boolean contains(S criteria);
 
-        int size();
+        void hierarchy(Map<String, Integer> map);
 
         void add(E entity);
 

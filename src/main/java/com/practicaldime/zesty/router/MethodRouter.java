@@ -11,13 +11,13 @@ public class MethodRouter implements Routing.Router{
 	
 	public MethodRouter() {
 		super();
-		routers.put(Method.GET, new PathPartsRouter());
-		routers.put(Method.PUT, new PathPartsRouter());
-		routers.put(Method.POST, new PathPartsRouter());
-		routers.put(Method.HEAD, new PathPartsRouter());
-		routers.put(Method.DELETE, new PathPartsRouter());
-		routers.put(Method.OPTIONS, new PathPartsRouter());
-		routers.put(Method.ALL, new PathPartsRouter());
+		routers.put(Method.GET, new SplitPathRouter());
+		routers.put(Method.PUT, new SplitPathRouter());
+		routers.put(Method.POST, new SplitPathRouter());
+		routers.put(Method.HEAD, new SplitPathRouter());
+		routers.put(Method.DELETE, new SplitPathRouter());
+		routers.put(Method.OPTIONS, new SplitPathRouter());
+		routers.put(Method.ALL, new SplitPathRouter());
 	}
 
 	@Override
@@ -39,12 +39,14 @@ public class MethodRouter implements Routing.Router{
 
 	@Override
 	public boolean contains(Routing.Search criteria) {
-		return false;
+		return routers.containsKey(criteria.attributes.method)?
+				routers.get(criteria.attributes.method).contains(criteria) : false;
 	}
 
 	@Override
-	public int size() {
-		return 0;
+	public void hierarchy(Map<String, Integer> map) {
+		map.put("methods", routers.size());
+		routers.entrySet().stream().forEach(entry -> entry.getValue().hierarchy(map));
 	}
 
 	@Override
@@ -58,6 +60,8 @@ public class MethodRouter implements Routing.Router{
 
 	@Override
 	public void remove(Routing.Route entity) {
-
+		if(routers.containsKey(entity.method)){
+			routers.get(entity.method).remove(entity);
+		}
 	}
 }
