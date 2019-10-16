@@ -1,4 +1,4 @@
-package com.practicaldime.testing.server;
+package com.practicaldime.zesty.testing.server;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

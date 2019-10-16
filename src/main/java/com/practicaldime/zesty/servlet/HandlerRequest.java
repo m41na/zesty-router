@@ -3,7 +3,7 @@ package com.practicaldime.zesty.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.basics.BodyReader;
 import com.practicaldime.zesty.basics.RouteRequest;
-import com.practicaldime.zesty.router.RouteSearch;
+import com.practicaldime.zesty.router.Routing.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 public class HandlerRequest extends HttpServletRequestWrapper implements RouteRequest {
 
 	private final Logger LOG = LoggerFactory.getLogger(HandlerRequest.class);
-	protected RouteSearch route;
+	protected Search route;
 	protected boolean error;
 	protected String message;
 	protected byte[] body;
@@ -56,12 +56,12 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
 	}
 
 	@Override
-	public RouteSearch route() {
+	public Search route() {
 		return this.route;
 	}
 
 	@Override
-	public void route(RouteSearch route) {
+	public void route(Search route) {
 		this.route = route;
 	}
 

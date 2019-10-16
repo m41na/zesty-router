@@ -33,3 +33,8 @@ java -cp ~/.m2/repository/org/eclipse/jetty/jetty-util/9.4.20.v20190813/jetty-ut
 error:
 org.eclipse.jetty.http.HttpParser$IllegalCharacterException: 400: Illegal character CNTL=0x16
 means use https and not http and use the correct port number
+
+setup build env (example)
+export MAVEN_HOME=/opt/tools/maven-3.6.2
+export JAVA_HOME=`/usr/libexec/java_home -v 11`
+export PATH=$PATH:$JAVA_HOME/bin:$MAVEN_HOME/bin

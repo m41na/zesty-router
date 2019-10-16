@@ -1,46 +1,58 @@
 package com.practicaldime.zesty.basics;
 
-import com.practicaldime.zesty.router.RequestAttrs;
-import com.practicaldime.zesty.router.Route;
-import com.practicaldime.zesty.router.RouteSearch;
-import com.practicaldime.zesty.router.Router;
+import com.practicaldime.zesty.router.Routing;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
-public class AppRouter implements Router{
+public class AppRouter implements Routing.Router {
 
-	private final Router routeTree;
-	
-	public AppRouter(Router routeTree) {
-		super();
-		this.routeTree = routeTree;
-	}
-	
-	public RouteSearch search(HttpServletRequest request) {
-		RequestAttrs search = new RequestAttrs();
-		search.url = request.getRequestURI();
+    private final Routing.Router routeTree;
+
+    public AppRouter(Routing.Router routeTree) {
+        super();
+        this.routeTree = routeTree;
+    }
+
+    public Routing.Search search(HttpServletRequest request) {
+        Routing.Attributes search = new Routing.Attributes();
+        search.url = request.getRequestURI();
         search.method = request.getMethod();
-        for(Enumeration<String> keys = request.getHeaderNames(); keys.hasMoreElements();) {
+        for (Enumeration<String> keys = request.getHeaderNames(); keys.hasMoreElements(); ) {
             String key = keys.nextElement();
             search.headers.put(key, request.getHeader(key));
         }
         return searchRoute(search);
-	}
-	
-	public RouteSearch searchRoute(RequestAttrs requestAttrs) {
-		RouteSearch input = new RouteSearch(requestAttrs);
-		this.accept(input);
-		return input;
-	}
+    }
 
-	@Override
-	public void accept(RouteSearch input) {
-		routeTree.accept(input);
-	}
+    public Routing.Search searchRoute(Routing.Attributes requestAttrs) {
+        Routing.Search input = new Routing.Search(requestAttrs);
+        this.search(input);
+        return input;
+    }
 
-	@Override
-	public void addRoute(Route route) {
-		routeTree.addRoute(route);
-	}
+    @Override
+    public void search(Routing.Search input) {
+        routeTree.search(input);
+    }
+
+    @Override
+    public boolean contains(Routing.Search criteria) {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public void add(Routing.Route route) {
+        routeTree.add(route);
+    }
+
+    @Override
+    public void remove(Routing.Route entity) {
+
+    }
 }

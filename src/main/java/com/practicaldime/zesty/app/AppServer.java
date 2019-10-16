@@ -4,8 +4,7 @@ import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.basics.AppViewEngines;
 import com.practicaldime.zesty.basics.RouteHandle;
 import com.practicaldime.zesty.router.MethodRouter;
-import com.practicaldime.zesty.router.Route;
-import com.practicaldime.zesty.router.Router;
+import com.practicaldime.zesty.router.Routing;
 import com.practicaldime.zesty.servlet.*;
 import com.practicaldime.zesty.session.SessionUtil;
 import com.practicaldime.zesty.view.ViewEngine;
@@ -129,7 +128,7 @@ public class AppServer {
     }
 
     public final void use(String key, String value) {
-        if(!this.locals.keySet().contains(key)) {
+        if(!this.locals.containsKey(key)) {
             this.locals.put(key, value);
         }
     }
@@ -193,7 +192,7 @@ public class AppServer {
         return this;
     }
 
-    public AppServer router(Supplier<Router> supplier) {
+    public AppServer router(Supplier<Routing.Router> supplier) {
         this.routes = new AppRouter(supplier.get());
         return this;
     }
@@ -209,9 +208,9 @@ public class AppServer {
     }
 
     public AppServer servlet(String path, HandlerConfig config, HttpServlet handler) {
-        Route route = new Route(resolve(path), "all", "*", "*");
+        Routing.Route route = new Routing.Route(resolve(path), "all", "*", "*");
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -299,9 +298,9 @@ public class AppServer {
     }
 
     public AppServer head(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "head", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "head", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -338,9 +337,9 @@ public class AppServer {
     }
 
     public AppServer trace(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "trace", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "trace", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -377,9 +376,9 @@ public class AppServer {
     }
 
     public AppServer options(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "options", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "options", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -416,9 +415,9 @@ public class AppServer {
     }
 
     public AppServer get(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "get", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "get", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -455,9 +454,9 @@ public class AppServer {
     }
 
     public AppServer post(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "post", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "post", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         // for multipart/form-data, customize the servlet holder
@@ -499,9 +498,9 @@ public class AppServer {
     }
 
     public AppServer put(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "put", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "put", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -538,9 +537,9 @@ public class AppServer {
     }
 
     public AppServer delete(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "delete", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "delete", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -577,9 +576,9 @@ public class AppServer {
     }
 
     public AppServer all(String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
-        Route route = new Route(resolve(path), "all", accept, type);
+        Routing.Route route = new Routing.Route(resolve(path), "all", accept, type);
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = new ServletHolder(handler);
         if (config != null) config.configure(holder);
@@ -611,9 +610,9 @@ public class AppServer {
 
     // ************* Accept Handler ************** //
     public void accept(RouteHandle handle) {
-        Route route = new Route(resolve(handle.getPath()), handle.getMethod(), handle.getAccept(), handle.getType());
+        Routing.Route route = new Routing.Route(resolve(handle.getPath()), handle.getMethod(), handle.getAccept(), handle.getType());
         route.setId();
-        routes.addRoute(route);
+        routes.add(route);
         // add servlet handler
         ServletHolder holder = handle.handler(handle.start());
         handle.getConfig().configure(holder);

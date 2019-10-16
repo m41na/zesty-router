@@ -9,9 +9,9 @@ import java.util.Vector;
 
 public class MockRoute extends Request{
     
-    private final Route route;
+    private final Routing.Route route;
     
-    public MockRoute(HttpChannel channel, HttpInput input, Route route) {
+    public MockRoute(HttpChannel channel, HttpInput input, Routing.Route route) {
         super(channel, input);
         this.route = route;
         if(route.accept != null && route.accept.trim().length() > 0) {

@@ -1,25 +1,27 @@
-package com.practicaldime.testing.server;
+package com.practicaldime.zesty.testing.server;
 
 import com.practicaldime.zesty.app.AppServer;
 import org.eclipse.jetty.client.HttpClient;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.net.ServerSocket;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ZestySpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
+public class ZestyJUnit4ClassRunner extends BlockJUnit4ClassRunner {
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private CountDownLatch serverLatch;
 
-    public ZestySpringJUnit4ClassRunner(Class testClass) throws InitializationError {
+    public ZestyJUnit4ClassRunner(Class testClass) throws InitializationError {
         super(testClass);
         //look for method annotated with @ZestyProvider
         List<FrameworkMethod> provider =  getTestClass().getAnnotatedMethods(ZestyProvider.class);
@@ -47,6 +49,16 @@ public class ZestySpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
             }
             return res;
         });
+    }
+
+    protected Integer freeTcpPort()  {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            socket.setReuseAddress(true);
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     protected HttpClient startClient() {

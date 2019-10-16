@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AppWsUsers {
 
-    public static interface Searchable<S, E>{
+    public interface Searchable<S, E>{
 
         E search(S criteria);
 

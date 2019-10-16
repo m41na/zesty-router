@@ -2,7 +2,7 @@ package com.practicaldime.zesty.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.basics.AppRouter;
-import com.practicaldime.zesty.router.RouteSearch;
+import com.practicaldime.zesty.router.Routing.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +15,9 @@ import java.util.function.Supplier;
 public class RouteFilter implements Filter {
 
     public static final Logger LOG = LoggerFactory.getLogger(RouteFilter.class);
-
-    protected FilterConfig fConfig;
     private final AppRouter routes;
     private final Supplier<ObjectMapper> mapper = new ObjectMapperSupplier();
+    protected FilterConfig fConfig;
 
     public RouteFilter(AppRouter routes) {
         super();
@@ -38,17 +37,17 @@ public class RouteFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HandlerRequest httpRequest = new HandlerRequest((HttpServletRequest) request);
-        HandlerResponse httpResponse = new HandlerResponse((HttpServletResponse)response);        
+        HandlerResponse httpResponse = new HandlerResponse((HttpServletResponse) response);
         //set additional properties in response wrapper
         httpResponse.context(httpRequest.getContextPath());
-        
-        RouteSearch route = routes.search(httpRequest);
+
+        Search route = routes.search(httpRequest);
         if (route.result != null) {
-        	LOG.info("matched route -> {}", mapper.get().writeValueAsString(route));
+            LOG.info("matched route -> {}", mapper.get().writeValueAsString(route));
             httpRequest.route(route);
-           httpRequest.getRequestDispatcher(route.result.rid).forward(httpRequest, httpResponse);
+            httpRequest.getRequestDispatcher(route.result.rid).forward(httpRequest, httpResponse);
         } else {
             chain.doFilter(httpRequest, httpResponse);
         }
-    }    
+    }
 }

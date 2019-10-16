@@ -8,18 +8,18 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PathRegexRouter implements Router{
+public class PathRegexRouter implements Routing.Router{
 
 	public static final String CHAR_ENCODING = "UTF-8";
-	private Map<PathPattern, Router> routers = new HashMap<>();
+	private Map<PathPattern, Routing.Router> routers = new HashMap<>();
 	
 	@Override
-	public void accept(RouteSearch input) {
+	public void search(Routing.Search input) {
 		for(PathPattern pathRegex : routers.keySet()) {
 			Pattern valuesPattern = pathRegex.valuesPattern;
-			Matcher matcher = valuesPattern.matcher(input.requestAttrs.url);
+			Matcher matcher = valuesPattern.matcher(input.attributes.url);
 			if(matcher.matches()) {
-				routers.get(pathRegex).accept(input);
+				routers.get(pathRegex).search(input);
 				//if a matching route is found, extract path params from the input's url and get the values path params if any
 				if(input.result != null) {
 					if(matcher.groupCount() > 0) {
@@ -49,16 +49,31 @@ public class PathRegexRouter implements Router{
 	}
 
 	@Override
-	public void addRoute(Route route) {
+	public boolean contains(Routing.Search criteria) {
+		return false;
+	}
+
+	@Override
+	public int size() {
+		return 0;
+	}
+
+	@Override
+	public void add(Routing.Route route) {
 		String valuesRegex = route.path.replaceAll("\\{(.+?)\\}", "(.+?)").replaceAll("\\/", "\\\\/");
 		String paramsRegex = route.path.replaceAll("\\{(.+?)\\}", "\\\\{(.+?)\\\\}").replaceAll("\\/", "\\\\/");
 		PathPattern pathRegex = new PathPattern(valuesRegex, paramsRegex);
 		if(!routers.containsKey(pathRegex)) {
 			routers.put(pathRegex, new HeadersRouter());
 		}
-		routers.get(pathRegex).addRoute(route);
+		routers.get(pathRegex).add(route);
 	}
-	
+
+	@Override
+	public void remove(Routing.Route entity) {
+
+	}
+
 	public static class PathPattern implements Comparable<PathPattern>{
 		
 		private final String valuesRegex;
