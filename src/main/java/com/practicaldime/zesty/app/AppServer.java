@@ -2,6 +2,7 @@ package com.practicaldime.zesty.app;
 
 import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.basics.AppViewEngines;
+import com.practicaldime.zesty.basics.RouteHandle;
 import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Route;
 import com.practicaldime.zesty.router.Router;
@@ -222,24 +223,48 @@ public class AppServer {
         return route(method, path, null, handler);
     }
 
+    public AppServer route(String method, String path, HandlerFunction handler) {
+        return route(method, path, null, handler);
+    }
+
+    public AppServer route(String method, String path, HandlerConfig config, HandlerFunction handler) {
+        return route(method, path, config, handler);
+    }
+
     public AppServer route(String method, String path, HandlerConfig config, HandlerServlet handler) {
+        return route(method, path, "", "", config, handler);
+    }
+
+    public AppServer route(String method, String path, String accept, String type, HandlerConfig config, HandlerFunction handler) {
+        return route(method, path, accept, type, config, new HandlerServlet() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
+                handler.apply(request, response, promise);
+            }
+        });
+    }
+
+    public AppServer route(String method, String path, String accept, String type, HandlerConfig config, HandlerServlet handler) {
         switch (method.toLowerCase()) {
             case "get":
-                return get(path, "", "", config, handler);
+                return get(path, accept, type, config, handler);
             case "post":
-                return post(path, "", "", config, handler);
+                return post(path, accept, type, config, handler);
             case "put":
-                return put(path, "", "", config, handler);
+                return put(path, accept, type, config, handler);
             case "delete":
-                return delete(path, "", "", config, handler);
+                return delete(path, accept, type, config, handler);
             case "options":
-                return options(path, "", "", config, handler);
+                return options(path, accept, type, config, handler);
             case "trace":
-                return trace(path, "", "", config, handler);
+                return trace(path, accept, type, config, handler);
             case "head":
-                return head(path, "", "", config, handler);
+                return head(path, accept, type, config, handler);
             case "all":
-                return all(path, "", "", config, handler);
+            case "*":
+                return all(path, accept, type, config, handler);
             default:
                 throw new UnsupportedOperationException(method + " is not a supported method");
         }
@@ -251,17 +276,14 @@ public class AppServer {
     }
 
     public AppServer head(String path, HandlerFunction handler) {
-        return head(path, "", "", null, new HandlerServlet() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void handle(HandlerRequest request, HandlerResponse response, HandlerPromise promise) {
-                handler.apply(request, response, promise);
-            }
-        });
+        return head(path, "", "", null, handler);
     }
 
     public AppServer head(String path, HandlerConfig config, HandlerFunction handler) {
+        return head(path, "", "", config, handler);
+    }
+
+    public AppServer head(String path, HandlerConfig config, HandlerServlet handler) {
         return head(path, "", "", config, handler);
     }
 
@@ -585,6 +607,17 @@ public class AppServer {
         this.wpcontext.put("proxyTo", proxyTo);
         this.wpcontext.put("scriptRoot", home);
         return this;
+    }
+
+    // ************* Accept Handler ************** //
+    public void accept(RouteHandle handle) {
+        Route route = new Route(resolve(handle.getPath()), handle.getMethod(), handle.getAccept(), handle.getType());
+        route.setId();
+        routes.addRoute(route);
+        // add servlet handler
+        ServletHolder holder = handle.handler(handle.start());
+        handle.getConfig().configure(holder);
+        servlets.addServlet(holder, route.rid);
     }
 
     // ************* START *****************//
