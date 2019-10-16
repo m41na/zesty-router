@@ -15,7 +15,6 @@ import java.util.function.BiFunction;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 @RunWith(ZestyJUnit4ClassRunner.class)
 public class ZestyJUnit4ClassRunnerTest {

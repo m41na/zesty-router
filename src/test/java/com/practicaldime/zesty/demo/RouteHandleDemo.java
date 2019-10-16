@@ -2,7 +2,6 @@ package com.practicaldime.zesty.demo;
 
 import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.basics.RouteHandle;
-import com.practicaldime.zesty.router.Router;
 import com.practicaldime.zesty.servlet.HandlerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

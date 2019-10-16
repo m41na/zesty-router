@@ -10,7 +10,6 @@ import org.junit.runners.model.Statement;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.ServerSocket;
-import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;

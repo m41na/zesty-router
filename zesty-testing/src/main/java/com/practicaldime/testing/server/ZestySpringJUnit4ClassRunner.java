@@ -2,7 +2,6 @@ package com.practicaldime.testing.server;
 
 import com.practicaldime.zesty.app.AppServer;
 import org.eclipse.jetty.client.HttpClient;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
