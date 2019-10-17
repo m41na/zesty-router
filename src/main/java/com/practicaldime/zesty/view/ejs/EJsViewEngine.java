@@ -10,62 +10,61 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class EJsViewEngine implements ViewEngine{
+public class EJsViewEngine implements ViewEngine {
 
-	private static EJsViewEngine instance;
-	private final EJsViewConfiguration config;
+    private static EJsViewEngine instance;
+    private final EJsViewConfiguration config;
     private final ViewProcessor<String, ViewLookup> view;
-	private final String templateDir;
-	private final String templateExt;
-	private final ViewLookup strategy;
+    private final String templateDir;
+    private final String templateExt;
+    private final ViewLookup strategy;
 
-	private EJsViewEngine(String templateDir, String templateExt, String lookup) throws IOException {
-    	super();
+    private EJsViewEngine(String templateDir, String templateExt, String lookup) throws IOException {
+        super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
         this.config = new EJsViewConfiguration();
         this.strategy = Arrays.asList(ViewLookup.values()).stream().filter(value -> value.toString().equalsIgnoreCase(lookup)).findFirst().orElse(ViewLookup.FILE);
         this.view = new EJsViewProcessor(config);
-	}
-	
-	@Override
-	public String templateDir() {
-		return this.templateDir;
-	}
+    }
 
-	@Override
-	public String templateExt() {
-		return this.templateExt;
-	}
-	
-	public static EJsViewEngine create(String templateDir, String templateExt, String lookup)  {
+    public static EJsViewEngine create(String templateDir, String templateExt, String lookup) {
         if (instance == null) {
             synchronized (EJsViewEngine.class) {
-            	try {
-					instance = new EJsViewEngine(templateDir, templateExt, lookup);
-				}
-            	catch(IOException e){
-            		e.printStackTrace(System.err);
-            		throw new RuntimeException("Could not create view engine", e);
-				}
+                try {
+                    instance = new EJsViewEngine(templateDir, templateExt, lookup);
+                } catch (IOException e) {
+                    e.printStackTrace(System.err);
+                    throw new RuntimeException("Could not create view engine", e);
+                }
             }
         }
         return instance;
     }
-    
+
     public static EJsViewEngine instance() throws IOException {
-    	return instance;
+        return instance;
     }
-    
+
     public static ViewProcessor getProcessor() {
         return EJsViewEngine.instance.view;
     }
 
     @Override
-	public String merge(String template, Map<String, Object> model) throws Exception {	    	
-    	String templateFile = view.resolve(templateDir, template, strategy);
-		Value renderFunction = config.getEnvironment().getBindings("js").getMember("renderTemplate");
-		Object result = renderFunction.execute(templateFile, new ObjectMapper().writeValueAsString(model), template);
-		return result.toString();
-	}
+    public String templateDir() {
+        return this.templateDir;
+    }
+
+    @Override
+    public String templateExt() {
+        return this.templateExt;
+    }
+
+    @Override
+    public String merge(String template, Map<String, Object> model) throws Exception {
+        String templateFile = view.resolve(templateDir, template, strategy);
+        Value renderFunction = config.getEnvironment().getBindings("js").getMember("renderTemplate");
+        Object result = renderFunction.execute(templateFile, new ObjectMapper().writeValueAsString(model), template);
+        return result.toString();
+    }
 }

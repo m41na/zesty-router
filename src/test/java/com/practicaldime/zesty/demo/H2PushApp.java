@@ -101,7 +101,7 @@ public class H2PushApp {
                 }
             }
 
-        }).servlet("/echo", config, new HttpServlet(){
+        }).servlet("/echo", config, new HttpServlet() {
             @Override
             protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
                 AsyncContext ctx = req.startAsync();

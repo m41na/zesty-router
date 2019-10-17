@@ -15,14 +15,14 @@ public class AppWsUsersTest {
             .collect(Collectors.toList());
 
     @Test
-    public void testAddingUsers(){
+    public void testAddingUsers() {
         AppWsUsers.SearchableTree tree = new AppWsUsers.SearchableTree();
         users.forEach(user -> tree.add(user));
         assertEquals("Expecting 10 entries", 10, tree.size());
     }
 
     @Test
-    public void testSearchUser(){
+    public void testSearchUser() {
         AppWsUsers.SearchableTree tree = new AppWsUsers.SearchableTree();
         users.forEach(user -> tree.add(user));
         assertEquals("Expecting 10 entries", 10, tree.size());

@@ -23,7 +23,7 @@ public class HbJsViewConfiguration {
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(HANDLEBARS_RENDER)), HANDLEBARS_RENDER).build());
     }
 
-    public Context getEnvironment()  {
+    public Context getEnvironment() {
         return context;
     }
 }

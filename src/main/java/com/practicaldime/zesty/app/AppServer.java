@@ -118,7 +118,7 @@ public class AppServer {
     }
 
     public final void shutdown() {
-        if(this.shutdown != null) {
+        if (this.shutdown != null) {
             this.shutdown.accept(true);
         }
     }
@@ -128,7 +128,7 @@ public class AppServer {
     }
 
     public final void use(String key, String value) {
-        if(!this.locals.containsKey(key)) {
+        if (!this.locals.containsKey(key)) {
             this.locals.put(key, value);
         }
     }
@@ -167,17 +167,15 @@ public class AppServer {
         return this;
     }
 
-    public final AppServer assets(String mapping, String folder){
-        if(!UNASSIGNED.equals(this.locals("assets").toString())){
+    public final AppServer assets(String mapping, String folder) {
+        if (!UNASSIGNED.equals(this.locals("assets").toString())) {
             LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
-        }
-        else {
+        } else {
             String pathspec = mapping.endsWith("/*") ? mapping : (mapping.endsWith("/") ? mapping + "*" : mapping + "/*");
-            if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                 ServletHolder defaultServlet = createResourceServlet(folder);
                 servlets.addServlet(defaultServlet, pathspec);
-            }
-            else{
+            } else {
                 ContextHandler context = new ContextHandler();
                 context.setContextPath(pathspec);
                 context.setHandler(createResourceHandler(folder));
@@ -713,16 +711,16 @@ public class AppServer {
             String resourceBase = this.locals.getProperty("assets");
 
             // configure DefaultServlet to serve static content
-            if(!UNASSIGNED.equals(resourceBase)) {
-                if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (!UNASSIGNED.equals(resourceBase)) {
+                if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ServletHolder defaultServlet = createResourceServlet(resourceBase);
                     servlets.addServlet(defaultServlet, "/*");
                 }
             }
 
             // configure ResourceHandler to serve static content
-            if(!UNASSIGNED.equals(resourceBase)) {
-                if(!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (!UNASSIGNED.equals(resourceBase)) {
+                if (!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ContextHandler resourceHandler = new ContextHandler("/*");
                     resourceHandler.setHandler(createResourceHandler(resourceBase));
                     contexts.add(resourceHandler);

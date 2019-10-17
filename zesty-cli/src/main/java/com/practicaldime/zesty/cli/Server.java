@@ -18,7 +18,7 @@ public abstract class Server {
 
     private final static Logger LOG = LoggerFactory.getLogger(Server.class);
 
-    public static void main(String...args) {
+    public static void main(String... args) {
         try {
             Server server = new Server() {
                 @Override
@@ -51,23 +51,23 @@ public abstract class Server {
         LOG.info("server listening on port 4444");
 
         //keep listening to selection keys
-        while(serverSocket.isOpen()){
+        while (serverSocket.isOpen()) {
             //await selection keys from channel that's ready for i/o
             selector.select();
             Set<SelectionKey> keys = selector.selectedKeys();
 
             //iterate over returned set of keys and act depending on type
-            for(Iterator<SelectionKey> iter = keys.iterator(); iter.hasNext();){
+            for (Iterator<SelectionKey> iter = keys.iterator(); iter.hasNext(); ) {
                 SelectionKey key = iter.next();
                 //remove selected key from the iterator
                 iter.remove();
 
                 //test if this channel is ready to accept connections
-                if(key.isAcceptable()){
+                if (key.isAcceptable()) {
                     //accept connection request and set blocking mode to 'false' (applies to any channels)
                     SocketChannel clientSocket = serverSocket.accept();
                     clientSocket.configureBlocking(false);
-                    String address = (new StringBuilder( clientSocket.socket().getInetAddress().toString() )).append(":").append( clientSocket.socket().getPort() ).toString();
+                    String address = (new StringBuilder(clientSocket.socket().getInetAddress().toString())).append(":").append(clientSocket.socket().getPort()).toString();
 
                     //set bit in selector as 'this client is ready for reading'
                     clientSocket.register(selector, SelectionKey.OP_READ, address);
@@ -77,14 +77,14 @@ public abstract class Server {
                     clientSocket.write(ByteBuffer.wrap(("Welcome " + address + "! You are now connected!\n").getBytes()));
                 }
                 //test if the channel is ready for reading
-                else if(key.isReadable()){
+                else if (key.isReadable()) {
                     //create accumulator for incoming bytes
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                     //retrieve read-ready channel
-                    SocketChannel clientSocket = (SocketChannel)key.channel();
+                    SocketChannel clientSocket = (SocketChannel) key.channel();
                     ByteBuffer buffer = ByteBuffer.allocate(256);
-                    while(clientSocket.read(buffer) > 0){
+                    while (clientSocket.read(buffer) > 0) {
                         buffer.flip();
                         byte[] bytes = new byte[buffer.limit()];
                         buffer.get(bytes);
@@ -94,7 +94,7 @@ public abstract class Server {
                     String incoming = new String(buffer.array()).trim();
                     LOG.info("<<<< {}", incoming);
 
-                    if(incoming.equalsIgnoreCase(":q")){
+                    if (incoming.equalsIgnoreCase(":q")) {
                         LOG.info("{} is now closing their connection", key.attachment());
                         clientSocket.close();
                     }

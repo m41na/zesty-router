@@ -22,18 +22,18 @@ public class ZestySpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
     public ZestySpringJUnit4ClassRunner(Class testClass) throws InitializationError {
         super(testClass);
         //look for method annotated with @ZestyProvider
-        List<FrameworkMethod> provider =  getTestClass().getAnnotatedMethods(ZestyProvider.class);
-        if(provider == null){
+        List<FrameworkMethod> provider = getTestClass().getAnnotatedMethods(ZestyProvider.class);
+        if (provider == null) {
             throw new RuntimeException("Could not find a provider method for the server");
         }
-        if(provider.size() > 1){
+        if (provider.size() > 1) {
             throw new RuntimeException("Expected only one a provider method for the server");
         }
         //start server in its own thread
         CompletableFuture.runAsync(() -> {
             try {
                 FrameworkMethod method = provider.get(0);
-                AppServer server = (AppServer)method.invokeExplosively(createTest());
+                AppServer server = (AppServer) method.invokeExplosively(createTest());
                 serverLatch.await();
                 server.shutdown();
                 executor.shutdown();
@@ -42,7 +42,7 @@ public class ZestySpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
                 throw new RuntimeException(e);
             }
         }, executor).handle((res, th) -> {
-            if(th != null){
+            if (th != null) {
                 System.err.println(th.getMessage());
             }
             return res;
@@ -75,10 +75,9 @@ public class ZestySpringJUnit4ClassRunner extends SpringJUnit4ClassRunner {
     protected Statement methodInvoker(FrameworkMethod method, Object test) {
         System.out.println("invoking: " + method.getName());
         serverLatch.countDown();
-        if(method.getMethod().getParameterCount() == 1) {
+        if (method.getMethod().getParameterCount() == 1) {
             return new ZestyInvokeMethod(method, test, startClient());
-        }
-        else{
+        } else {
             return super.methodInvoker(method, test);
         }
     }

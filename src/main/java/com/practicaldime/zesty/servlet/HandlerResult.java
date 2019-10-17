@@ -9,18 +9,18 @@ public class HandlerResult {
         this.startInMillis = System.currentTimeMillis();
     }
 
-    public Boolean isSuccess(){
-        return this.status;
-    }
-
-    public Long updateStatus(Boolean status){
-        this.status = status;
-        return System.currentTimeMillis() - this.startInMillis;
-    }
-
-    public static HandlerResult build(Boolean status){
+    public static HandlerResult build(Boolean status) {
         HandlerResult res = new HandlerResult();
         res.status = status;
         return res;
+    }
+
+    public Boolean isSuccess() {
+        return this.status;
+    }
+
+    public Long updateStatus(Boolean status) {
+        this.status = status;
+        return System.currentTimeMillis() - this.startInMillis;
     }
 }

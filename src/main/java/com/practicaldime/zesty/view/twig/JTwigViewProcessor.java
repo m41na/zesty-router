@@ -5,7 +5,7 @@ import org.jtwig.JtwigTemplate;
 import org.jtwig.resource.reference.ResourceReference;
 
 public class JTwigViewProcessor implements ViewProcessor<JtwigTemplate, ResourceReference> {
-    
+
     protected final ViewConfiguration factory;
 
     public JTwigViewProcessor(ViewConfiguration factory) {

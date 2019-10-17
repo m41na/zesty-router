@@ -4,7 +4,7 @@ import com.practicaldime.zesty.router.Routing;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
-import java.util.Map;
+import java.util.List;
 
 public class AppRouter implements Routing.Router {
 
@@ -43,8 +43,10 @@ public class AppRouter implements Routing.Router {
     }
 
     @Override
-    public void hierarchy(Map<String, Integer> map) {
-        routeTree.hierarchy(map);
+    public void info(List<String> nodes, String prefix) {
+        String indent = prefix + "|-";
+        nodes.add(indent + "root");
+        routeTree.info(nodes, indent);
     }
 
     @Override
