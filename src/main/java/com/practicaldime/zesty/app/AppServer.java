@@ -1,5 +1,6 @@
 package com.practicaldime.zesty.app;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.basics.AppRouter;
 import com.practicaldime.zesty.basics.AppViewEngines;
 import com.practicaldime.zesty.basics.RouteHandle;
@@ -7,6 +8,8 @@ import com.practicaldime.zesty.router.MethodRouter;
 import com.practicaldime.zesty.router.Routing;
 import com.practicaldime.zesty.servlet.*;
 import com.practicaldime.zesty.session.SessionUtil;
+import com.practicaldime.zesty.sse.AppEventSource;
+import com.practicaldime.zesty.sse.EventsEmitter;
 import com.practicaldime.zesty.view.ViewEngine;
 import com.practicaldime.zesty.view.ViewEngineFactory;
 import com.practicaldime.zesty.websock.AppWsPolicy;
@@ -22,6 +25,8 @@ import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.*;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.eclipse.jetty.servlets.EventSource;
+import org.eclipse.jetty.servlets.EventSourceServlet;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
@@ -31,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
@@ -118,7 +124,7 @@ public class AppServer {
     }
 
     public final void shutdown() {
-        if(this.shutdown != null) {
+        if (this.shutdown != null) {
             this.shutdown.accept(true);
         }
     }
@@ -128,7 +134,7 @@ public class AppServer {
     }
 
     public final void use(String key, String value) {
-        if(!this.locals.containsKey(key)) {
+        if (!this.locals.containsKey(key)) {
             this.locals.put(key, value);
         }
     }
@@ -151,6 +157,10 @@ public class AppServer {
         return path1 + path2;
     }
 
+    public ObjectMapper mapper() {
+        return new ObjectMapper();
+    }
+
     public AppServer cors(Map<String, String> cors) {
         this.locals.put("cors", "true");
         if (cors != null) this.corscontext.putAll(cors);
@@ -167,17 +177,15 @@ public class AppServer {
         return this;
     }
 
-    public final AppServer assets(String mapping, String folder){
-        if(!UNASSIGNED.equals(this.locals("assets").toString())){
+    public final AppServer assets(String mapping, String folder) {
+        if (!UNASSIGNED.equals(this.locals("assets").toString())) {
             LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
-        }
-        else {
+        } else {
             String pathspec = mapping.endsWith("/*") ? mapping : (mapping.endsWith("/") ? mapping + "*" : mapping + "/*");
-            if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                 ServletHolder defaultServlet = createResourceServlet(folder);
                 servlets.addServlet(defaultServlet, pathspec);
-            }
-            else{
+            } else {
                 ContextHandler context = new ContextHandler();
                 context.setContextPath(pathspec);
                 context.setHandler(createResourceHandler(folder));
@@ -608,7 +616,24 @@ public class AppServer {
         return this;
     }
 
-    // ************* Accept Handler ************** //
+    // ************* SSE *****************//
+    public AppServer subscribe(String path, HandlerConfig config, EventsEmitter eventsEmitter) {
+        return servlet(path, config, new EventSourceServlet() {
+            @Override
+            protected EventSource newEventSource(HttpServletRequest request) {
+                return new AppEventSource(request, mapper()) {
+
+                    @Override
+                    public void onOpen(Emitter emitter) throws IOException {
+                        super.onOpen(emitter);
+                        eventsEmitter.onOpen(mapper, emitter);
+                    }
+                };
+            }
+        });
+    }
+
+    // ************* Accept new Handler ************** //
     public void accept(RouteHandle handle) {
         Routing.Route route = new Routing.Route(resolve(handle.getPath()), handle.getMethod(), handle.getAccept(), handle.getType());
         route.setId();
@@ -713,16 +738,16 @@ public class AppServer {
             String resourceBase = this.locals.getProperty("assets");
 
             // configure DefaultServlet to serve static content
-            if(!UNASSIGNED.equals(resourceBase)) {
-                if(Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (!UNASSIGNED.equals(resourceBase)) {
+                if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ServletHolder defaultServlet = createResourceServlet(resourceBase);
                     servlets.addServlet(defaultServlet, "/*");
                 }
             }
 
             // configure ResourceHandler to serve static content
-            if(!UNASSIGNED.equals(resourceBase)) {
-                if(!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
+            if (!UNASSIGNED.equals(resourceBase)) {
+                if (!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ContextHandler resourceHandler = new ContextHandler("/*");
                     resourceHandler.setHandler(createResourceHandler(resourceBase));
                     contexts.add(resourceHandler);
