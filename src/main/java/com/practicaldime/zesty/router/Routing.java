@@ -1,24 +1,24 @@
 package com.practicaldime.zesty.router;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 
 public interface Routing {
 
-    interface Searchable<S, E>{
+    interface Searchable<S, E> {
 
         void search(S criteria);
 
         boolean contains(S criteria);
 
-        void hierarchy(Map<String, Integer> map);
+        void info(List<String> nodes, String prefix);
 
         void add(E entity);
 
         void remove(E entity);
+    }
+
+    interface Router extends Searchable<Search, Route> {
     }
 
     class Search {
@@ -42,7 +42,7 @@ public interface Routing {
         public Map<String, String> headers = new HashMap<>();
 
         public String getHeader(String name) {
-            return headers.containsKey(name)? headers.get(name) : null;
+            return headers.containsKey(name) ? headers.get(name) : null;
         }
 
         @Override
@@ -169,6 +169,4 @@ public interface Routing {
                     headers);
         }
     }
-
-    interface Router extends Searchable<Search, Route> {}
 }

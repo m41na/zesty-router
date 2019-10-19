@@ -27,24 +27,24 @@ public class FcgiPyServer {
         context.setResourceBase("src/test/resources/fcgi");
         context.setWelcomeFiles(new String[]{"index.html"});
         server.setHandler(context);
-        
+
         //Add default servlet (dest serve the html/css/js)
-        ServletHolder defHolder = new ServletHolder("default",new DefaultServlet());
-        defHolder.setInitParameter("dirAllowed","false");
-        context.addServlet(defHolder,"/");
-        
+        ServletHolder defHolder = new ServletHolder("default", new DefaultServlet());
+        defHolder.setInitParameter("dirAllowed", "false");
+        context.addServlet(defHolder, "/");
+
         //add try filter
         FilterHolder tryHolder = new FilterHolder(new TryFilesFilter());
         tryHolder.setInitParameter("files", "$path /index.php?p=$path");
         context.addFilter(tryHolder, "/*", EnumSet.of(DispatcherType.REQUEST));
-        
+
         //add fcgi servlet
-        ServletHolder fcgiHolder = new ServletHolder("vcgi",new FastCGIProxyServlet());
-        fcgiHolder.setInitParameter("proxyTo","http://localhost:9000");
-        fcgiHolder.setInitParameter("prefix","/");
-        fcgiHolder.setInitParameter("scriptRoot","src/test/resources/fcgi");
-        fcgiHolder.setInitParameter("scriptPattern","(.+?\\\\.py)");
-        context.addServlet(fcgiHolder,"*.py");
+        ServletHolder fcgiHolder = new ServletHolder("vcgi", new FastCGIProxyServlet());
+        fcgiHolder.setInitParameter("proxyTo", "http://localhost:9000");
+        fcgiHolder.setInitParameter("prefix", "/");
+        fcgiHolder.setInitParameter("scriptRoot", "src/test/resources/fcgi");
+        fcgiHolder.setInitParameter("scriptPattern", "(.+?\\\\.py)");
+        context.addServlet(fcgiHolder, "*.py");
 
         try {
             server.start();

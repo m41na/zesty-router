@@ -32,7 +32,7 @@ public abstract class RouteHandle {
         return config;
     }
 
-    public ServletHolder handler(HandlerFunction handler){
+    public ServletHolder handler(HandlerFunction handler) {
         return new ServletHolder(new HandlerServlet() {
             private static final long serialVersionUID = 1L;
 
@@ -43,11 +43,11 @@ public abstract class RouteHandle {
         });
     }
 
-    public void register(String method, String path, String accept, String type){
+    public void register(String method, String path, String accept, String type) {
         register(method, path, accept, type, config -> config.setAsyncSupported(true));
     }
 
-    public void register(String method, String path, String accept, String type, HandlerConfig config){
+    public void register(String method, String path, String accept, String type, HandlerConfig config) {
         this.method = method;
         this.path = path;
         this.accept = accept;

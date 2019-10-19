@@ -3,6 +3,7 @@ package com.practicaldime.zesty.router;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -70,9 +71,9 @@ public class PathRegexRouter implements Routing.Router {
     }
 
     @Override
-    public void hierarchy(Map<String, Integer> map) {
-        map.put("splitPathRegex", routers.size());
-        routers.entrySet().stream().forEach(entry -> entry.getValue().hierarchy(map));
+    public void info(List<String> nodes, String prefix) {
+        String indent = prefix + "|-";
+        routers.entrySet().stream().forEach(entry -> entry.getValue().info(nodes, indent));
     }
 
     @Override

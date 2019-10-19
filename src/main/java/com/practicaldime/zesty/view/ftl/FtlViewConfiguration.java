@@ -16,11 +16,11 @@ public class FtlViewConfiguration implements ViewConfiguration {
     protected final Configuration cfg;
 
     public FtlViewConfiguration(String assets) throws IOException {
-    	String path = assets != null && assets.trim().length() > 0? assets.trim() : "./";
+        String path = assets != null && assets.trim().length() > 0 ? assets.trim() : "./";
         cfg = new Configuration(new Version(2, 3, 23));
         TemplateLoader[] loaders = new TemplateLoader[]{
-            new FileTemplateLoader(new File(path)),
-            new ClassTemplateLoader(FtlViewConfiguration.class, path)
+                new FileTemplateLoader(new File(path)),
+                new ClassTemplateLoader(FtlViewConfiguration.class, path)
         };
         cfg.setTemplateLoader(new MultiTemplateLoader(loaders));
         cfg.setDefaultEncoding("UTF-8");

@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AppWsUsers {
 
-    public interface Searchable<S, E>{
+    public interface Searchable<S, E> {
 
         E search(S criteria);
 
@@ -21,23 +21,22 @@ public class AppWsUsers {
         void remove(E entity);
     }
 
-    public static class ContextsNode implements Searchable<Search, UserId>{
+    public static class ContextsNode implements Searchable<Search, UserId> {
 
         public final Map<String, TopicsNode> contexts = new ConcurrentHashMap<>();
 
         @Override
         public UserId search(Search criteria) {
-            if(contexts.containsKey(criteria.context)){
+            if (contexts.containsKey(criteria.context)) {
                 return contexts.get(criteria.context).search(criteria);
-            }
-            else{
+            } else {
                 throw new RuntimeException("could not find any context that matches '" + criteria.context + "'");
             }
         }
 
         @Override
         public boolean contains(Search criteria) {
-            if(contexts.containsKey(criteria.context)){
+            if (contexts.containsKey(criteria.context)) {
                 return contexts.get(criteria.context).contains(criteria);
             }
             return false;
@@ -50,10 +49,9 @@ public class AppWsUsers {
 
         @Override
         public void add(UserId entity) {
-            if(contexts.containsKey(entity.context)){
+            if (contexts.containsKey(entity.context)) {
                 contexts.get(entity.context).add(entity);
-            }
-            else{
+            } else {
                 TopicsNode newNode = new TopicsNode();
                 newNode.add(entity);
                 contexts.put(entity.context, newNode);
@@ -62,32 +60,30 @@ public class AppWsUsers {
 
         @Override
         public void remove(UserId entity) {
-            if(contexts.containsKey(entity.context)){
+            if (contexts.containsKey(entity.context)) {
                 contexts.get(entity.context).remove(entity);
-            }
-            else{
+            } else {
                 throw new RuntimeException("could not find any context that matches '" + entity.context + "'");
             }
         }
     }
 
-    public static class TopicsNode implements Searchable<Search, UserId>{
+    public static class TopicsNode implements Searchable<Search, UserId> {
 
         public final Map<String, UserIdsNode> topics = new ConcurrentHashMap<>();
 
         @Override
         public UserId search(Search criteria) {
-            if(topics.containsKey(criteria.topic)){
+            if (topics.containsKey(criteria.topic)) {
                 return topics.get(criteria.topic).search(criteria);
-            }
-            else{
+            } else {
                 throw new RuntimeException("could not find any topic that matches '" + criteria.topic + "'");
             }
         }
 
         @Override
         public boolean contains(Search criteria) {
-            if(topics.containsKey(criteria.topic)){
+            if (topics.containsKey(criteria.topic)) {
                 return topics.get(criteria.topic).contains(criteria);
             }
             return false;
@@ -100,10 +96,9 @@ public class AppWsUsers {
 
         @Override
         public void add(UserId entity) {
-            if(topics.containsKey(entity.topic)){
+            if (topics.containsKey(entity.topic)) {
                 topics.get(entity.topic).add(entity);
-            }
-            else{
+            } else {
                 UserIdsNode newNode = new UserIdsNode();
                 newNode.add(entity);
                 topics.put(entity.topic, newNode);
@@ -112,25 +107,23 @@ public class AppWsUsers {
 
         @Override
         public void remove(UserId entity) {
-            if(topics.containsKey(entity.topic)){
+            if (topics.containsKey(entity.topic)) {
                 topics.get(entity.topic).remove(entity);
-            }
-            else{
+            } else {
                 throw new RuntimeException("could not find any topic that matches '" + entity.topic + "'");
             }
         }
     }
 
-    public static class UserIdsNode implements Searchable<Search, UserId>{
+    public static class UserIdsNode implements Searchable<Search, UserId> {
 
         public final Map<String, UserId> users = new ConcurrentHashMap<>();
 
         @Override
         public UserId search(Search criteria) {
-            if(users.containsKey(criteria.name)){
+            if (users.containsKey(criteria.name)) {
                 return users.get(criteria.name);
-            }
-            else{
+            } else {
                 throw new RuntimeException("could not find any user with the name '" + criteria.name + "'");
             }
         }
@@ -147,20 +140,20 @@ public class AppWsUsers {
 
         @Override
         public void add(UserId entity) {
-            if(!users.containsKey(entity.name)){
+            if (!users.containsKey(entity.name)) {
                 users.put(entity.name, entity);
             }
         }
 
         @Override
         public void remove(UserId entity) {
-            if(users.containsKey(entity.name)){
+            if (users.containsKey(entity.name)) {
                 users.remove(entity);
             }
         }
     }
 
-    public static class SearchableTree implements Searchable<Search, UserId>{
+    public static class SearchableTree implements Searchable<Search, UserId> {
 
         private final ContextsNode nodes = new ContextsNode();
 
@@ -190,7 +183,7 @@ public class AppWsUsers {
         }
     }
 
-    public static class Search{
+    public static class Search {
 
         public final String name;
         public final String topic;
@@ -234,11 +227,11 @@ public class AppWsUsers {
 
         @Override
         public int compareTo(UserId o) {
-            if(this == o) return 0;
+            if (this == o) return 0;
             int comparison = this.context.compareTo(o.context);
-            if(comparison != 0) return comparison;
+            if (comparison != 0) return comparison;
             comparison = this.topic.compareTo(o.topic);
-            if(comparison != 0) return comparison;
+            if (comparison != 0) return comparison;
             return this.name.compareTo(o.name);
         }
 

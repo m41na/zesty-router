@@ -97,7 +97,7 @@ public class Simproxy {
         }
     }
 
-    private static void addJmxSupport(Server server)  {
+    private static void addJmxSupport(Server server) {
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
         server.addBean(mBeanContainer);
@@ -142,7 +142,7 @@ public class Simproxy {
         context.addServlet(proxyServlet, "/api/*");
     }
 
-    private static void addBalancerServlet(ServletContextHandler context){
+    private static void addBalancerServlet(ServletContextHandler context) {
         ServletHolder balancerServlet = new ServletHolder(BalancerServlet.class);
         balancerServlet.setInitParameter("balancerMember.jetty0.proxyTo", "http://localhost:8081");
         balancerServlet.setInitParameter("balancerMember.jetty1.proxyTo", "http://localhost:8082");
@@ -162,7 +162,7 @@ public class Simproxy {
         // Configuration for serving /A/* from X/V/A
         DefaultServlet aServlet = new DefaultServlet();
         ServletHolder aHolder = new ServletHolder(aServlet);
-        aHolder.setInitParameter("resourceBase", resourceBase );
+        aHolder.setInitParameter("resourceBase", resourceBase);
         aHolder.setInitParameter("pathInfoOnly", "true");
         servletHandler.addServlet(aHolder, "/*");
 

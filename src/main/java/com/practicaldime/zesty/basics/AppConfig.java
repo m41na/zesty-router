@@ -10,8 +10,8 @@ import java.util.Properties;
 
 public class AppConfig {
 
-    private static AppConfig instance;
     private static final Logger LOG = LoggerFactory.getLogger(AppConfig.class);
+    private static AppConfig instance;
     private Properties properties;
 
     private AppConfig() {
@@ -26,7 +26,7 @@ public class AppConfig {
         }
         return instance;
     }
-    
+
     private void initProperties() {
         File file = new File("app-config.properties");
         Properties props = new Properties();

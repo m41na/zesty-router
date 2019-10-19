@@ -37,7 +37,7 @@ public class ObjectMapperSupplierTest {
 
     @Test
     public void testParseDate() throws IOException {
-        String dateStr =  "\"2019-09-08T06:50:07.007-0500\"";
+        String dateStr = "\"2019-09-08T06:50:07.007-0500\"";
         Date date = mapper.readValue(dateStr, Date.class);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

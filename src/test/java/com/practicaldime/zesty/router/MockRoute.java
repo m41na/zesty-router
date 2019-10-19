@@ -7,18 +7,18 @@ import org.eclipse.jetty.server.Request;
 import java.util.Enumeration;
 import java.util.Vector;
 
-public class MockRoute extends Request{
-    
+public class MockRoute extends Request {
+
     private final Routing.Route route;
-    
+
     public MockRoute(HttpChannel channel, HttpInput input, Routing.Route route) {
         super(channel, input);
         this.route = route;
-        if(route.accept != null && route.accept.trim().length() > 0) {
-        	this.route.headers.put("Accept", route.accept);
+        if (route.accept != null && route.accept.trim().length() > 0) {
+            this.route.headers.put("Accept", route.accept);
         }
-        if(route.contentType != null && route.accept.trim().length() > 0) {
-        	this.route.headers.put("Content-Type", route.contentType);
+        if (route.contentType != null && route.accept.trim().length() > 0) {
+            this.route.headers.put("Content-Type", route.contentType);
         }
     }
 
@@ -32,19 +32,19 @@ public class MockRoute extends Request{
         return route.method;
     }
 
-	@Override
-	public Enumeration<String> getHeaderNames() {
-		return new Vector<String>(route.headers.keySet()).elements();
-	}
+    @Override
+    public Enumeration<String> getHeaderNames() {
+        return new Vector<String>(route.headers.keySet()).elements();
+    }
 
-	@Override
+    @Override
     public String getHeader(String name) {
-        if("Accept".equalsIgnoreCase(name)){
+        if ("Accept".equalsIgnoreCase(name)) {
             return route.accept;
         }
-        if("Content-Type".equalsIgnoreCase(name)){
+        if ("Content-Type".equalsIgnoreCase(name)) {
             return route.contentType;
         }
         return route.headers.get(name);
-    }    
+    }
 }

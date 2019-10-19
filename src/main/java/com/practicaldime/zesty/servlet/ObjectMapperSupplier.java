@@ -17,6 +17,24 @@ import java.util.function.Supplier;
 
 public class ObjectMapperSupplier implements Supplier<ObjectMapper> {
 
+    private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(DateTimeFormatter.ISO_LOCAL_DATE)
+            .optionalStart()
+            .appendLiteral('T')
+            .appendOptional(DateTimeFormatter.ISO_TIME)
+            .toFormatter();
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public ObjectMapperSupplier() {
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ"));
+    }
+
+    @Override
+    public ObjectMapper get() {
+        return this.mapper;
+    }
+
     public static class LocalDateSerializer extends StdSerializer<LocalDate> {
 
         public LocalDateSerializer() {
@@ -39,23 +57,5 @@ public class ObjectMapperSupplier implements Supplier<ObjectMapper> {
         public LocalDate deserialize(JsonParser parser, DeserializationContext context) throws IOException {
             return LocalDate.parse(parser.readValueAs(String.class));
         }
-    }
-
-    private final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-            .parseCaseInsensitive()
-            .append(DateTimeFormatter.ISO_LOCAL_DATE)
-            .optionalStart()
-            .appendLiteral('T')
-            .appendOptional(DateTimeFormatter.ISO_TIME)
-            .toFormatter();
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    public ObjectMapperSupplier() {
-        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ"));
-    }
-
-    @Override
-    public ObjectMapper get() {
-        return this.mapper;
     }
 }

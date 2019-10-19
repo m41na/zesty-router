@@ -9,16 +9,16 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 
-public class FtlViewEngine implements ViewEngine{
+public class FtlViewEngine implements ViewEngine {
 
     private static FtlViewEngine instance;
     private final ViewConfiguration config;
     private final ViewProcessor<Template, Configuration> view;
     private final String templateDir;
-	private final String templateExt;
+    private final String templateExt;
 
     private FtlViewEngine(String templateDir, String templateExt) throws IOException {
-    	super();
+        super();
         this.templateDir = templateDir;
         this.templateExt = templateExt;
         this.config = new FtlViewConfiguration(templateDir);
@@ -38,22 +38,22 @@ public class FtlViewEngine implements ViewEngine{
         return instance;
     }
 
-    @Override
-	public String templateDir() {
-		return this.templateDir;
-	}
-
-	@Override
-	public String templateExt() {
-		return this.templateExt;
-	}
-
     public static ViewConfiguration getConfiguration() throws IOException {
         return instance().config;
     }
 
     public static ViewProcessor<Template, Configuration> getProcessor() throws IOException {
         return instance().view;
+    }
+
+    @Override
+    public String templateDir() {
+        return this.templateDir;
+    }
+
+    @Override
+    public String templateExt() {
+        return this.templateExt;
     }
 
     @Override

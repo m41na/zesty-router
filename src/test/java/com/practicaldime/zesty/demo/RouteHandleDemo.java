@@ -20,10 +20,10 @@ public class RouteHandleDemo {
         });
     }
 
-    public RouteHandle helloHandle(){
+    public RouteHandle helloHandle() {
         class HelloHandle extends RouteHandle {
 
-            public HelloHandle(){
+            public HelloHandle() {
                 register("get", "/", "", "");
             }
 

@@ -29,16 +29,6 @@ public class ReactViewEngine implements ViewEngine {
         this.view = new ReactViewProcessor(config);
     }
 
-	@Override
-	public String templateDir() {
-		return this.templateDir;
-	}
-
-	@Override
-	public String templateExt() {
-		return this.templateExt;
-	}
-
     public static ReactViewEngine create(String templateDir, String templateExt, String lookup) {
         if (instance == null) {
             synchronized (ReactViewEngine.class) {
@@ -59,6 +49,16 @@ public class ReactViewEngine implements ViewEngine {
 
     public static ViewProcessor getProcessor() {
         return ReactViewEngine.instance.view;
+    }
+
+    @Override
+    public String templateDir() {
+        return this.templateDir;
+    }
+
+    @Override
+    public String templateExt() {
+        return this.templateExt;
     }
 
     @Override

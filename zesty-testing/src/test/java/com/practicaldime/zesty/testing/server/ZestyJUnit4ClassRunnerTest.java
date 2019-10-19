@@ -25,7 +25,7 @@ public class ZestyJUnit4ClassRunnerTest {
 
     private BiFunction<Integer, Integer, Integer> addition = (x, y) -> x + y;
 
-    public String getUrl(String endpoint){
+    public String getUrl(String endpoint) {
         return String.format("http://%s:%d/%s", HOST, PORT, endpoint);
     }
 

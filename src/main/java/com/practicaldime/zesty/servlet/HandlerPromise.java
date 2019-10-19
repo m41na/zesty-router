@@ -10,27 +10,25 @@ import java.util.function.Function;
 public class HandlerPromise<R> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HandlerPromise.class);
+    private final HandlerResult result = new HandlerResult();
     private Function<HandlerResult, HandlerResult> success;
     private BiFunction<HandlerResult, Throwable, HandlerResult> failure;
-    private final HandlerResult result = new HandlerResult();
 
     public HandlerResult resolve(CompletableFuture<R> action) {
         LOG.info("Now will resolve promise");
         return action.handle((res, th) -> {
-            if(th != null) {
+            if (th != null) {
                 result.updateStatus(Boolean.FALSE);
-                if (th.getCause() != null){
-                    if(HandlerException.class.isAssignableFrom(th.getCause().getClass())){
+                if (th.getCause() != null) {
+                    if (HandlerException.class.isAssignableFrom(th.getCause().getClass())) {
                         return failure.apply(result, th.getCause());
-                    }
-                    else {
+                    } else {
                         return failure.apply(result, new HandlerException(500, "promise resolver exception: " + th.getCause().getMessage(), th.getCause()));
                     }
                 } else {
                     return failure.apply(result, new HandlerException(500, "promise resolver exception: " + th.getMessage(), th));
                 }
-            }
-            else{
+            } else {
                 return success.apply(result);
             }
         }).join();

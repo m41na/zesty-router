@@ -1,7 +1,6 @@
 package com.practicaldime.zesty.router;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class HeadersRouter implements Routing.Router {
 
@@ -96,9 +95,9 @@ public class HeadersRouter implements Routing.Router {
     }
 
     @Override
-    public void hierarchy(Map<String, Integer> map) {
-        AtomicInteger count = new AtomicInteger(1);
-        routes.stream().forEach(route -> map.put(Integer.toString(count.getAndIncrement()), 1));
+    public void info(List<String> nodes, String prefix) {
+        String indent = prefix + "|-";
+        routes.stream().forEach(route -> nodes.add(indent + route.toString()));
     }
 
     @Override

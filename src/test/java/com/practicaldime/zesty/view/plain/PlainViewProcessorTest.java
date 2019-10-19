@@ -15,15 +15,14 @@ public class PlainViewProcessorTest {
             String template = view.resolve("www", "hello", ViewLookup.FILE);
             System.out.println(template);
             fail("expected failure since 'hello' does not exist");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             String message = e.getMessage();
             assertEquals("Expected 'File 'hello' does not exist'", "File 'hello' does not exist", message);
         }
 
         String template = view.resolve("/src/test/resources/template/js", "ejs.test.js", ViewLookup.FILE);
         System.out.println(template);
-        assertTrue("Expected '<% comments.comments.forEach(function(comment){ %>' in the content", template.contains("<% comments.comments.forEach(function(comment){ %>") );
+        assertTrue("Expected '<% comments.comments.forEach(function(comment){ %>' in the content", template.contains("<% comments.comments.forEach(function(comment){ %>"));
     }
 
     @Test
@@ -32,15 +31,14 @@ public class PlainViewProcessorTest {
             String template = view.resolve("www", "hello", ViewLookup.CLASSPATH);
             System.out.println(template);
             fail("expected failure since 'hello' does not exist");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             String message = e.getMessage();
             assertEquals("Expected 'Resource 'hello' does not exist'", "Resource 'hello' does not exist", message);
         }
 
         String template = view.resolve("template/js", "ejs.test.js", ViewLookup.CLASSPATH);
         System.out.println(template);
-        assertTrue("Expected '<% comments.comments.forEach(function(comment){ %>' in the content", template.contains("<% comments.comments.forEach(function(comment){ %>") );
+        assertTrue("Expected '<% comments.comments.forEach(function(comment){ %>' in the content", template.contains("<% comments.comments.forEach(function(comment){ %>"));
     }
 
     @Test

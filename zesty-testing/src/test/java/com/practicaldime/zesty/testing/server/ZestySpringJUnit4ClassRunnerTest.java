@@ -20,18 +20,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 @RunWith(ZestySpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={ZestySpringJUnit4ClassRunnerTest.ZestyTestConfig.class})
+@ContextConfiguration(classes = {ZestySpringJUnit4ClassRunnerTest.ZestyTestConfig.class})
 @TestPropertySource("/test-file.properties")
 public class ZestySpringJUnit4ClassRunnerTest {
-
-    @Configuration
-    public static class ZestyTestConfig{}
 
     @Value("${x}")
     private int x;
     @Value("${y}")
     private int y;
-
     private BiFunction<Integer, Integer, Integer> addition = (x, y) -> x + y;
 
     @ZestyProvider
@@ -64,5 +60,9 @@ public class ZestySpringJUnit4ClassRunnerTest {
                 .timeout(3, SECONDS)
                 .send();
         assertFalse("Contains 'hello from server++'", response.getContentAsString().contains("hello from server++"));
+    }
+
+    @Configuration
+    public static class ZestyTestConfig {
     }
 }

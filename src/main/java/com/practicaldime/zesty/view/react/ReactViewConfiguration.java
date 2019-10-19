@@ -21,7 +21,7 @@ public class ReactViewConfiguration {
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(REACT_DOM_JS)), REACT_DOM_JS).build());
     }
 
-    public Context getEnvironment()  {
+    public Context getEnvironment() {
         return context;
     }
 }

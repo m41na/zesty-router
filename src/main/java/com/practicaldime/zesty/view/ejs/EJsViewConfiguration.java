@@ -21,7 +21,7 @@ public class EJsViewConfiguration {
         context.eval(Source.newBuilder("js", new InputStreamReader(this.getClass().getResourceAsStream(EJS_RENDER)), EJS_RENDER).build());
     }
 
-    public Context getEnvironment()  {
+    public Context getEnvironment() {
         return context;
     }
 }
