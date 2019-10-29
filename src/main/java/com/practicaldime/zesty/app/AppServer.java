@@ -56,6 +56,7 @@ public class AppServer {
     private final String UNASSIGNED = "not.yet.assigned";
     private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
     private final Collection<ContextHandler> contexts = new LinkedList<>();
+    private final ObjectMapper mapper = ObjectMapperSupplier.version1.get();
     private AppRouter routes;
     private String status = "stopped";
     private Consumer<Boolean> shutdown;
@@ -728,7 +729,7 @@ public class AppServer {
                 servlets.addFilter(corsFilter, "/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
             }
             // add routes filter
-            servlets.addFilter(new FilterHolder(new RouteFilter(this.routes)), "/*", EnumSet.of(DispatcherType.REQUEST));
+            servlets.addFilter(new FilterHolder(new RouteFilter(this.routes, mapper)), "/*", EnumSet.of(DispatcherType.REQUEST));
 
             // configure context for servlets
             String appctx = this.locals.getProperty("appctx");

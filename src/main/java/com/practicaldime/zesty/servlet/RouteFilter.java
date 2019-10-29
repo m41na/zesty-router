@@ -10,18 +10,18 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.function.Supplier;
 
 public class RouteFilter implements Filter {
 
     public static final Logger LOG = LoggerFactory.getLogger(RouteFilter.class);
     private final AppRouter routes;
-    private final Supplier<ObjectMapper> mapper = new ObjectMapperSupplier();
+    private final ObjectMapper mapper;
     protected FilterConfig fConfig;
 
-    public RouteFilter(AppRouter routes) {
+    public RouteFilter(AppRouter routes, ObjectMapper mapper) {
         super();
         this.routes = routes;
+        this.mapper = mapper;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class RouteFilter implements Filter {
 
         Search route = routes.search(httpRequest);
         if (route.result != null) {
-            LOG.info("matched route -> {}", mapper.get().writeValueAsString(route));
+            LOG.info("matched route -> {}", mapper.writeValueAsString(route));
             httpRequest.route(route);
             httpRequest.getRequestDispatcher(route.result.rid).forward(httpRequest, httpResponse);
         } else {

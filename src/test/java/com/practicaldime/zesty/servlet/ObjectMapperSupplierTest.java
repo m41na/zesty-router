@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ObjectMapperSupplierTest {
 
-    private ObjectMapper mapper = new ObjectMapperSupplier().get();
+    private ObjectMapper mapper = ObjectMapperSupplier.version2.get();
 
     @Test
     public void testDateFormat() throws JsonProcessingException {

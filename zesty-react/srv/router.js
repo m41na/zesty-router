@@ -1,6 +1,5 @@
 import {renderToString} from 'react-dom/server';
 import {renderFullPage} from './renderer';
-import React from 'react';
 import routes from './routes';
 import {matchPath, StaticRouter} from 'react-router-dom';
 import products from "../src/store";

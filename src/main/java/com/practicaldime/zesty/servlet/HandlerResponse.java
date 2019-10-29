@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class HandlerResponse extends HttpServletResponseWrapper implements RouteResponse {
 
@@ -32,7 +31,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     protected String routeUri;
     protected String contextPath;
     protected String templateDir;
-    protected Supplier<ObjectMapper> mapper;
+    protected ObjectMapper mapper;
 
     public HandlerResponse(HttpServletResponse response) {
         super(response);
@@ -41,7 +40,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
 
     private void init() {
         setContentType("text/html;charset=utf-8");
-        this.mapper = new ObjectMapperSupplier();
+        this.mapper = ObjectMapperSupplier.version1.get();
     }
 
     @Override
@@ -93,7 +92,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     public void json(Object payload) {
         try {
             setContentType("application/json");
-            this.content = mapper.get().writeValueAsBytes(payload);
+            this.content = mapper.writeValueAsBytes(payload);
         } catch (Exception e) {
             throw new RuntimeException("Could not write json value from java entity", e);
         }
@@ -103,7 +102,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     public void jsonp(Object payload) {
         try {
             setContentType("application/json");
-            this.content = mapper.get().writeValueAsBytes(payload);
+            this.content = mapper.writeValueAsBytes(payload);
         } catch (Exception e) {
             throw new RuntimeException("Could not write json value from java entity", e);
         }

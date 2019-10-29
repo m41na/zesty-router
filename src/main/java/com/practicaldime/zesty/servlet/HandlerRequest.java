@@ -18,7 +18,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class HandlerRequest extends HttpServletRequestWrapper implements RouteRequest {
 
@@ -28,11 +27,11 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
     protected String message;
     protected byte[] body;
     protected Cookie[] cookies;
-    protected Supplier<ObjectMapper> mapper;
+    protected ObjectMapper mapper;
 
     public HandlerRequest(HttpServletRequest request) {
         super(request);
-        this.mapper = new ObjectMapperSupplier();
+        this.mapper = ObjectMapperSupplier.version1.get();
     }
 
     @Override
@@ -124,7 +123,7 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
         if (contentType.contains("application/json")) {
             Reader reader = new InputStreamReader(new ByteArrayInputStream(body()));
             try {
-                return this.mapper.get().readValue(reader, type);
+                return this.mapper.readValue(reader, type);
             } catch (Exception e) {
                 throw new RuntimeException("Could not parse json body into java entity", e);
             }

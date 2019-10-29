@@ -61,6 +61,7 @@
         <twig.version>5.87.0.RELEASE</twig.version>
         <graalvm.version>19.2.0.1</graalvm.version>
         <servlet.api>4.0.1</servlet.api>
+        <jackson.version>2.10.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -190,13 +191,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.9</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.9.9</version>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
