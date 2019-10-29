@@ -56,7 +56,7 @@ public class AppServer {
     private final String UNASSIGNED = "not.yet.assigned";
     private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
     private final Collection<ContextHandler> contexts = new LinkedList<>();
-    private final ObjectMapper mapper = ObjectMapperSupplier.version1.get();
+    private ObjectMapper mapper = ObjectMapperSupplier.version1.get();
     private AppRouter routes;
     private String status = "stopped";
     private Consumer<Boolean> shutdown;
@@ -158,8 +158,9 @@ public class AppServer {
         return path1 + path2;
     }
 
-    public ObjectMapper mapper() {
-        return new ObjectMapper();
+    public AppServer mapper(ObjectMapper mapper) {
+        this.mapper = mapper;
+        return this;
     }
 
     public AppServer cors(Map<String, String> cors) {
@@ -622,7 +623,7 @@ public class AppServer {
         return servlet(path, config, new EventSourceServlet() {
             @Override
             protected EventSource newEventSource(HttpServletRequest request) {
-                return new AppEventSource(request, mapper()) {
+                return new AppEventSource(request) {
 
                     @Override
                     public void onOpen(Emitter emitter) throws IOException {

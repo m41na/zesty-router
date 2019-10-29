@@ -1,6 +1,5 @@
 package com.practicaldime.zesty.sse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.jetty.servlets.EventSource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +8,10 @@ import java.io.IOException;
 public abstract class AppEventSource implements EventSource {
 
     protected final HttpServletRequest request;
-    protected final ObjectMapper mapper;
     protected Emitter emitter;
 
-    public AppEventSource(HttpServletRequest request, ObjectMapper mapper) {
+    public AppEventSource(HttpServletRequest request) {
         this.request = request;
-        this.mapper = mapper;
     }
 
     @Override
@@ -24,7 +21,7 @@ public abstract class AppEventSource implements EventSource {
 
     @Override
     public void onClose() {
-        this.emitter.close();;
+        this.emitter.close();
         this.emitter = null;
     }
 }
