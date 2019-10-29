@@ -38,16 +38,19 @@ public class Main {
                 .post("/todo/{name}", "application/json", "application/json", config, (req, res, done) -> {
                     String task = req.param("name");
                     repo.add(task);
+                    res.accepted();
                     done.complete();
                 })
                 .put("/todo/{name}", "application/json", "application/json", config, (req, res, done) -> {
                     String task = req.param("name");
                     repo.complete(task);
+                    res.accepted();
                     done.complete();
                 })
                 .delete("/todo/{name}", (req, res, done) -> {
                     String task = req.param("name");
                     repo.remove(task);
+                    res.accepted();
                     done.complete();
                 })
                 .subscribe("/todos", config, new EventsEmitter() {

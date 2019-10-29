@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -72,6 +73,11 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
     @Override
     public String param(String name) {
         String value = pathParams().get(name);
+        try {
+            value = URLDecoder.decode(pathParams().get(name), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            LOG.warn("Could not decode path parameter, so will use raw value");
+        }
         return (value != null) ? value : getParameter(name);
     }
 
