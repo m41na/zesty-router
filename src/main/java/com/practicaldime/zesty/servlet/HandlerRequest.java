@@ -73,12 +73,16 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
     @Override
     public String param(String name) {
         String value = pathParams().get(name);
-        try {
-            value = URLDecoder.decode(pathParams().get(name), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            LOG.warn("Could not decode path parameter, so will use raw value");
+        if (value != null) {
+            try {
+                return URLDecoder.decode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                LOG.warn("Could not decode path parameter, so will use raw value");
+                return value;
+            }
+        } else {
+            return getParameter(name);
         }
-        return (value != null) ? value : getParameter(name);
     }
 
     @Override
