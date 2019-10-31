@@ -159,7 +159,7 @@ public class AppServer {
         return path1 + path2;
     }
 
-    public AppServer splash(String spash){
+    public AppServer splash(String splash){
         this.splash = splash;
         return this;
     }
@@ -653,12 +653,16 @@ public class AppServer {
     }
 
     // ************* Rapid file read/write ****************** //
-    public void printSplash() throws IOException {
+    public void printSplash() {
         try(InputStream is = getClass().getResourceAsStream(this.splash)){
-            byte[] bytes = new byte[512];
+            int maxSize = 1024;
+            byte[] bytes = new byte[maxSize];
             int size = is.read(bytes);
-            System.out.printf("splash file is %d bytes in size%n", size);
+            System.out.printf("splash file is %d bytes in size of a max acceptable %d bytes%n", size, maxSize);
             LOG.info(new String(bytes, 0, size));
+        }
+        catch(IOException e){
+            e.printStackTrace(System.err);
         }
     }
 
