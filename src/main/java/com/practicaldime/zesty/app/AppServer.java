@@ -37,7 +37,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -58,6 +58,7 @@ public class AppServer {
     private final Collection<ContextHandler> contexts = new LinkedList<>();
     private ObjectMapper mapper = ObjectMapperSupplier.version1.get();
     private AppRouter routes;
+    private String splash = "/splash/shadow.txt";
     private String status = "stopped";
     private Consumer<Boolean> shutdown;
 
@@ -156,6 +157,11 @@ public class AppServer {
         }
         String path2 = !path.startsWith("/") ? "/" + path : path;
         return path1 + path2;
+    }
+
+    public AppServer splash(String spash){
+        this.splash = splash;
+        return this;
     }
 
     public AppServer mapper(ObjectMapper mapper) {
@@ -646,6 +652,16 @@ public class AppServer {
         servlets.addServlet(holder, route.rid);
     }
 
+    // ************* Rapid file read/write ****************** //
+    public void printSplash() throws IOException {
+        try(InputStream is = getClass().getResourceAsStream(this.splash)){
+            byte[] bytes = new byte[512];
+            int size = is.read(bytes);
+            System.out.printf("splash file is %d bytes in size%n", size);
+            LOG.info(new String(bytes, 0, size));
+        }
+    }
+
     // ************* START *****************//
     public void listen(int port, String host) {
         listen(port, host, null);
@@ -654,6 +670,9 @@ public class AppServer {
     public void listen(int port, String host, Consumer<String> result) {
         try {
             status = "starting";
+            //print splash file
+            printSplash();
+
             //init view engine
             initEngine();
 
