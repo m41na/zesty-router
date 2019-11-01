@@ -159,7 +159,7 @@ public class AppServer {
         return path1 + path2;
     }
 
-    public AppServer splash(String splash){
+    public AppServer banner(String splash){
         this.splash = splash;
         return this;
     }
@@ -652,8 +652,8 @@ public class AppServer {
         servlets.addServlet(holder, route.rid);
     }
 
-    // ************* Rapid file read/write ****************** //
-    public void printSplash() {
+    // ************* console splash banner ****************** //
+    private void banner() {
         try(InputStream is = getClass().getResourceAsStream(this.splash)){
             int maxSize = 1024;
             byte[] bytes = new byte[maxSize];
@@ -674,10 +674,10 @@ public class AppServer {
     public void listen(int port, String host, Consumer<String> result) {
         try {
             status = "starting";
-            //print splash file
-            printSplash();
+            // splash banner
+            banner();
 
-            //init view engine
+            // init view engine
             initEngine();
 
             // create server with thread pool
