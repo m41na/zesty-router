@@ -62,6 +62,12 @@
         <graalvm.version>19.2.0.1</graalvm.version>
         <servlet.api>4.0.1</servlet.api>
         <jackson.version>2.10.0</jackson.version>
+        <!-- manifest entries -->
+        <maven.version>3.6.1</maven.version>
+        <maven.compile.source>1.9</maven.compile.source>
+        <maven.compile.target>1.9</maven.compile.target>
+        <project.artifact.selectedVersion.majorVersion>0</project.artifact.selectedVersion.majorVersion>
+        <project.artifact.selectedVersion.minorVersion>1</project.artifact.selectedVersion.minorVersion>
     </properties>
 
     <dependencies>
@@ -355,6 +361,17 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>com.practicaldime.zesty.app.QuickStart</Main-Class>
+                                        <Build-Number>${project.version}</Build-Number>
+                                        <Build-Jdk>${java.version}</Build-Jdk>
+                                        <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
+                                        <X-Compile-Target-JDK>${maven.compile.target}</X-Compile-Target-JDK>
+                                        <Created-By> Apache Maven ${maven.version}</Created-By>
+                                        <Specification-Title>${project.name}</Specification-Title>
+                                        <Specification-Version>${project.artifact.selectedVersion.majorVersion}.${project.artifact.selectedVersion.minorVersion}</Specification-Version>
+                                        <Specification-Vendor>${project.organization.name}</Specification-Vendor>
+                                        <Implementation-Title>${project.name}</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
