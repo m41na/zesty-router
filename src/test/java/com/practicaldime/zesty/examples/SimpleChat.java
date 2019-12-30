@@ -1,6 +1,5 @@
 package com.practicaldime.zesty.examples;
 
-import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
@@ -18,7 +17,7 @@ public class SimpleChat {
         props.put("assets", "src/test/resources/webapp/chat");
         props.put("cors", "true");
 
-        AppServer app = AppProvider.provide(props);
+        AppServer app = new AppServer(props);
         app.router()
                 .websocket("/events/*", () -> new SimpleSock())
                 .listen(8080, "localhost", (result) -> {

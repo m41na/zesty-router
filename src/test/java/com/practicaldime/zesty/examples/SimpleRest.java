@@ -1,6 +1,5 @@
 package com.practicaldime.zesty.examples;
 
-import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
 
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class SimpleRest {
 
         Map<String, String> config = new HashMap<>();
         config.put("appctx", "/users");
-        AppServer app = AppProvider.provide(config);
+        AppServer app = new AppServer(config);
 
         app.router()
                 .get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
