@@ -12,21 +12,21 @@ import java.net.URLClassLoader;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class AppConfig {
+public class AppOptions {
 
     public static final String UNASSIGNED = "not.yet.assigned";
 
-    private AppConfig(){}
+    private AppOptions(){}
 
     private static Properties loadDataFile(String protocol, String host, String file, String dataFile) {
         Properties props = new Properties();
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(Paths.get(dataFile).toFile()))) {
             props.load(reader);
         } catch (Exception e1) {
-            try (InputStreamReader reader = new InputStreamReader(AppConfig.class.getResourceAsStream(dataFile))) {
+            try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getResourceAsStream(dataFile))) {
                 props.load(reader);
             } catch (Exception e2) {
-                try (InputStreamReader reader = new InputStreamReader(AppConfig.class.getClassLoader().getResourceAsStream(dataFile))) {
+                try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getClassLoader().getResourceAsStream(dataFile))) {
                     props.load(reader);
                 } catch (Exception e3) {
                     try {
@@ -188,7 +188,7 @@ public class AppConfig {
             }
         } catch (Exception e) {
             HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("AppConfig CLI", options);
+            formatter.printHelp("AppOptions CLI", options);
         }
         return props;
     }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.practicaldime.zesty.app.AppConfig.applyDefaults;
+import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
 
 public class SimpleRest {
 

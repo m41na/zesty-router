@@ -2,7 +2,7 @@ package com.practicaldime.zesty.app;
 
 import java.util.Map;
 
-import static com.practicaldime.zesty.app.AppConfig.applyDefaults;
+import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
 
 public interface AppProvider {
 

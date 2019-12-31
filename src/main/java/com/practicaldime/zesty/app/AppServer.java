@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static org.eclipse.jetty.servlets.CrossOriginFilter.*;
 import static org.eclipse.jetty.util.resource.Resource.newClassPathResource;
@@ -167,7 +166,7 @@ public class AppServer {
     }
 
     public final AppServer assets(String mapping, String folder) {
-        if (!AppConfig.UNASSIGNED.equals(this.locals("assets").toString())) {
+        if (!AppOptions.UNASSIGNED.equals(this.locals("assets").toString())) {
             LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
         } else {
             String pathspec = mapping.endsWith("/*") ? mapping : (mapping.endsWith("/") ? mapping + "*" : mapping + "/*");
@@ -738,7 +737,7 @@ public class AppServer {
             String resourceBase = this.locals.getProperty("assets");
 
             // configure DefaultServlet to serve static content
-            if (!AppConfig.UNASSIGNED.equals(resourceBase)) {
+            if (!AppOptions.UNASSIGNED.equals(resourceBase)) {
                 if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ServletHolder defaultServlet = createResourceServlet(resourceBase);
                     servlets.addServlet(defaultServlet, "/*");
@@ -746,7 +745,7 @@ public class AppServer {
             }
 
             // configure ResourceHandler to serve static content
-            if (!AppConfig.UNASSIGNED.equals(resourceBase)) {
+            if (!AppOptions.UNASSIGNED.equals(resourceBase)) {
                 if (!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ContextHandler resourceHandler = new ContextHandler("/*");
                     resourceHandler.setHandler(createResourceHandler(resourceBase));
