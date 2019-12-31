@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
@@ -17,7 +19,7 @@ import java.util.jar.Manifest;
  */
 public class AppLoader {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
         File folder = Paths.get(".", "deploy").toFile();
         if (folder.isDirectory()) {
             File[] files = folder.listFiles(pathname -> pathname.isFile() && pathname.getPath().endsWith(".jar"));
@@ -41,10 +43,19 @@ public class AppLoader {
             Attributes attr = manifest.getMainAttributes();
 
             Class mainClass = Class.forName(attr.getValue("Main-Class"), true, child);
-            mainClass.getMethod("main", String[].class).invoke(null, (Object) args);
+            Method main = mainClass.getMethod("main", args.getClass());
+            int mods = main.getModifiers();
+            if (main.getReturnType() != void.class || !Modifier.isStatic(mods) || !Modifier.isPublic(mods)) {
+                throw new NoSuchMethodException("main");
+            }
+            try {
+                //invoke main method
+                main.invoke(null, new Object[]{args});
+            } catch (IllegalAccessException e) {
+                // This should not happen, as we have disabled access checks
+            }
             System.out.println("application loaded successfully");
-        }
-        else{
+        } else {
             System.err.println("Expecting a 'deploy' folder with an application jar");
         }
     }

@@ -1,8 +1,8 @@
 set JAVA_HOME to GRAALVM_HOME
-mvn install:install-file 
--Dfile=${JAVA_HOME}/jre/lib/svm/builder/svm.jar 
--DgroupId=com.oracle.substratevm 
--DartifactId=svm -Dversion=GraalVM-1.0.0-rc10 
+mvn install:install-file
+-Dfile=${JAVA_HOME}/jre/lib/svm/builder/svm.jar
+-DgroupId=com.oracle.substratevm
+-DartifactId=svm -Dversion=GraalVM-1.0.0-rc10
 -Dpackaging=jar
 
 1. log4j is used by freemarker, so include log4j-over-slf4j to redirect to logback
@@ -54,7 +54,7 @@ javax.servlet.ServletException: default@5c13d641==org.eclipse.jetty.servlet.Defa
 	at java.lang.Throwable.<init>(Throwable.java:287)
 	at java.lang.Exception.<init>(Exception.java:84)
 	at javax.servlet.ServletException.<init>(ServletException.java:128)
-	
+
 4. Add another option for Servlet
 
   {
@@ -68,5 +68,27 @@ javax.servlet.ServletException: default@5c13d641==org.eclipse.jetty.servlet.Defa
       { "name" : "<init>", "parameterTypes" : ["org.eclipse.jetty.server.ResourceService"] }
     ]
   }
-  
- 
+
+=============== jdk-11 version ===============
+
+$GRAALVM_HOME/bin/native-image -jar target/zesty-router-0.1.1-shaded.jar
+
+This creates an image with these warnings:
+
+Warning: Reflection method java.lang.Class.forName invoked at com.practicaldime.zesty.app.AppLoader.main(AppLoader.java:43)
+Warning: Reflection method java.lang.Class.getMethod invoked at com.practicaldime.zesty.app.AppLoader.main(AppLoader.java:44)
+Warning: Aborting stand-alone image build due to reflection use without configuration.
+Warning: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
+Warning: Image 'zesty-router-0.1.1-shaded' is a fallback image that requires a JDK for execution (use --no-fallback to suppress fallback image generation).
+
+$GRAALVM_HOME/bin/native-image --report-unsupported-elements-at-runtime -jar target/zesty-router-0.1.1-shaded.jar
+
+This creates an image with no errors/warnings, but might potentially blow up during runtime
+
+Additional options for configuring reflection
+
+$GRAALVM_HOME/bin/native-image -H:ReflectionConfigurationFiles=./reflection.options -jar target/zesty-router-0.1.1-shaded.jar
+
+To build the native image using maven, use the configured profile
+
+mvn clean package -Pnative-image-gen

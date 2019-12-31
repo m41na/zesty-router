@@ -59,7 +59,7 @@
         <java.version>1.9</java.version>
         <jetty.version>9.4.24.v20191120</jetty.version>
         <twig.version>5.87.0.RELEASE</twig.version>
-        <graalvm.version>19.2.0.1</graalvm.version>
+        <graalvm.version>19.3.0.2</graalvm.version>
         <servlet.api>4.0.1</servlet.api>
         <jackson.version>2.10.1</jackson.version>
         <!-- manifest entries -->
@@ -481,4 +481,33 @@
             -->
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native-image-gen</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${graalvm.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <imageName>${project.artifactId}-${project.version}-bin</imageName>
+                            <buildArgs>--auto-fallback</buildArgs>
+                            <mainClass>com.practicaldime.zesty.app.AppLoader</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
