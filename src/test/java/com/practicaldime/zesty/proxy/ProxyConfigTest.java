@@ -79,8 +79,8 @@ public class ProxyConfigTest {
     public void runTestWithServer(int port, BiConsumer<AppServer, CountDownLatch> test) {
         CountDownLatch latch = new CountDownLatch(1);
         new Thread(() -> {
-            AppServer app = new AppServer();
-            app.router().get("/config", (req, res, done) -> {
+            AppServer app = AppServer.instance();
+            app.get("/config", (req, res, done) -> {
                 res.send("{\n" +
                         "  \"proxy\": {\n" +
                         "    \"pathspec\": \"/*\",\n" +

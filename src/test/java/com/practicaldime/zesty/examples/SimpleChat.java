@@ -17,9 +17,8 @@ public class SimpleChat {
         props.put("assets", "src/test/resources/webapp/chat");
         props.put("cors", "true");
 
-        AppServer app = new AppServer(props);
-        app.router()
-                .websocket("/events/*", () -> new SimpleSock())
+        AppServer app = AppServer.instance(props);
+        app.websocket("/events/*", () -> new SimpleSock())
                 .listen(8080, "localhost", (result) -> {
                     System.out.println(result);
                 });

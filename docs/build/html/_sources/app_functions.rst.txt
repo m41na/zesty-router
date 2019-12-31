@@ -11,7 +11,7 @@ These are the functions you can be able to use that are made accessible through 
     function now() {
         return new DateFormat("hh:mm:ss a").format(new Date());
     }
-    
+
     //create AppServer instance
     let app = zesty.provide({
         appctx: "/app",
@@ -62,7 +62,7 @@ cors(params: Map) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Enable and provide request headers to configure *cors* for the application. If an empty or *null* map is provided, the application will use default values
-to configure the *cors* filter, which are generously open. You can equally turn *cors* on/off through passing a *cors* true/false attribute to the 
+to configure the *cors* filter, which are generously open. You can equally turn *cors* on/off through passing a *cors* true/false attribute to the
 :code:`locals` map.
 
 router() : AppServer
@@ -73,7 +73,7 @@ Create the :code:`AppRoutes` object and return the current instance on :code:`Ap
 router(supplier: Supplier) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This method matches :code:`router()`, except that is allows you to provide your own implementation of the :code:`Router` interface. 
+This method matches :code:`router()`, except that is allows you to provide your own implementation of the :code:`Router` interface.
 This allows you to try out different algorithms for matching request handlers to the respective requests.
 
 filter(filter: HandlerFilter) : AppServer
@@ -95,10 +95,10 @@ Add a route to handle requests that match the specified *path* and *method*. Thi
 route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Similar to the :code:`route(method: String, path: String, handler: HandlerServlet)`. However, this function allows you to 
+Similar to the :code:`route(method: String, path: String, handler: HandlerServlet)`. However, this function allows you to
 dynamically configure the handler before it is added to the server. This is done through the :code:`HandlerConfig` interface.
 A *Java* example is shown below.::
-    
+
     get("/async/{value}", (holder)->holder.getRegistration().setAsyncSupported(true), new HandlerServlet() {
         @Override
         public void handle(HandlerRequest request, HandlerResponse response) {
@@ -106,7 +106,7 @@ A *Java* example is shown below.::
         }
     })
 
-In this example, we configure the handler to use servlet 3.0's :code:`AsyncContext` object to process the request by setting 
+In this example, we configure the handler to use servlet 3.0's :code:`AsyncContext` object to process the request by setting
 :code:`setAsyncSupported` to *true*. This is how we leverage the :code:`AsyncContext` because the default value is *false*.
 
 head(path: String, handler: HandlerServlet) : AppServer
@@ -376,7 +376,7 @@ Fire up the server and start listening for requests on the specified *host* and 
 listen(port: int, host: String, result: Consumer) : void
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This is similar to :code:`listen(port: int, host: String)` except that is also accepts a consumer which gets invoked when the start up is completed. 
+This is similar to :code:`listen(port: int, host: String)` except that is also accepts a consumer which gets invoked when the start up is completed.
 
 lifecycle(event: String, callback: Consumer) : AppServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

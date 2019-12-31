@@ -13,7 +13,7 @@ public class RouteHandleDemo {
     public static void main(String... args) {
         int port = 8080;
         String host = "localhost";
-        AppServer app = new AppServer().router().templates("target/classes/");
+        AppServer app = AppServer.instance().templates("target/classes/");
         app.listen(port, host, res -> {
             LOG.info("server started. Now adding handler");
             app.accept(new RouteHandleDemo().helloHandle());

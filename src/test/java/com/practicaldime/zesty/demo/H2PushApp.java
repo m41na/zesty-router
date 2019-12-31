@@ -35,8 +35,8 @@ public class H2PushApp {
     public static void start(int port, String host) {
         //NOTE: no leading '/' before assets path, but the leading '/' is required for templates path
         HandlerConfig config = cfg -> cfg.setAsyncSupported(true);
-        AppServer app = new AppServer();
-        app.router().assets("/assets", "src/test/resources/webapp/page/assets/").templates("/src/test/resources/webapp/page/")
+        AppServer app = AppServer.instance();
+        app.assets("/assets", "src/test/resources/webapp/page/assets/").templates("/src/test/resources/webapp/page/")
                 .get("/", config, (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
                     Request jettyRequest = Request.getBaseRequest(request);
                     PushBuilder pushBuilder = jettyRequest.newPushBuilder();

@@ -23,7 +23,7 @@ This is just a simple application which responds with the current time when the 
 
 * Initialize the application using some initial configuration.::
 
-    let app = zesty.provide({});    
+    let app = zesty.provide({});
     print('zesty app is configured');
 
 * Create a router to add handlers.::
@@ -59,7 +59,7 @@ This is just a simple application which responds with the current time when the 
 Simple REST App
 ^^^^^^^^^^^^^^^^
 
-Let's create a file :code:`simple_rest.js` and begin by creating a simple database access class. Since :code:`nashorn` 
+Let's create a file :code:`simple_rest.js` and begin by creating a simple database access class. Since :code:`nashorn`
 does not use the :code:`class` keyword, we will use the :code:`function` syntax instead.::
 
     let AtomicInteger = Java.type('java.util.concurrent.atomic.AtomicInteger');
@@ -136,7 +136,7 @@ Next, let's create the API service.::
         dao.update(parseInt(id), name, email);
         res.status(204);
     });
-    
+
     router.delete('/delete/{id}', function (req, res) {
         let id = req.param('id')
         dao.delete(parseInt(id))
@@ -156,9 +156,9 @@ Start the application and listen for requests.::
 For comparison, the Java equilavent of :code:`simple_rest.js` would be.::
 
     public class SimpleRest {
-        
+
         static class User {
-            
+
             private int id;
             private String name;
             private String email;
@@ -176,7 +176,7 @@ For comparison, the Java equilavent of :code:`simple_rest.js` would be.::
 
             private AtomicInteger lastId;
             private Map<Integer, User> users = new HashMap<>();
-            
+
             public UserDao() {
                 users.put(0, new User("James", "james@jjs.io", 0));
                 users.put(1, new User("Steve", "steve@jjs.io", 1));
@@ -184,10 +184,10 @@ For comparison, the Java equilavent of :code:`simple_rest.js` would be.::
                 users.put(3, new User("Becky", "becky@jjs.io", 3));
                 lastId = new AtomicInteger(users.size() - 1);
             }
-            
+
             public Map<Integer, User> all(){
                 return this.users;
-            }	    
+            }
 
             public void save(String name, String email) {
                 int id = lastId.incrementAndGet();
@@ -213,14 +213,14 @@ For comparison, the Java equilavent of :code:`simple_rest.js` would be.::
                 users.remove(id);
             }
         }
-        
+
         public static void main(String...args) {
             UserDao dao = new UserDao();
-            
+
             Map<String, String> config = new HashMap<>();
             config.put("appctx", "/users");
             AppServer app = AppProvider.provide(config);
-            
+
             app.router()
                 .get("/", (req, res) -> {
                     res.json(dao.all());
@@ -324,8 +324,8 @@ the response was a :code:`404 - Not found` error. Now you should expect to see t
 A Freemarker Template
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The previous example used a plain :code:`html` page. This example uses a Freemarker template to display the users from the 
-:code:`simple_rest` application. Let's create one. Copy the :code:`index.html` file and rename it to :code:`index.ftl`. 
+The previous example used a plain :code:`html` page. This example uses a Freemarker template to display the users from the
+:code:`simple_rest` application. Let's create one. Copy the :code:`index.html` file and rename it to :code:`index.ftl`.
 This will be layout page for other pages. Let's begin with extracting the css into a new file, :code:`index.css`::
 
     * {
@@ -395,8 +395,8 @@ Now create a template for displaying user data, and call it :code:`users.ftl`.::
     </script>
     </@u.page>
 
-This template iterates over the values of the users' map passed from the calling function, and for each user it creates a corresponding 
-user element. Each user element also contains a :code:`delete` link. The template contains a script which removes the corresponding user 
+This template iterates over the values of the users' map passed from the calling function, and for each user it creates a corresponding
+user element. Each user element also contains a :code:`delete` link. The template contains a script which removes the corresponding user
 element from the page when clicked. Now create a route to render this :code:`users.ftl` page on the :code:`/users` context.::
 
     router.get('/', function (req, res) {
@@ -409,14 +409,14 @@ And finally, let's configure the :code:`AppProvider` to be aware of the view eng
         appctx: '/users',
         assets: 'www',
         engine: "freemarker"
-    }); 
+    });
 
 Restart the application and navigate to the root context :code:`http://localhost:8080/users`.
 
 Adding Submit Form
 ^^^^^^^^^^^^^^^^^^^
 
-Let's start by splitting the :code:`simple_rest.js` file into two and call the second file :code:`simple_repo.js`. This way, 
+Let's start by splitting the :code:`simple_rest.js` file into two and call the second file :code:`simple_repo.js`. This way,
 have the repository separate from the rest endpoints, and thereby both file can evolve independently. Let's slightly refector
 the :code:`simple_repo.js` source code so that it is importable in other modules.::
 
@@ -434,7 +434,7 @@ the :code:`simple_repo.js` source code so that it is importable in other modules
                 2: {name: "Carol", email: "carol@jjs.io", id: 2},
                 3: {name: "Becky", email: "becky@jjs.io", id: 3}
             }
-            
+
             this.lastId = new AtomicInteger(3); //this.users.size() - 1
 
             this.save = (name, email) => {
@@ -529,7 +529,7 @@ Call this new template :code:`user.ftl` and add this markup.::
         </p>
     </div>
 
-This template expects a :code:`user` object in its context and renders the user attributes in it. This template will come in handy when 
+This template expects a :code:`user` object in its context and renders the user attributes in it. This template will come in handy when
 creating a new user or even editing an existing user. Now we need to import and use this template in the :code:`users.ftl` file. And
 while doing so, add another block element for the form to submit user data for persistence in the repository.::
 
@@ -559,7 +559,7 @@ while doing so, add another block element for the form to submit user data for p
         </script>
         </@u.page>
 
-The new data entry component we added contains a form which references a :code:`saveUser(event, this)` method. 
+The new data entry component we added contains a form which references a :code:`saveUser(event, this)` method.
 Add the implementation in the :code:`script` section beneath the :code:`removeUser(e, id)` function.::
 
     function saveUser(e, form){
@@ -675,7 +675,7 @@ implementations for these two helper methods is shown below.::
     }
 
 Now let's add the body for the :code:`updateUser(id, form)` function. Just like we did with the :code:`createUser` method, we define
-an options parameter to describe the request data, and we use both the :code:`encodeFormData()` and :code:`htmlToElement()` methods in 
+an options parameter to describe the request data, and we use both the :code:`encodeFormData()` and :code:`htmlToElement()` methods in
 the same way. For the response, this time we replace the existing component with the updated one instead of appending a new one.::
 
     function updateUser(id, form){
@@ -725,7 +725,7 @@ also add another method, :code:`resetForm()` to clear the form when an update is
         form.elements["email"].value = "";
     }
 
-This method populates the *form* component which makes the *Save* operation an update instead of a create operation. At this 
+This method populates the *form* component which makes the *Save* operation an update instead of a create operation. At this
 point, restart the application again and navigate to the :code:`/users` context http://localhost:8080/users.
 
 ::

@@ -1,15 +1,15 @@
 WordPress Example
 ==================
 
-This example shows how you can configure zesty-router to serve WordPress via FastCGI. The first step is to have WordPress 
-installed on your server machine, for example under /var/www/wordpress. For more information about how to install WordPress, 
-please refer to the `WordPress Installation Guide <https://codex.wordpress.org/Installing_WordPress>`_. 
+This example shows how you can configure zesty-router to serve WordPress via FastCGI. The first step is to have WordPress
+installed on your server machine, for example under /var/www/wordpress. For more information about how to install WordPress,
+please refer to the `WordPress Installation Guide <https://codex.wordpress.org/Installing_WordPress>`_.
 
 This example assumes you are on a Linux system, but there will be a section later on for a Windows system as well. The points below are simply a checklist, and cannot by any measure replace the steps outlined in the wordpress documentation.
 
     * create a holder for the wordpress application :code:`sudo mkdir -p /var/www` with sudo permissions.
     * Assuming you have downloaded and unpacked the wordpress application into your home's Download folder, move the wordpress folder to the the *www* directory created in the previous step - :code:`sudo mv ~/Downloads/wordpress /var/www`.
-    * Install :code:`php-fpm` in your machine using your system's package manager - :code:`sudo pacman -S php-fpm`. This is a *FastCGI Process Manager* for PHP which will bridge the wordpress application to :code:`zesty-router` application. 
+    * Install :code:`php-fpm` in your machine using your system's package manager - :code:`sudo pacman -S php-fpm`. This is a *FastCGI Process Manager* for PHP which will bridge the wordpress application to :code:`zesty-router` application.
     * Configure :code:`php-fpm` to listen on a TCP port. In some systems, the default configuration is set to listen on a unix socket file which would not work in this case.::
 
         # Listen on localhost port 9000

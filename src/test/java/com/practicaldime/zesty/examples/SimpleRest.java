@@ -1,19 +1,22 @@
 package com.practicaldime.zesty.examples;
 
+import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.practicaldime.zesty.app.AppConfig.applyDefaults;
+
 public class SimpleRest {
 
     public static void main(String... args) {
         UserDao dao = new UserDao();
 
-        Map<String, String> config = new HashMap<>();
+        Map<String, String> config = applyDefaults(args);
         config.put("appctx", "/users");
-        AppServer app = new AppServer(config);
+        AppServer app = ((AppProvider) props -> AppServer.instance(props)).provide(config);
 
         app.router()
                 .get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {

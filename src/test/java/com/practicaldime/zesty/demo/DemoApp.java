@@ -40,7 +40,7 @@ public class DemoApp {
     }
 
     public static void start(int port, String host) {
-        new AppServer().router().templates("target/classes/").get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
+        AppServer.instance().templates("target/classes/").get("/", (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
             CompletableFuture.runAsync(() -> {
                 try {
                     Thread.sleep(2000);

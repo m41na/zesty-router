@@ -54,7 +54,6 @@ public class AppServer {
     private final Map<String, String> wpcontext = new HashMap<>();
     private final Map<String, String> corscontext = new HashMap<>();
     private final ViewEngineFactory engineFactory = new AppViewEngines();
-    private final String UNASSIGNED = "not.yet.assigned";
     private final ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
     private final Collection<ContextHandler> contexts = new LinkedList<>();
     private ObjectMapper mapper = ObjectMapperSupplier.version1.get();
@@ -63,41 +62,22 @@ public class AppServer {
     private String status = "stopped";
     private Consumer<Boolean> shutdown;
 
-    public AppServer() {
+    private AppServer() {
         this(new HashMap<>());
     }
 
-    public AppServer(Map<String, String> props) {
-        //basic
-        this.use("assets", Optional.ofNullable(props.get("assets")).orElse(UNASSIGNED));
-        this.use("appctx", Optional.ofNullable(props.get("appctx")).orElse("/"));
-        this.use("engine", Optional.ofNullable(props.get("engine")).orElse("*"));
-        this.use("lookup", Optional.ofNullable(props.get("lookup")).orElse("FILE"));
-        this.use("templates", Optional.ofNullable(props.get("templates")).orElse("templates/"));
-        //http session
-        this.use("session.jdbc.enable", Optional.ofNullable(props.get("session.jdbc.enable")).orElse("true"));
-        this.use("session.jdbc.url", Optional.ofNullable(props.get("session.jdbc.url")).orElse("jdbc:h2:~/zesty-session"));
-        this.use("session.jdbc.driver", Optional.ofNullable(props.get("session.jdbc.driver")).orElse("org.h2.Driver"));
-        //static resources
-        this.use("assets.default.servlet", Optional.ofNullable(props.get("assets.default.servlet")).orElse("false"));
-        this.use("assets.dirAllowed", Optional.ofNullable(props.get("assets.dirAllowed")).orElse("false"));
-        this.use("assets.pathInfoOnly", Optional.ofNullable(props.get("assets.pathInfoOnly")).orElse("true"));
-        this.use("assets.welcomeFile", Optional.ofNullable(props.get("assets.welcomeFile")).orElse("index.html"));
-        this.use("assets.acceptRanges", Optional.ofNullable(props.get("assets.acceptRanges")).orElse("true"));
-        this.use("assets.etags", Optional.ofNullable(props.get("assets.etags")).orElse("true"));
-        this.use("assets.cacheControl", Optional.ofNullable(props.get("assets.cacheControl")).orElse("public, max-age=0"));
-        //thread pool
-        this.use("poolSize", Optional.ofNullable(props.get("poolSize")).orElse("5"));
-        this.use("maxPoolSize", Optional.ofNullable(props.get("maxPoolSize")).orElse("200"));
-        this.use("keepAliveTime", Optional.ofNullable(props.get("keepAliveTime")).orElse("30000"));
-        //https
-        this.use("https.port", Optional.ofNullable(props.get("https.port")).orElse("8443"));
-        this.use("https.idleTimeout", Optional.ofNullable(props.get("https.idleTimeout")).orElse("30000"));
-        this.use("https.outputBufferSize", Optional.ofNullable(props.get("https.outputBufferSize")).orElse("32768"));
-        this.use("https.ssl.stsMaxAge", Optional.ofNullable(props.get("https.ssl.stsMaxAge")).orElse("2000"));
-        this.use("https.ssl.includeSubDomains", Optional.ofNullable(props.get("https.ssl.includeSubDomains")).orElse("true"));
-        this.use("https.keystore.classpath", Optional.ofNullable(props.get("https.keystore.classpath")).orElse("keystore.jks"));
-        this.use("https.keystore.password", Optional.ofNullable(props.get("https.keystore.password")).orElse("OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u"));
+    private AppServer(Map<String, String> props) {
+        props.forEach((key, value) -> {
+            this.use(key, value);
+        });
+    }
+
+    public static AppServer instance(){
+        return new AppServer().router();
+    }
+
+    public static AppServer instance(Map<String, String> props){
+        return new AppServer(props).router();
     }
 
     public static ViewEngine engine() {
@@ -160,7 +140,7 @@ public class AppServer {
         return path1 + path2;
     }
 
-    public AppServer banner(String splash){
+    public AppServer banner(String splash) {
         this.splash = splash;
         return this;
     }
@@ -187,7 +167,7 @@ public class AppServer {
     }
 
     public final AppServer assets(String mapping, String folder) {
-        if (!UNASSIGNED.equals(this.locals("assets").toString())) {
+        if (!AppConfig.UNASSIGNED.equals(this.locals("assets").toString())) {
             LOG.warn("To use this option, remove the 'assets' property from the initial properties object");
         } else {
             String pathspec = mapping.endsWith("/*") ? mapping : (mapping.endsWith("/") ? mapping + "*" : mapping + "/*");
@@ -206,11 +186,6 @@ public class AppServer {
 
     public AppServer router() {
         this.routes = new AppRouter(new MethodRouter());
-        return this;
-    }
-
-    public AppServer router(Supplier<Routing.Router> supplier) {
-        this.routes = new AppRouter(supplier.get());
         return this;
     }
 
@@ -655,14 +630,13 @@ public class AppServer {
 
     // ************* console splash banner ****************** //
     private void banner() {
-        try(InputStream is = getClass().getResourceAsStream(this.splash)){
+        try (InputStream is = getClass().getResourceAsStream(this.splash)) {
             int maxSize = 1024;
             byte[] bytes = new byte[maxSize];
             int size = is.read(bytes);
             System.out.printf("splash file is %d bytes in size of a max acceptable %d bytes%n", size, maxSize);
             LOG.info(new String(bytes, 0, size));
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace(System.err);
         }
     }
@@ -764,7 +738,7 @@ public class AppServer {
             String resourceBase = this.locals.getProperty("assets");
 
             // configure DefaultServlet to serve static content
-            if (!UNASSIGNED.equals(resourceBase)) {
+            if (!AppConfig.UNASSIGNED.equals(resourceBase)) {
                 if (Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ServletHolder defaultServlet = createResourceServlet(resourceBase);
                     servlets.addServlet(defaultServlet, "/*");
@@ -772,7 +746,7 @@ public class AppServer {
             }
 
             // configure ResourceHandler to serve static content
-            if (!UNASSIGNED.equals(resourceBase)) {
+            if (!AppConfig.UNASSIGNED.equals(resourceBase)) {
                 if (!Boolean.parseBoolean(this.locals.getProperty("assets.default.servlet"))) {
                     ContextHandler resourceHandler = new ContextHandler("/*");
                     resourceHandler.setHandler(createResourceHandler(resourceBase));
