@@ -33,7 +33,7 @@ public class ZestyJUnit4ClassRunnerTest {
     public AppServer provider() {
         props.put("host", HOST);
         props.put("port", PORT);
-        AppServer server = new AppServer();
+        AppServer server = AppServer.instance();
         server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));

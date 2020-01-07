@@ -32,7 +32,7 @@ public class ZestySpringJUnit4ClassRunnerTest {
 
     @ZestyProvider
     public AppServer provider() {
-        AppServer server = new AppServer();
+        AppServer server = AppServer.instance();
         server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
