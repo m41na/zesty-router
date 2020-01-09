@@ -804,7 +804,7 @@ public class AppServer {
             };
 
             //add acknowledge handler
-            if (result != null) result.accept(String.format("AppServer is now listening on http://%s:%d. Press CTRL+C to quit", host, port));
+            if (result != null) result.accept(String.format("AppServer is now listening on http://%s:%d. (Press CTRL+C to quit)", host, port));
 
             //if reached, join and await interruption
             server.join();
