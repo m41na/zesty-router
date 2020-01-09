@@ -54,7 +54,7 @@ public class AppOptions {
         //define acceptable options
         Options options = new Options();
         options.addOption("p", "port", true, "The location to load static content from, if it is required")
-                .addOption("h", "hort", true, "The application's entry point from the URL")
+                .addOption("h", "host", true, "The application's entry point from the URL")
                 .addOption("n", "name", true, "A unique name for the application for configurability")
                 .addOption("c", "config", true, "The application's config properties file")
 
