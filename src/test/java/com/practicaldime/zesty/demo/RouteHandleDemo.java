@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.demo;
 
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import com.practicaldime.zesty.basics.RouteHandle;
 import com.practicaldime.zesty.servlet.HandlerFunction;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ public class RouteHandleDemo {
     public static void main(String... args) {
         int port = 8080;
         String host = "localhost";
-        AppServer app = AppServer.instance().templates("target/classes/");
+        IServer app = AppServer.instance().templates("target/classes/");
         app.listen(port, host, res -> {
             LOG.info("server started. Now adding handler");
             app.accept(new RouteHandleDemo().helloHandle());

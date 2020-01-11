@@ -1,6 +1,6 @@
 package com.practicaldime.zesty.testing.server;
 
-import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import org.eclipse.jetty.client.HttpClient;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -35,7 +35,7 @@ public class ZestyJUnit4ClassRunner extends BlockJUnit4ClassRunner {
         CompletableFuture.runAsync(() -> {
             try {
                 FrameworkMethod method = provider.get(0);
-                AppServer server = (AppServer) method.invokeExplosively(createTest());
+                IServer server = (IServer) method.invokeExplosively(createTest());
                 serverLatch.await();
                 server.shutdown();
                 executor.shutdown();

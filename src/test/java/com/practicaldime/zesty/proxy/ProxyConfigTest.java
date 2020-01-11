@@ -2,6 +2,7 @@ package com.practicaldime.zesty.proxy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -76,10 +77,10 @@ public class ProxyConfigTest {
 
     }
 
-    public void runTestWithServer(int port, BiConsumer<AppServer, CountDownLatch> test) {
+    public void runTestWithServer(int port, BiConsumer<IServer, CountDownLatch> test) {
         CountDownLatch latch = new CountDownLatch(1);
         new Thread(() -> {
-            AppServer app = AppServer.instance();
+            IServer app = AppServer.instance();
             app.get("/config", (req, res, done) -> {
                 res.send("{\n" +
                         "  \"proxy\": {\n" +

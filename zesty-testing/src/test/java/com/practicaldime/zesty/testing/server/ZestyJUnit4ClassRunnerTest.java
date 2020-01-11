@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.testing.server;
 
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.junit.Test;
@@ -30,11 +31,11 @@ public class ZestyJUnit4ClassRunnerTest {
     }
 
     @ZestyProvider
-    public AppServer provider() {
+    public IServer provider() {
         props.put("host", HOST);
         props.put("port", PORT);
-        AppServer server = AppServer.instance();
-        server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
+        IServer server = AppServer.instance();
+        server.get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
         server.listen(Optional.ofNullable(Integer.parseInt(props.getProperty("port"))).orElse(PORT), props.getProperty("host", HOST));

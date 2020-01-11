@@ -16,7 +16,8 @@ public class AppOptions {
 
     public static final String UNASSIGNED = "not.yet.assigned";
 
-    private AppOptions(){}
+    private AppOptions() {
+    }
 
     private static Properties loadDataFile(String protocol, String host, String file, String dataFile) {
         Properties props = new Properties();
@@ -50,9 +51,8 @@ public class AppOptions {
         return loadDataFile(null, null, null, dataFile);
     }
 
-    private static Properties handleCli(String[] args) {
+    private static Properties handleCli(Options options, String[] args) {
         //define acceptable options
-        Options options = new Options();
         options.addOption("p", "port", true, "The location to load static content from, if it is required")
                 .addOption("h", "host", true, "The application's entry point from the URL")
                 .addOption("n", "name", true, "A unique name for the application for configurability")
@@ -193,10 +193,10 @@ public class AppOptions {
         return props;
     }
 
-    public static Map<String, String> applyDefaults(String[] args) {
+    public static Map<String, String> applyDefaults(Options options, String[] args) {
         Map<String, String> properties = new HashMap<>();
         //gather properties info
-        Properties props = handleCli(args);
+        Properties props = handleCli(options, args);
         //protocol
         properties.put("port", Optional.ofNullable(props.getProperty("port")).orElse("8080"));
         properties.put("host", Optional.ofNullable(props.getProperty("host")).orElse("localhost"));

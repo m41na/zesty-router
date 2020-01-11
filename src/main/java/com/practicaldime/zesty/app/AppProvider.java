@@ -1,15 +1,23 @@
 package com.practicaldime.zesty.app;
 
-import java.util.Map;
+import org.apache.commons.cli.Options;
 
-import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
+import java.util.Map;
 
 public interface AppProvider {
 
-    AppServer provide(Map<String, String> properties);
+    IServer provide(Map<String, String> properties);
 
     default void start(String[] args) {
-        Map<String, String> properties = applyDefaults(args);
-        provide(properties).listen(Integer.parseInt(properties.get("port")), properties.get("host"), (result) -> System.out.println(result));;
+        start(new Options(), args);
+    }
+
+    default void start(Options options, String[] args) {
+        Map<String, String> properties = apply(AppOptions.applyDefaults(options, args));
+        provide(properties).listen(Integer.parseInt(properties.get("port")), properties.get("host"), (result) -> System.out.println(result));
+    }
+
+    default Map<String, String> apply(Map<String, String> props){
+        return props;
     }
 }

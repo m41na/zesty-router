@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.demo;
 
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import com.practicaldime.zesty.servlet.HandlerConfig;
 import com.practicaldime.zesty.servlet.HandlerPromise;
 import com.practicaldime.zesty.servlet.HandlerRequest;
@@ -35,7 +36,7 @@ public class H2PushApp {
     public static void start(int port, String host) {
         //NOTE: no leading '/' before assets path, but the leading '/' is required for templates path
         HandlerConfig config = cfg -> cfg.setAsyncSupported(true);
-        AppServer app = AppServer.instance();
+        IServer app = AppServer.instance();
         app.assets("/assets", "src/test/resources/webapp/page/assets/").templates("/src/test/resources/webapp/page/")
                 .get("/", config, (HandlerRequest request, HandlerResponse response, HandlerPromise promise) -> {
                     Request jettyRequest = Request.getBaseRequest(request);

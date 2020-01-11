@@ -1,5 +1,7 @@
 package com.practicaldime.zesty.basics;
 
+import com.practicaldime.zesty.view.ViewEngine;
+
 import java.io.Reader;
 import java.util.Map;
 
@@ -8,6 +10,8 @@ public interface RouteResponse {
     void header(String header, String value);
 
     void templates(String folder);
+
+    void engine(ViewEngine engine);
 
     void context(String ctx);
 

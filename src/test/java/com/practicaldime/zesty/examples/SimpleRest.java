@@ -2,6 +2,8 @@ package com.practicaldime.zesty.examples;
 
 import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
+import org.apache.commons.cli.Options;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,15 +16,14 @@ public class SimpleRest {
     public static void main(String... args) {
         UserDao dao = new UserDao();
 
-        Map<String, String> config = applyDefaults(args);
+        Map<String, String> config = applyDefaults(new Options(), args);
         config.put("appctx", "/users");
-        AppServer app = ((AppProvider) props -> AppServer.instance(props)).provide(config);
+        IServer app = ((AppProvider) props -> AppServer.instance(props)).provide(config);
 
-        app.router()
-                .get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
-                    res.json(dao.all());
-                    done.complete();
-                })
+        app.get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
+            res.json(dao.all());
+            done.complete();
+        })
                 .get("/{id}", (req, res, done) -> {
                     String id = req.param("id");
                     User result = dao.findById(Integer.valueOf(id));
@@ -56,8 +57,6 @@ public class SimpleRest {
                     done.complete();
                 })
                 .put("/error", (req, res, done) -> {
-                    //throw new RuntimeException("bad things happened");
-                    //throw new HandlerException(501, "bad things happened status 501");
                     throw new UnsupportedOperationException("bad things happened will happen");
                 })
                 .listen(8080, "localhost", (result) -> {

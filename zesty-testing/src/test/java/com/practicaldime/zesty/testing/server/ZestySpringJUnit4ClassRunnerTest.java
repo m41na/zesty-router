@@ -1,6 +1,7 @@
 package com.practicaldime.zesty.testing.server;
 
 import com.practicaldime.zesty.app.AppServer;
+import com.practicaldime.zesty.app.IServer;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.junit.Test;
@@ -31,9 +32,9 @@ public class ZestySpringJUnit4ClassRunnerTest {
     private BiFunction<Integer, Integer, Integer> addition = (x, y) -> x + y;
 
     @ZestyProvider
-    public AppServer provider() {
-        AppServer server = AppServer.instance();
-        server.router().get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
+    public IServer provider() {
+        IServer server = AppServer.instance();
+        server.get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
         server.listen(9099, "localhost");

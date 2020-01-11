@@ -1,10 +1,10 @@
 package com.practicaldime.zesty.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.basics.BodyWriter;
 import com.practicaldime.zesty.basics.HandlerStatus;
 import com.practicaldime.zesty.basics.RouteResponse;
+import com.practicaldime.zesty.view.ViewEngine;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +32,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     protected String contextPath;
     protected String templateDir;
     protected ObjectMapper mapper;
+    protected ViewEngine engine;
 
     public HandlerResponse(HttpServletResponse response) {
         super(response);
@@ -51,6 +52,11 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     @Override
     public void templates(String folder) {
         this.templateDir = folder;
+    }
+
+    @Override
+    public void engine(ViewEngine engine) {
+        this.engine = engine;
     }
 
     @Override
@@ -133,7 +139,7 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     @Override
     public void render(String template, Map<String, Object> model) {
         try {
-            this.content = AppServer.engine().merge(template, model).getBytes(StandardCharsets.UTF_8);
+            this.content = this.engine.merge(template, model).getBytes(StandardCharsets.UTF_8);
         } catch (Exception e) {
             this.content = e.getMessage().getBytes(StandardCharsets.UTF_8);
             setStatus(SC_NOT_ACCEPTABLE);

@@ -25,7 +25,7 @@ public class Main {
 
         HandlerConfig config = cfg -> cfg.setAsyncSupported(true);
 
-        new AppServer().assets("/", "www").router()
+        AppServer.instance().assets("/", "www")
                 .get("/todo", (req, res, done) -> {
                     res.json(repo.list());
                     done.complete();
