@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.app;
+package com.practicaldime.zesty.cli;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,15 +14,17 @@ import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 /**
- * Expects to find a 'deploy' folder in the current location that contains exactly one jar file.
- * Expects the loaded jar file to contain a manifest, and a Main-Class attribute in that manifest
+ * Expects the loader jar to be in the bin directory of the application root.
+ * Expects the application jar to be the only jar file present in the application root.
+ * Expects the loaded jar file to contain a manifest, and a Main-Class attribute in that manifest.
  */
 public class AppLoader {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
-        File folder = Paths.get(".", "deploy").toFile();
-        if (folder.isDirectory()) {
-            File[] files = folder.listFiles(pathname -> pathname.isFile() && pathname.getPath().endsWith(".jar"));
+        File rootDir = Paths.get(System.getProperty("user.dir")).toFile();
+        System.out.println("root directory is " + rootDir.getAbsolutePath());
+        if (rootDir.isDirectory()) {
+            File[] files = rootDir.listFiles(pathname -> pathname.isFile() && pathname.getPath().endsWith(".jar"));
             if (files.length == 0) {
                 throw new RuntimeException("Expected a jar file");
             }

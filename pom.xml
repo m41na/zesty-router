@@ -346,7 +346,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -398,7 +398,7 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>com.practicaldime.zesty.app.AppLoader</Main-Class>
+                                        <Main-Class>com.practicaldime.zesty.app.QuickStart</Main-Class>
                                         <Build-Number>${project.version}</Build-Number>
                                         <Build-Jdk>${java.version}</Build-Jdk>
                                         <X-Compile-Source-JDK>${maven.compile.source}</X-Compile-Source-JDK>
@@ -503,7 +503,7 @@
                             <skip>false</skip>
                             <imageName>${project.artifactId}-${project.version}-bin</imageName>
                             <buildArgs>--auto-fallback</buildArgs>
-                            <mainClass>com.practicaldime.zesty.app.AppLoader</mainClass>
+                            <mainClass>com.practicaldime.zesty.app.QuickStart</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

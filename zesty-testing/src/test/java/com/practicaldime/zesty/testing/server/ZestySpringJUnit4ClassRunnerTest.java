@@ -1,7 +1,9 @@
 package com.practicaldime.zesty.testing.server;
 
+import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.app.IServer;
+import org.apache.commons.cli.Options;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.junit.Test;
@@ -11,11 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiFunction;
 
+import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,7 +37,9 @@ public class ZestySpringJUnit4ClassRunnerTest {
 
     @ZestyProvider
     public IServer provider() {
-        IServer server = AppServer.instance();
+        Map<String, String> config = applyDefaults(new Options(), new String[]{});
+        config.put("appctx", "/");
+        IServer server = ((AppProvider) props -> AppServer.instance(props)).provide(config);
         server.get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));

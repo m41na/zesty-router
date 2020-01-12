@@ -34,7 +34,7 @@ public abstract class StartableImpl implements Startable {
 
     private static final Logger LOG = LoggerFactory.getLogger(StartableImpl.class);
 
-    private final ViewEngine engine;
+    private final ViewEngineFactory engineFactory;
     private final ServletContextHandler servlets;
     private final Function<String, String> properties;
     private final Collection<ContextHandler> contexts;
@@ -44,13 +44,14 @@ public abstract class StartableImpl implements Startable {
 
     private String splash = "/splash/shadow.txt";
     private String status = "stopped";
+    private ViewEngine engine;
     private Consumer<Boolean> shutdown;
 
     public StartableImpl(ServletContextHandler servlets, Function<String, String> properties, ViewEngineFactory engineFactory, Collection<ContextHandler> contexts) {
         this.servlets = servlets;
         this.properties = properties;
         this.contexts = contexts;
-        this.engine = this.initEngine(engineFactory);
+        this.engineFactory = engineFactory;
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class StartableImpl implements Startable {
 
     @Override
     public final ViewEngine initEngine(ViewEngineFactory engineFactory) {
-        String view = this.properties.apply("engine");
+        String view = Optional.ofNullable(this.properties.apply("engine")).orElse("none");
         switch (view) {
             case "jtwig":
                 return engineFactory.engine(view, properties.apply("templates"), "html", "");
@@ -111,11 +112,13 @@ public abstract class StartableImpl implements Startable {
     // ************* console splash banner ****************** //
     private void banner() {
         try (InputStream is = getClass().getResourceAsStream(this.splash)) {
-            int maxSize = 1024;
-            byte[] bytes = new byte[maxSize];
-            int size = is.read(bytes);
-            System.out.printf("splash file is %d bytes in size of a max acceptable %d bytes%n", size, maxSize);
-            LOG.info(new String(bytes, 0, size));
+            if (is != null) {
+                int maxSize = 1024;
+                byte[] bytes = new byte[maxSize];
+                int size = is.read(bytes);
+                System.out.printf("splash file is %d bytes in size of a max acceptable %d bytes%n", size, maxSize);
+                LOG.info(new String(bytes, 0, size));
+            }
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
@@ -151,6 +154,9 @@ public abstract class StartableImpl implements Startable {
             status = "starting";
             // splash banner
             banner();
+
+            //initialize view engine
+            this.engine = initEngine(engineFactory);
 
             // create server with thread pool
             QueuedThreadPool threadPool = createThreadPool();

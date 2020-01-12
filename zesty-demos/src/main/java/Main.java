@@ -8,6 +8,7 @@ import com.practicaldime.zesty.sse.EventsEmitter;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
+import org.apache.commons.cli.Options;
 import org.eclipse.jetty.servlets.EventSource;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -24,8 +27,8 @@ public class Main {
         Repo repo = new Repo();
 
         HandlerConfig config = cfg -> cfg.setAsyncSupported(true);
-
-        AppServer.instance().assets("/", "www")
+        Map<String, String> props = applyDefaults(new Options(), args);
+        AppServer.instance(props).assets("/", "www")
                 .get("/todo", (req, res, done) -> {
                     res.json(repo.list());
                     done.complete();

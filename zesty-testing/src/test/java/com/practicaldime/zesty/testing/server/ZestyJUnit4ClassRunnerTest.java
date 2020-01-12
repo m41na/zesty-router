@@ -1,19 +1,22 @@
 package com.practicaldime.zesty.testing.server;
 
+import com.practicaldime.zesty.app.AppProvider;
 import com.practicaldime.zesty.app.AppServer;
 import com.practicaldime.zesty.app.IServer;
+import org.apache.commons.cli.Options;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Optional;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiFunction;
 
+import static com.practicaldime.zesty.app.AppOptions.applyDefaults;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 
@@ -22,7 +25,7 @@ public class ZestyJUnit4ClassRunnerTest {
 
     public static final Integer PORT = 9099;
     public static final String HOST = "127.0.0.1";
-    public static final Properties props = new Properties();
+    public static final Map<String, String> props = new HashMap<>();
 
     private BiFunction<Integer, Integer, Integer> addition = (x, y) -> x + y;
 
@@ -32,13 +35,13 @@ public class ZestyJUnit4ClassRunnerTest {
 
     @ZestyProvider
     public IServer provider() {
-        props.put("host", HOST);
-        props.put("port", PORT);
-        IServer server = AppServer.instance();
+        Map<String, String> config = applyDefaults(new Options(), new String[]{});
+        config.put("appctx", "/");
+        IServer server = ((AppProvider) props -> AppServer.instance(props)).provide(config);
         server.get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));
-        server.listen(Optional.ofNullable(Integer.parseInt(props.getProperty("port"))).orElse(PORT), props.getProperty("host", HOST));
+        server.listen(PORT, HOST);
         return server;
     }
 

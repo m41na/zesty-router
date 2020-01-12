@@ -75,8 +75,8 @@ $GRAALVM_HOME/bin/native-image -jar target/zesty-router-0.1.1-shaded.jar
 
 This creates an image with these warnings:
 
-Warning: Reflection method java.lang.Class.forName invoked at com.practicaldime.zesty.app.AppLoader.main(AppLoader.java:43)
-Warning: Reflection method java.lang.Class.getMethod invoked at com.practicaldime.zesty.app.AppLoader.main(AppLoader.java:44)
+Warning: Reflection method java.lang.Class.forName invoked at com.practicaldime.zesty.cli.AppLoader.main(AppLoader.java:43)
+Warning: Reflection method java.lang.Class.getMethod invoked at com.practicaldime.zesty.cli.AppLoader.main(AppLoader.java:44)
 Warning: Aborting stand-alone image build due to reflection use without configuration.
 Warning: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
 Warning: Image 'zesty-router-0.1.1-shaded' is a fallback image that requires a JDK for execution (use --no-fallback to suppress fallback image generation).
