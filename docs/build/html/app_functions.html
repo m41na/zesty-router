@@ -1,623 +1,1155 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>App Functions &mdash; zesty-router 0.1.0 documentation</title>
-  
+    <meta charset="utf-8">
 
-  
-  
-  
-  
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  
+    <title>App Functions &mdash; zesty-router 0.1.0 documentation</title>
 
-  
-  
-    
 
-  
+    <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="genindex.html" rel="index" title="Index"/>
+    <link href="search.html" rel="search" title="Search"/>
+    <link href="app_examples.html" rel="next" title="App Examples"/>
+    <link href="handler_response.html" rel="prev" title="HandlerResponse Object"/>
 
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="App Examples" href="app_examples.html" />
-    <link rel="prev" title="HandlerResponse Object" href="handler_response.html" /> 
 
-  
-  <script src="_static/js/modernizr.min.js"></script>
+    <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav">
 
-   
-  <div class="wy-grid-for-nav">
 
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
+<div class="wy-grid-for-nav">
 
-          
-            <a href="index.html" class="icon icon-home"> zesty-router
-          
 
-          
-          </a>
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
 
-          
-            
-            
-              <div class="version">
-                0.1.0
-              </div>
-            
-          
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
+                <a class="icon icon-home" href="index.html"> zesty-router
 
-          
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure
+                        Logging</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse
+                        Object</a></li>
+                    <li class="toctree-l1 current"><a class="current reference internal" href="#">App Functions</a>
+                        <ul>
+                            <li class="toctree-l2"><a class="reference internal" href="#status-string">status() :
+                                String</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#appctx-path-string-void">appctx(path:
+                                String) : void</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#assets-path-string-void">assets(path:
+                                String) : void</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#engine-string-view-void">engine(String
+                                view) : void</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#resolve-path-string-string">resolve(path:
+                                String) : String</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#locals-set-string">locals() :
+                                Set&lt;String&gt;</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#locals-param-string-object">locals(param:
+                                String) : Object</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#cors-params-map-appserver">cors(params:
+                                Map) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="#router-appserver">router() :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#router-supplier-supplier-appserver">router(supplier:
+                                Supplier) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#filter-filter-handlerfilter-appserver">filter(filter:
+                                HandlerFilter) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#filter-context-string-filter-handlerfilter-appserver">filter(context:
+                                String, filter: HandlerFilter) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#route-method-string-path-string-handler-handlerservlet-appserver">route(method:
+                                String, path: String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method:
+                                String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#head-path-string-handler-handlerservlet-appserver">head(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#head-path-string-handler-bifunction-appserver">head(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#head-path-string-config-handlerconfig-handler-handlerservlet-appserver">head(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#head-path-string-config-handlerconfig-handler-bifunction-appserver">head(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">head(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#trace-path-string-handler-handlerservlet-appserver">trace(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#trace-path-string-handler-bifunction-appserver">trace(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#trace-path-string-config-handlerconfig-handler-bifunction-appserver">trace(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#options-path-string-handler-handlerservlet-appserver">options(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#options-path-string-handler-bifunction-appserver">options(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#options-path-string-config-handlerconfig-handler-handlerservlet-appserver">options(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#options-path-string-config-handlerconfig-handler-bifunction-appserver">options(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">options(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#get-path-string-handler-handlerservlet-appserver">get(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#get-path-string-handler-bifunction-appserver">get(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#get-path-string-config-handlerconfig-handler-handlerservlet-appserver">get(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#get-path-string-config-handlerconfig-handler-bifunction-appserver">get(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">get(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#post-path-string-handler-handlerservlet-appserver">post(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#post-path-string-handler-bifunction-appserver">post(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#post-path-string-config-handlerconfig-handler-handlerservlet-appserver">post(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#post-path-string-config-handlerconfig-handler-bifunction-appserver">post(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">post(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#put-path-string-handler-handlerservlet-appserver">put(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#put-path-string-handler-bifunction-appserver">put(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#put-path-string-config-handlerconfig-handler-handlerservlet-appserver">put(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#put-path-string-config-handlerconfig-handler-bifunction-appserver">put(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">put(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#delete-path-string-handler-handlerservlet-appserver">delete(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#delete-path-string-handler-bifunction-appserver">delete(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#delete-path-string-config-handlerconfig-handler-bifunction-appserver">delete(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#all-path-string-handler-handlerservlet-appserver">all(path:
+                                String, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#all-path-string-handler-bifunction-appserver">all(path:
+                                String, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#all-path-string-config-handlerconfig-handler-handlerservlet-appserver">all(path:
+                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#all-path-string-config-handlerconfig-handler-bifunction-appserver">all(path:
+                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">all(path:
+                                String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) :
+                                AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#websocket-ctx-string-provider-appwsprovider-appserver">websocket(ctx:
+                                String, provider: AppWsProvider) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#wordpress-home-string-fcgi-proxy-string-appserver">wordpress(home:
+                                String, fcgi_proxy: String) : AppServer</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#listen-port-int-host-string-void">listen(port: int, host:
+                                String) : void</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#listen-port-int-host-string-result-consumer-void">listen(port:
+                                int, host: String, result: Consumer) : void</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="#lifecycle-event-string-callback-consumer-appserver">lifecycle(event:
+                                String, callback: Consumer) : AppServer</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress Example</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket Example</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+                </ul>
+
+
+            </div>
         </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">App Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#status-string">status() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#appctx-path-string-void">appctx(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#assets-path-string-void">assets(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#engine-string-view-void">engine(String view) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#resolve-path-string-string">resolve(path: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#locals-set-string">locals() : Set&lt;String&gt;</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#locals-param-string-object">locals(param: String) : Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cors-params-map-appserver">cors(params: Map) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#router-appserver">router() : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#router-supplier-supplier-appserver">router(supplier: Supplier) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#filter-context-string-filter-handlerfilter-appserver">filter(context: String, filter: HandlerFilter) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#route-method-string-path-string-handler-handlerservlet-appserver">route(method: String, path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#head-path-string-handler-handlerservlet-appserver">head(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#head-path-string-handler-bifunction-appserver">head(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#head-path-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#head-path-string-config-handlerconfig-handler-bifunction-appserver">head(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trace-path-string-handler-handlerservlet-appserver">trace(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trace-path-string-handler-bifunction-appserver">trace(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trace-path-string-config-handlerconfig-handler-bifunction-appserver">trace(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-path-string-handler-handlerservlet-appserver">options(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-path-string-handler-bifunction-appserver">options(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-path-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-path-string-config-handlerconfig-handler-bifunction-appserver">options(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-path-string-handler-handlerservlet-appserver">get(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-path-string-handler-bifunction-appserver">get(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-path-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-path-string-config-handlerconfig-handler-bifunction-appserver">get(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-path-string-handler-handlerservlet-appserver">post(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-path-string-handler-bifunction-appserver">post(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-path-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-path-string-config-handlerconfig-handler-bifunction-appserver">post(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#put-path-string-handler-handlerservlet-appserver">put(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#put-path-string-handler-bifunction-appserver">put(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#put-path-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#put-path-string-config-handlerconfig-handler-bifunction-appserver">put(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-path-string-handler-handlerservlet-appserver">delete(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-path-string-handler-bifunction-appserver">delete(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-path-string-config-handlerconfig-handler-bifunction-appserver">delete(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#all-path-string-handler-handlerservlet-appserver">all(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#all-path-string-handler-bifunction-appserver">all(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#all-path-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#all-path-string-config-handlerconfig-handler-bifunction-appserver">all(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#websocket-ctx-string-provider-appwsprovider-appserver">websocket(ctx: String, provider: AppWsProvider) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#wordpress-home-string-fcgi-proxy-string-appserver">wordpress(home: String, fcgi_proxy: String) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#listen-port-int-host-string-void">listen(port: int, host: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#listen-port-int-host-string-result-consumer-void">listen(port: int, host: String, result: Consumer) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lifecycle-event-string-callback-consumer-appserver">lifecycle(event: String, callback: Consumer) : AppServer</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">zesty-router</a>
-        
-      </nav>
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="index.html">zesty-router</a>
+
+        </nav>
 
 
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
 
 
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="index.html">Docs</a> &raquo;</li>
+
+                        <li>App Functions</li>
 
 
+                        <li class="wy-breadcrumbs-aside">
 
 
+                            <a href="_sources/app_functions.rst.txt" rel="nofollow"> View page source</a>
 
 
+                        </li>
+
+                    </ul>
 
 
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
 
+                        <div class="section" id="app-functions">
+                            <h1>App Functions<a class="headerlink" href="#app-functions"
+                                                title="Permalink to this headline">¶</a></h1>
+                            <p>These are the functions you can be able to use that are made accessible through the <code
+                                    class="code docutils literal notranslate"><span class="pre">AppServer</span></code>
+                                instance.:</p>
+                            <div class="highlight-default notranslate">
+                                <div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">zesty</span> <span
+                                        class="o">=</span> <span class="n">Java</span><span class="o">.</span><span
+                                        class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span
+                                        class="p">);</span>
 
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>App Functions</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="_sources/app_functions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="app-functions">
-<h1>App Functions<a class="headerlink" href="#app-functions" title="Permalink to this headline">¶</a></h1>
-<p>These are the functions you can be able to use that are made accessible through the <code class="code docutils literal notranslate"><span class="pre">AppServer</span></code> instance.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">let</span> <span class="n">zesty</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;com.practicaldime.zesty.app.AppProvider&#39;</span><span class="p">);</span>
-
-<span class="n">let</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.util.Date&#39;</span><span class="p">);</span>
-<span class="n">let</span> <span class="n">DateFormat</span> <span class="o">=</span> <span class="n">Java</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="s1">&#39;java.text.SimpleDateFormat&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">Date</span> <span class="o">=</span> <span class="n">Java</span><span
+                                            class="o">.</span><span class="n">type</span><span class="p">(</span><span
+                                            class="s1">&#39;java.util.Date&#39;</span><span class="p">);</span>
+<span class="n">let</span> <span class="n">DateFormat</span> <span class="o">=</span> <span class="n">Java</span><span
+                                            class="o">.</span><span class="n">type</span><span class="p">(</span><span
+                                            class="s1">&#39;java.text.SimpleDateFormat&#39;</span><span
+                                            class="p">);</span>
 
 <span class="n">function</span> <span class="n">now</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">new</span> <span class="n">DateFormat</span><span class="p">(</span><span class="s2">&quot;hh:mm:ss a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new</span> <span class="n">Date</span><span class="p">());</span>
+    <span class="k">return</span> <span class="n">new</span> <span class="n">DateFormat</span><span
+                                            class="p">(</span><span class="s2">&quot;hh:mm:ss a&quot;</span><span
+                                            class="p">)</span><span class="o">.</span><span class="n">format</span><span
+                                            class="p">(</span><span class="n">new</span> <span
+                                            class="n">Date</span><span class="p">());</span>
 <span class="p">}</span>
 
 <span class="o">//</span><span class="n">create</span> <span class="n">AppServer</span> <span class="n">instance</span>
-<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span class="o">.</span><span class="n">provide</span><span class="p">({</span>
-    <span class="n">appctx</span><span class="p">:</span> <span class="s2">&quot;/app&quot;</span><span class="p">,</span>
+<span class="n">let</span> <span class="n">app</span> <span class="o">=</span> <span class="n">zesty</span><span
+                                            class="o">.</span><span class="n">provide</span><span class="p">({</span>
+    <span class="n">appctx</span><span class="p">:</span> <span class="s2">&quot;/app&quot;</span><span
+                                            class="p">,</span>
     <span class="n">assets</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">engine</span><span class="p">:</span> <span class="s2">&quot;freemarker&quot;</span>
 <span class="p">});</span>
-</pre></div>
-</div>
-<div class="section" id="status-string">
-<h2>status() : String<a class="headerlink" href="#status-string" title="Permalink to this headline">¶</a></h2>
-<p>Return a value hinting at the health of the application:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">()</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="s2">&quot; @ &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">now</span><span class="p">());</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="appctx-path-string-void">
-<h2>appctx(path: String) : void<a class="headerlink" href="#appctx-path-string-void" title="Permalink to this headline">¶</a></h2>
-<p>Define the application’s <code class="code docutils literal notranslate"><span class="pre">context</span> <span class="pre">path</span></code> through which requests should be routed. This value is held in the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object.</p>
-</div>
-<div class="section" id="assets-path-string-void">
-<h2>assets(path: String) : void<a class="headerlink" href="#assets-path-string-void" title="Permalink to this headline">¶</a></h2>
-<p>Define the directory, relative to the application’s root directory, where <code class="code docutils literal notranslate"><span class="pre">static</span> <span class="pre">resources</span></code> will be located. This value is held in the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object.</p>
-</div>
-<div class="section" id="engine-string-view-void">
-<h2>engine(String view) : void<a class="headerlink" href="#engine-string-view-void" title="Permalink to this headline">¶</a></h2>
-<p>Define the application’s view <code class="code docutils literal notranslate"><span class="pre">rendering</span> <span class="pre">engine</span></code> - valid values are currently either <em>freemarker</em> or <em>jtwig</em>. This value is held in the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object.</p>
-</div>
-<div class="section" id="resolve-path-string-string">
-<h2>resolve(path: String) : String<a class="headerlink" href="#resolve-path-string-string" title="Permalink to this headline">¶</a></h2>
-<p>Sanitizes the path value relative the <code class="code docutils literal notranslate"><span class="pre">appctx</span></code> to eliminate ambiguity when dealing with relativity of url paths.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="o">.</span><span class="n">redirect</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span class="p">));</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="locals-set-string">
-<h2>locals() : Set&lt;String&gt;<a class="headerlink" href="#locals-set-string" title="Permalink to this headline">¶</a></h2>
-<p>Return the keys contained in the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object</p>
-</div>
-<div class="section" id="locals-param-string-object">
-<h2>locals(param: String) : Object<a class="headerlink" href="#locals-param-string-object" title="Permalink to this headline">¶</a></h2>
-<p>Return a value from the <code class="code docutils literal notranslate"><span class="pre">locals</span></code> object using the given key</p>
-</div>
-<div class="section" id="cors-params-map-appserver">
-<h2>cors(params: Map) : AppServer<a class="headerlink" href="#cors-params-map-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Enable and provide request headers to configure <em>cors</em> for the application. If an empty or <em>null</em> map is provided, the application will use default values
-to configure the <em>cors</em> filter, which are generously open. You can equally turn <em>cors</em> on/off through passing a <em>cors</em> true/false attribute to the
-<code class="code docutils literal notranslate"><span class="pre">locals</span></code> map.</p>
-</div>
-<div class="section" id="router-appserver">
-<h2>router() : AppServer<a class="headerlink" href="#router-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Create the <code class="code docutils literal notranslate"><span class="pre">AppRoutes</span></code> object and return the current instance on <code class="code docutils literal notranslate"><span class="pre">AppServer</span></code> to allow method chaining.</p>
-</div>
-<div class="section" id="router-supplier-supplier-appserver">
-<h2>router(supplier: Supplier) : AppServer<a class="headerlink" href="#router-supplier-supplier-appserver" title="Permalink to this headline">¶</a></h2>
-<p>This method matches <code class="code docutils literal notranslate"><span class="pre">router()</span></code>, except that is allows you to provide your own implementation of the <code class="code docutils literal notranslate"><span class="pre">Router</span></code> interface.
-This allows you to try out different algorithms for matching request handlers to the respective requests.</p>
-</div>
-<div class="section" id="filter-filter-handlerfilter-appserver">
-<h2>filter(filter: HandlerFilter) : AppServer<a class="headerlink" href="#filter-filter-handlerfilter-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Apply a filter at the front of the request processing pipeline where the outcome would either allow the request to proceed or send a response instead.
-This filter is applied to all incoming requests</p>
-</div>
-<div class="section" id="filter-context-string-filter-handlerfilter-appserver">
-<h2>filter(context: String, filter: HandlerFilter) : AppServer<a class="headerlink" href="#filter-context-string-filter-handlerfilter-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Similar to <code class="code docutils literal notranslate"><span class="pre">filter(filter:</span> <span class="pre">HandlerFilter)</span></code> but this filter is only applied for requests on the specified context</p>
-</div>
-<div class="section" id="route-method-string-path-string-handler-handlerservlet-appserver">
-<h2>route(method: String, path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Add a route to handle requests that match the specified <em>path</em> and <em>method</em>. This API is targeted for <em>Java</em> users.</p>
-</div>
-<div class="section" id="route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Similar to the <code class="code docutils literal notranslate"><span class="pre">route(method:</span> <span class="pre">String,</span> <span class="pre">path:</span> <span class="pre">String,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>. However, this function allows you to
-dynamically configure the handler before it is added to the server. This is done through the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> interface.
-A <em>Java</em> example is shown below.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/async/</span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">holder</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">holder</span><span class="o">.</span><span class="n">getRegistration</span><span class="p">()</span><span class="o">.</span><span class="n">setAsyncSupported</span><span class="p">(</span><span class="n">true</span><span class="p">),</span> <span class="n">new</span> <span class="n">HandlerServlet</span><span class="p">()</span> <span class="p">{</span>
+</pre>
+                                </div>
+                            </div>
+                            <div class="section" id="status-string">
+                                <h2>status() : String<a class="headerlink" href="#status-string"
+                                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Return a value hinting at the health of the application:</p>
+                                <div class="highlight-default notranslate">
+                                    <div class="highlight"><pre><span></span><span class="n">res</span><span
+                                            class="o">.</span><span class="n">send</span><span class="p">(</span><span
+                                            class="n">app</span><span class="o">.</span><span
+                                            class="n">status</span><span class="p">()</span><span
+                                            class="o">.</span><span class="n">concat</span><span class="p">(</span><span
+                                            class="s2">&quot; @ &quot;</span><span class="p">)</span><span
+                                            class="o">.</span><span class="n">concat</span><span class="p">(</span><span
+                                            class="n">now</span><span class="p">());</span>
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section" id="appctx-path-string-void">
+                                <h2>appctx(path: String) : void<a class="headerlink" href="#appctx-path-string-void"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Define the application’s <code class="code docutils literal notranslate"><span
+                                        class="pre">context</span> <span class="pre">path</span></code> through which
+                                    requests should be routed. This value is held in the <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">locals</span></code> object.</p>
+                            </div>
+                            <div class="section" id="assets-path-string-void">
+                                <h2>assets(path: String) : void<a class="headerlink" href="#assets-path-string-void"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Define the directory, relative to the application’s root directory, where <code
+                                        class="code docutils literal notranslate"><span class="pre">static</span> <span
+                                        class="pre">resources</span></code> will be located. This value is held in the
+                                    <code class="code docutils literal notranslate"><span
+                                            class="pre">locals</span></code> object.</p>
+                            </div>
+                            <div class="section" id="engine-string-view-void">
+                                <h2>engine(String view) : void<a class="headerlink" href="#engine-string-view-void"
+                                                                 title="Permalink to this headline">¶</a></h2>
+                                <p>Define the application’s view <code class="code docutils literal notranslate"><span
+                                        class="pre">rendering</span> <span class="pre">engine</span></code> - valid
+                                    values are currently either <em>freemarker</em> or <em>jtwig</em>. This value is
+                                    held in the <code class="code docutils literal notranslate"><span
+                                            class="pre">locals</span></code> object.</p>
+                            </div>
+                            <div class="section" id="resolve-path-string-string">
+                                <h2>resolve(path: String) : String<a class="headerlink"
+                                                                     href="#resolve-path-string-string"
+                                                                     title="Permalink to this headline">¶</a></h2>
+                                <p>Sanitizes the path value relative the <code
+                                        class="code docutils literal notranslate"><span class="pre">appctx</span></code>
+                                    to eliminate ambiguity when dealing with relativity of url paths.:</p>
+                                <div class="highlight-default notranslate">
+                                    <div class="highlight"><pre><span></span><span class="n">res</span><span
+                                            class="o">.</span><span class="n">redirect</span><span
+                                            class="p">(</span><span class="n">app</span><span class="o">.</span><span
+                                            class="n">resolve</span><span class="p">(</span><span class="s2">&quot;/upload&quot;</span><span
+                                            class="p">));</span>
+</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section" id="locals-set-string">
+                                <h2>locals() : Set&lt;String&gt;<a class="headerlink" href="#locals-set-string"
+                                                                   title="Permalink to this headline">¶</a></h2>
+                                <p>Return the keys contained in the <code
+                                        class="code docutils literal notranslate"><span class="pre">locals</span></code>
+                                    object</p>
+                            </div>
+                            <div class="section" id="locals-param-string-object">
+                                <h2>locals(param: String) : Object<a class="headerlink"
+                                                                     href="#locals-param-string-object"
+                                                                     title="Permalink to this headline">¶</a></h2>
+                                <p>Return a value from the <code class="code docutils literal notranslate"><span
+                                        class="pre">locals</span></code> object using the given key</p>
+                            </div>
+                            <div class="section" id="cors-params-map-appserver">
+                                <h2>cors(params: Map) : AppServer<a class="headerlink" href="#cors-params-map-appserver"
+                                                                    title="Permalink to this headline">¶</a></h2>
+                                <p>Enable and provide request headers to configure <em>cors</em> for the application. If
+                                    an empty or <em>null</em> map is provided, the application will use default values
+                                    to configure the <em>cors</em> filter, which are generously open. You can equally
+                                    turn <em>cors</em> on/off through passing a <em>cors</em> true/false attribute to
+                                    the
+                                    <code class="code docutils literal notranslate"><span
+                                            class="pre">locals</span></code> map.</p>
+                            </div>
+                            <div class="section" id="router-appserver">
+                                <h2>router() : AppServer<a class="headerlink" href="#router-appserver"
+                                                           title="Permalink to this headline">¶</a></h2>
+                                <p>Create the <code class="code docutils literal notranslate"><span class="pre">AppRoutes</span></code>
+                                    object and return the current instance on <code
+                                            class="code docutils literal notranslate"><span class="pre">AppServer</span></code>
+                                    to allow method chaining.</p>
+                            </div>
+                            <div class="section" id="router-supplier-supplier-appserver">
+                                <h2>router(supplier: Supplier) : AppServer<a class="headerlink"
+                                                                             href="#router-supplier-supplier-appserver"
+                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>This method matches <code class="code docutils literal notranslate"><span
+                                        class="pre">router()</span></code>, except that is allows you to provide your
+                                    own implementation of the <code class="code docutils literal notranslate"><span
+                                            class="pre">Router</span></code> interface.
+                                    This allows you to try out different algorithms for matching request handlers to the
+                                    respective requests.</p>
+                            </div>
+                            <div class="section" id="filter-filter-handlerfilter-appserver">
+                                <h2>filter(filter: HandlerFilter) : AppServer<a class="headerlink"
+                                                                                href="#filter-filter-handlerfilter-appserver"
+                                                                                title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Apply a filter at the front of the request processing pipeline where the outcome
+                                    would either allow the request to proceed or send a response instead.
+                                    This filter is applied to all incoming requests</p>
+                            </div>
+                            <div class="section" id="filter-context-string-filter-handlerfilter-appserver">
+                                <h2>filter(context: String, filter: HandlerFilter) : AppServer<a class="headerlink"
+                                                                                                 href="#filter-context-string-filter-handlerfilter-appserver"
+                                                                                                 title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Similar to <code class="code docutils literal notranslate"><span class="pre">filter(filter:</span>
+                                    <span class="pre">HandlerFilter)</span></code> but this filter is only applied for
+                                    requests on the specified context</p>
+                            </div>
+                            <div class="section" id="route-method-string-path-string-handler-handlerservlet-appserver">
+                                <h2>route(method: String, path: String, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#route-method-string-path-string-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Add a route to handle requests that match the specified <em>path</em> and
+                                    <em>method</em>. This API is targeted for <em>Java</em> users.</p>
+                            </div>
+                            <div class="section"
+                                 id="route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet)
+                                    : AppServer<a class="headerlink"
+                                                  href="#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Similar to the <code class="code docutils literal notranslate"><span class="pre">route(method:</span>
+                                    <span class="pre">String,</span> <span class="pre">path:</span> <span class="pre">String,</span>
+                                    <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>.
+                                    However, this function allows you to
+                                    dynamically configure the handler before it is added to the server. This is done
+                                    through the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code>
+                                    interface.
+                                    A <em>Java</em> example is shown below.:</p>
+                                <div class="highlight-default notranslate">
+                                    <div class="highlight"><pre><span></span><span class="n">get</span><span
+                                            class="p">(</span><span class="s2">&quot;/async/</span><span class="si">{value}</span><span
+                                            class="s2">&quot;</span><span class="p">,</span> <span
+                                            class="p">(</span><span class="n">holder</span><span class="p">)</span><span
+                                            class="o">-&gt;</span><span class="n">holder</span><span
+                                            class="o">.</span><span class="n">getRegistration</span><span
+                                            class="p">()</span><span class="o">.</span><span
+                                            class="n">setAsyncSupported</span><span class="p">(</span><span class="n">true</span><span
+                                            class="p">),</span> <span class="n">new</span> <span class="n">HandlerServlet</span><span
+                                            class="p">()</span> <span class="p">{</span>
     <span class="nd">@Override</span>
-    <span class="n">public</span> <span class="n">void</span> <span class="n">handle</span><span class="p">(</span><span class="n">HandlerRequest</span> <span class="n">request</span><span class="p">,</span> <span class="n">HandlerResponse</span> <span class="n">response</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">public</span> <span class="n">void</span> <span class="n">handle</span><span class="p">(</span><span
+                                                class="n">HandlerRequest</span> <span class="n">request</span><span
+                                                class="p">,</span> <span class="n">HandlerResponse</span> <span
+                                                class="n">response</span><span class="p">)</span> <span
+                                                class="p">{</span>
         <span class="o">//</span><span class="n">code</span> <span class="n">goes</span> <span class="n">here</span>
     <span class="p">}</span>
 <span class="p">})</span>
-</pre></div>
-</div>
-<p>In this example, we configure the handler to use servlet 3.0’s <code class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code> object to process the request by setting
-<code class="code docutils literal notranslate"><span class="pre">setAsyncSupported</span></code> to <em>true</em>. This is how we leverage the <code class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code> because the default value is <em>false</em>.</p>
-</div>
-<div class="section" id="head-path-string-handler-handlerservlet-appserver">
-<h2>head(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#head-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>head</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="head-path-string-handler-bifunction-appserver">
-<h2>head(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#head-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>head</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">head(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="head-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#head-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="head-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>head(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#head-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">head(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>head(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">head(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">head(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="trace-path-string-handler-handlerservlet-appserver">
-<h2>trace(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#trace-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>trace</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="trace-path-string-handler-bifunction-appserver">
-<h2>trace(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#trace-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>trace</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">trace(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="trace-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>trace(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#trace-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">trace(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>trace(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">trace(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">trace(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="options-path-string-handler-handlerservlet-appserver">
-<h2>options(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#options-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>options</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="options-path-string-handler-bifunction-appserver">
-<h2>options(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#options-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>options</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">options(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="options-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#options-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="options-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>options(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#options-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">options(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>options(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">options(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">options(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="get-path-string-handler-handlerservlet-appserver">
-<h2>get(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#get-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>get</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="get-path-string-handler-bifunction-appserver">
-<h2>get(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#get-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>get</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">get(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="get-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#get-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="get-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>get(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#get-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">get(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>get(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">get(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">get(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="post-path-string-handler-handlerservlet-appserver">
-<h2>post(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#post-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>post</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="post-path-string-handler-bifunction-appserver">
-<h2>post(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#post-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>post</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">post(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="post-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#post-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="post-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>post(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#post-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">post(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>post(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">post(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">post(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="put-path-string-handler-handlerservlet-appserver">
-<h2>put(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#put-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>put</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="put-path-string-handler-bifunction-appserver">
-<h2>put(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#put-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>put</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">put(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="put-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>put(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#put-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="put-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>put(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#put-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">put(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>put(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">put(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">put(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="delete-path-string-handler-handlerservlet-appserver">
-<h2>delete(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#delete-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>delete</em> requests on the <em>path</em> url.</p>
-</div>
-<div class="section" id="delete-path-string-handler-bifunction-appserver">
-<h2>delete(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#delete-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle a <em>delete</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">delete(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>delete(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="delete-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>delete(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#delete-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">delete(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>delete(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">delete(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">delete(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="all-path-string-handler-handlerservlet-appserver">
-<h2>all(path: String, handler: HandlerServlet) : AppServer<a class="headerlink" href="#all-path-string-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle requests of any <em>method</em> on the <em>path</em> url.</p>
-</div>
-<div class="section" id="all-path-string-handler-bifunction-appserver">
-<h2>all(path: String, handler: BiFunction) : AppServer<a class="headerlink" href="#all-path-string-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configures a route to handle requests of any <em>method</em> on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">all(path,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="all-path-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>all(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#all-path-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url. This function also uses the <code class="code docutils literal notranslate"><span class="pre">HandlerConfig</span></code> config object
-to further customize the handler before it is added to the server. With the <code class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code> object, the handler
-can be further customized with servlet specific properties to adapt to different requirements.</p>
-</div>
-<div class="section" id="all-path-string-config-handlerconfig-handler-bifunction-appserver">
-<h2>all(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a class="headerlink" href="#all-path-string-config-handlerconfig-handler-bifunction-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">all(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
-and is more favorable for use with Javascript instead of Java.</p>
-</div>
-<div class="section" id="all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
-<h2>all(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a class="headerlink" href="#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url, with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
-<em>accept</em> value. This function is exactly like <code class="code docutils literal notranslate"><span class="pre">all(path,</span> <span class="pre">config,</span> <span class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code> with the added parameters. All the other
-functions in the <code class="code docutils literal notranslate"><span class="pre">all(...)</span></code> family eventually delegate to this function, which add the handler to the server.</p>
-</div>
-<div class="section" id="websocket-ctx-string-provider-appwsprovider-appserver">
-<h2>websocket(ctx: String, provider: AppWsProvider) : AppServer<a class="headerlink" href="#websocket-ctx-string-provider-appwsprovider-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure a websocket handler for the application. This will handle websocket requests on the <code class="code docutils literal notranslate"><span class="pre">ctx</span></code> context path. The <code class="code docutils literal notranslate"><span class="pre">AppWsProvider</span></code> object
-should provide a prepared instance of <code class="code docutils literal notranslate"><span class="pre">WebSocketAdapter</span></code>. You can use <code class="code docutils literal notranslate"><span class="pre">AppWebSocket</span></code> which is the the default implementation provided by the framework.</p>
-</div>
-<div class="section" id="wordpress-home-string-fcgi-proxy-string-appserver">
-<h2>wordpress(home: String, fcgi_proxy: String) : AppServer<a class="headerlink" href="#wordpress-home-string-fcgi-proxy-string-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Configure an <code class="code docutils literal notranslate"><span class="pre">FCGI</span></code> handler to use with any application that <em>speaks</em> fcgi like <code class="code docutils literal notranslate"><span class="pre">Wordpress</span></code>.</p>
-</div>
-<div class="section" id="listen-port-int-host-string-void">
-<h2>listen(port: int, host: String) : void<a class="headerlink" href="#listen-port-int-host-string-void" title="Permalink to this headline">¶</a></h2>
-<p>Fire up the server and start listening for requests on the specified <em>host</em> and on the specified <em>port</em>.</p>
-</div>
-<div class="section" id="listen-port-int-host-string-result-consumer-void">
-<h2>listen(port: int, host: String, result: Consumer) : void<a class="headerlink" href="#listen-port-int-host-string-result-consumer-void" title="Permalink to this headline">¶</a></h2>
-<p>This is similar to <code class="code docutils literal notranslate"><span class="pre">listen(port:</span> <span class="pre">int,</span> <span class="pre">host:</span> <span class="pre">String)</span></code> except that is also accepts a consumer which gets invoked when the start up is completed.</p>
-</div>
-<div class="section" id="lifecycle-event-string-callback-consumer-appserver">
-<h2>lifecycle(event: String, callback: Consumer) : AppServer<a class="headerlink" href="#lifecycle-event-string-callback-consumer-appserver" title="Permalink to this headline">¶</a></h2>
-<p>Add a lifecycle listener which gets invoked when the corresponding lifecycle even happens. The lifecycle events that will trigger the listener are:</p>
-<blockquote>
-<div><ul class="simple">
-<li>starting  - happens when the server begins to get instantiated</li>
-<li>started   - happens when the server is started successfully</li>
-<li>stopping  - happens when the server begins to shut down</li>
-<li>stopped   - happens when the server has stopped running</li>
-<li>failed    - happens when the server is unable to start successfully</li>
-</ul>
-</div></blockquote>
-</div>
-</div>
+</pre>
+                                    </div>
+                                </div>
+                                <p>In this example, we configure the handler to use servlet 3.0’s <code
+                                        class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code>
+                                    object to process the request by setting
+                                    <code class="code docutils literal notranslate"><span
+                                            class="pre">setAsyncSupported</span></code> to <em>true</em>. This is how we
+                                    leverage the <code class="code docutils literal notranslate"><span class="pre">AsyncContext</span></code>
+                                    because the default value is <em>false</em>.</p>
+                            </div>
+                            <div class="section" id="head-path-string-handler-handlerservlet-appserver">
+                                <h2>head(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                              href="#head-path-string-handler-handlerservlet-appserver"
+                                                                                              title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>head</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="head-path-string-handler-bifunction-appserver">
+                                <h2>head(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                          href="#head-path-string-handler-bifunction-appserver"
+                                                                                          title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>head</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">head(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="head-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#head-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section"
+                                 id="head-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>head(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#head-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">head(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>head(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>head</em> requests on the <em>path</em> url, with a
+                                    <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">head(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    with the added parameters. All the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">head(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="trace-path-string-handler-handlerservlet-appserver">
+                                <h2>trace(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                               href="#trace-path-string-handler-handlerservlet-appserver"
+                                                                                               title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>trace</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="trace-path-string-handler-bifunction-appserver">
+                                <h2>trace(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                           href="#trace-path-string-handler-bifunction-appserver"
+                                                                                           title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>trace</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">trace(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section"
+                                 id="trace-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>trace(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#trace-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">trace(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>trace(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>trace</em> requests on the <em>path</em> url, with
+                                    a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header
+                                    of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">trace(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    with the added parameters. All the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">trace(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="options-path-string-handler-handlerservlet-appserver">
+                                <h2>options(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                                 href="#options-path-string-handler-handlerservlet-appserver"
+                                                                                                 title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>options</em> requests on the <em>path</em> url.
+                                </p>
+                            </div>
+                            <div class="section" id="options-path-string-handler-bifunction-appserver">
+                                <h2>options(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                             href="#options-path-string-handler-bifunction-appserver"
+                                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>options</em> requests on the <em>path</em> url.
+                                    This function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">options(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="options-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#options-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url.
+                                    This function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section"
+                                 id="options-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>options(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#options-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url.
+                                    This function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">options(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>options(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>options</em> requests on the <em>path</em> url,
+                                    with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em>
+                                    header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">options(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    with the added parameters. All the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">options(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="get-path-string-handler-handlerservlet-appserver">
+                                <h2>get(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                             href="#get-path-string-handler-handlerservlet-appserver"
+                                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>get</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="get-path-string-handler-bifunction-appserver">
+                                <h2>get(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                         href="#get-path-string-handler-bifunction-appserver"
+                                                                                         title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>get</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">get(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="get-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#get-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section" id="get-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>get(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#get-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">get(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>get(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>get</em> requests on the <em>path</em> url, with a
+                                    <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span class="pre">get(path,</span>
+                                        <span class="pre">config,</span> <span class="pre">handler:</span> <span
+                                                class="pre">HandlerServlet)</span></code> with the added parameters. All
+                                    the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">get(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="post-path-string-handler-handlerservlet-appserver">
+                                <h2>post(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                              href="#post-path-string-handler-handlerservlet-appserver"
+                                                                                              title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>post</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="post-path-string-handler-bifunction-appserver">
+                                <h2>post(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                          href="#post-path-string-handler-bifunction-appserver"
+                                                                                          title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>post</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">post(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="post-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#post-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section"
+                                 id="post-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>post(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#post-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">post(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>post(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>post</em> requests on the <em>path</em> url, with a
+                                    <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">post(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    with the added parameters. All the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">post(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="put-path-string-handler-handlerservlet-appserver">
+                                <h2>put(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                             href="#put-path-string-handler-handlerservlet-appserver"
+                                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>put</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="put-path-string-handler-bifunction-appserver">
+                                <h2>put(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                         href="#put-path-string-handler-bifunction-appserver"
+                                                                                         title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>put</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">put(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="put-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>put(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#put-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section" id="put-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>put(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#put-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">put(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>put(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>put</em> requests on the <em>path</em> url, with a
+                                    <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span class="pre">put(path,</span>
+                                        <span class="pre">config,</span> <span class="pre">handler:</span> <span
+                                                class="pre">HandlerServlet)</span></code> with the added parameters. All
+                                    the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">put(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="delete-path-string-handler-handlerservlet-appserver">
+                                <h2>delete(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                                href="#delete-path-string-handler-handlerservlet-appserver"
+                                                                                                title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>delete</em> requests on the <em>path</em> url.</p>
+                            </div>
+                            <div class="section" id="delete-path-string-handler-bifunction-appserver">
+                                <h2>delete(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                            href="#delete-path-string-handler-bifunction-appserver"
+                                                                                            title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle a <em>delete</em> requests on the <em>path</em> url.
+                                    This function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">delete(path,</span> <span class="pre">handler:</span> <span
+                                            class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>delete(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url. This
+                                    function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section"
+                                 id="delete-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>delete(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#delete-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url. This
+                                    function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">delete(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>delete(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle a <em>delete</em> requests on the <em>path</em> url, with
+                                    a <em>content-type</em> of header of <em>type</em> value and <em>accept</em> header
+                                    of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">delete(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    with the added parameters. All the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">delete(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="all-path-string-handler-handlerservlet-appserver">
+                                <h2>all(path: String, handler: HandlerServlet) : AppServer<a class="headerlink"
+                                                                                             href="#all-path-string-handler-handlerservlet-appserver"
+                                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle requests of any <em>method</em> on the <em>path</em>
+                                    url.</p>
+                            </div>
+                            <div class="section" id="all-path-string-handler-bifunction-appserver">
+                                <h2>all(path: String, handler: BiFunction) : AppServer<a class="headerlink"
+                                                                                         href="#all-path-string-handler-bifunction-appserver"
+                                                                                         title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configures a route to handle requests of any <em>method</em> on the <em>path</em>
+                                    url. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span class="pre">all(path,</span>
+                                        <span class="pre">handler:</span> <span
+                                                class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="all-path-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>all(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer<a
+                                        class="headerlink"
+                                        href="#all-path-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url.
+                                    This function also uses the <code class="code docutils literal notranslate"><span
+                                            class="pre">HandlerConfig</span></code> config object
+                                    to further customize the handler before it is added to the server. With the <code
+                                            class="code docutils literal notranslate"><span class="pre">config.getRegistration()</span></code>
+                                    object, the handler
+                                    can be further customized with servlet specific properties to adapt to different
+                                    requirements.</p>
+                            </div>
+                            <div class="section" id="all-path-string-config-handlerconfig-handler-bifunction-appserver">
+                                <h2>all(path: String, config: HandlerConfig, handler: BiFunction) : AppServer<a
+                                        class="headerlink"
+                                        href="#all-path-string-config-handlerconfig-handler-bifunction-appserver"
+                                        title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url.
+                                    This function is exactly like <code class="code docutils literal notranslate"><span
+                                            class="pre">all(path,</span> <span class="pre">config,</span> <span
+                                            class="pre">handler:</span> <span class="pre">HandlerServlet)</span></code>
+                                    and is more favorable for use with Javascript instead of Java.</p>
+                            </div>
+                            <div class="section"
+                                 id="all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">
+                                <h2>all(path: String, accept: String, type: String, config: HandlerConfig, handler:
+                                    HandlerServlet) : AppServer<a class="headerlink"
+                                                                  href="#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver"
+                                                                  title="Permalink to this headline">¶</a></h2>
+                                <p>Configure a route to handle requests of any <em>method</em> on the <em>path</em> url,
+                                    with a <em>content-type</em> of header of <em>type</em> value and <em>accept</em>
+                                    header of
+                                    <em>accept</em> value. This function is exactly like <code
+                                            class="code docutils literal notranslate"><span class="pre">all(path,</span>
+                                        <span class="pre">config,</span> <span class="pre">handler:</span> <span
+                                                class="pre">HandlerServlet)</span></code> with the added parameters. All
+                                    the other
+                                    functions in the <code class="code docutils literal notranslate"><span class="pre">all(...)</span></code>
+                                    family eventually delegate to this function, which add the handler to the server.
+                                </p>
+                            </div>
+                            <div class="section" id="websocket-ctx-string-provider-appwsprovider-appserver">
+                                <h2>websocket(ctx: String, provider: AppWsProvider) : AppServer<a class="headerlink"
+                                                                                                  href="#websocket-ctx-string-provider-appwsprovider-appserver"
+                                                                                                  title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configure a websocket handler for the application. This will handle websocket
+                                    requests on the <code class="code docutils literal notranslate"><span class="pre">ctx</span></code>
+                                    context path. The <code class="code docutils literal notranslate"><span class="pre">AppWsProvider</span></code>
+                                    object
+                                    should provide a prepared instance of <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">WebSocketAdapter</span></code>. You can use <code
+                                            class="code docutils literal notranslate"><span
+                                            class="pre">AppWebSocket</span></code> which is the the default
+                                    implementation provided by the framework.</p>
+                            </div>
+                            <div class="section" id="wordpress-home-string-fcgi-proxy-string-appserver">
+                                <h2>wordpress(home: String, fcgi_proxy: String) : AppServer<a class="headerlink"
+                                                                                              href="#wordpress-home-string-fcgi-proxy-string-appserver"
+                                                                                              title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Configure an <code class="code docutils literal notranslate"><span
+                                        class="pre">FCGI</span></code> handler to use with any application that <em>speaks</em>
+                                    fcgi like <code class="code docutils literal notranslate"><span class="pre">Wordpress</span></code>.
+                                </p>
+                            </div>
+                            <div class="section" id="listen-port-int-host-string-void">
+                                <h2>listen(port: int, host: String) : void<a class="headerlink"
+                                                                             href="#listen-port-int-host-string-void"
+                                                                             title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Fire up the server and start listening for requests on the specified <em>host</em>
+                                    and on the specified <em>port</em>.</p>
+                            </div>
+                            <div class="section" id="listen-port-int-host-string-result-consumer-void">
+                                <h2>listen(port: int, host: String, result: Consumer) : void<a class="headerlink"
+                                                                                               href="#listen-port-int-host-string-result-consumer-void"
+                                                                                               title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>This is similar to <code class="code docutils literal notranslate"><span class="pre">listen(port:</span>
+                                    <span class="pre">int,</span> <span class="pre">host:</span> <span class="pre">String)</span></code>
+                                    except that is also accepts a consumer which gets invoked when the start up is
+                                    completed.</p>
+                            </div>
+                            <div class="section" id="lifecycle-event-string-callback-consumer-appserver">
+                                <h2>lifecycle(event: String, callback: Consumer) : AppServer<a class="headerlink"
+                                                                                               href="#lifecycle-event-string-callback-consumer-appserver"
+                                                                                               title="Permalink to this headline">¶</a>
+                                </h2>
+                                <p>Add a lifecycle listener which gets invoked when the corresponding lifecycle even
+                                    happens. The lifecycle events that will trigger the listener are:</p>
+                                <blockquote>
+                                    <div>
+                                        <ul class="simple">
+                                            <li>starting - happens when the server begins to get instantiated</li>
+                                            <li>started - happens when the server is started successfully</li>
+                                            <li>stopping - happens when the server begins to shut down</li>
+                                            <li>stopped - happens when the server has stopped running</li>
+                                            <li>failed - happens when the server is unable to start successfully</li>
+                                        </ul>
+                                    </div>
+                                </blockquote>
+                            </div>
+                        </div>
 
 
-           </div>
-           
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="app_examples.html" class="btn btn-neutral float-right" title="App Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="handler_response.html" class="btn btn-neutral" title="HandlerResponse Object" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
+                    </div>
 
-  <hr/>
+                </div>
+                <footer>
 
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2019, Stephen Maina
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+                        <a accesskey="n" class="btn btn-neutral float-right" href="app_examples.html"
+                           rel="next" title="App Examples">Next <span class="fa fa-arrow-circle-right"></span></a>
 
-</footer>
 
+                        <a accesskey="p" class="btn btn-neutral" href="handler_response.html"
+                           rel="prev" title="HandlerResponse Object"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2019, Stephen Maina
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
         </div>
-      </div>
 
     </section>
 
-  </div>
-  
+</div>
 
 
-  
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"
+        type="text/javascript"></script>
+<script src="_static/jquery.js" type="text/javascript"></script>
+<script src="_static/underscore.js" type="text/javascript"></script>
+<script src="_static/doctools.js" type="text/javascript"></script>
+<script src="_static/language_data.js" type="text/javascript"></script>
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
 
-  
+<script src="_static/js/theme.js" type="text/javascript"></script>
 
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
 
 </body>
 </html>

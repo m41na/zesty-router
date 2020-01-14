@@ -5,24 +5,29 @@ import {matchPath, StaticRouter} from 'react-router-dom';
 import products from "../src/store";
 import App from '../src/App';
 
-export default function(req, resp){
+export default function (req, resp) {
 
     const match = routes.reduce((acc, route) => matchPath(req.url, {path: route, exact: true}) || acc, null);
 
-    if(!match){
+    if (!match) {
         resp.status(400).send('page not found')
         return
     }
 
-    let context = {}    
+    let context = {}
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
         let htmlString = renderToString(
-            <StaticRouter context={context} location={req.url}>
-                <App products={products} />
-            </StaticRouter>
-        );
-    
+            < StaticRouter
+        context = {context}
+        location = {req.url} >
+            < App
+        products = {products}
+        />
+        < /StaticRouter>
+    )
+        ;
+
         resolve(resp.status(200).send(renderFullPage(htmlString, products)))
         reject(resp.status(400).send("problem in heaven"))
     });

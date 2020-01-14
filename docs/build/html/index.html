@@ -1,373 +1,611 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Zesty-Router Docs &mdash; zesty-router 0.1.0 documentation</title>
-  
+    <meta charset="utf-8">
 
-  
-  
-  
-  
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  
+    <title>Zesty-Router Docs &mdash; zesty-router 0.1.0 documentation</title>
 
-  
-  
-    
 
-  
+    <link href="_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="genindex.html" rel="index" title="Index"/>
+    <link href="search.html" rel="search" title="Search"/>
+    <link href="app_server.html" rel="next" title="AppServer Object"/>
 
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="AppServer Object" href="app_server.html" /> 
 
-  
-  <script src="_static/js/modernizr.min.js"></script>
+    <script src="_static/js/modernizr.min.js"></script>
 
 </head>
 
 <body class="wy-body-for-nav">
 
-   
-  <div class="wy-grid-for-nav">
 
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
+<div class="wy-grid-for-nav">
 
-          
-            <a href="#" class="icon icon-home"> zesty-router
-          
 
-          
-          </a>
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
 
-          
-            
-            
-              <div class="version">
-                0.1.0
-              </div>
-            
-          
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
+                <a class="icon icon-home" href="#"> zesty-router
 
-          
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure
+                        Logging</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse
+                        Object</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress Example</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket Example</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
+                </ul>
+
+
+            </div>
         </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
-</ul>
-
-            
-          
-        </div>
-      </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">zesty-router</a>
-        
-      </nav>
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
 
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="#">zesty-router</a>
+
+        </nav>
 
 
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
 
 
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="#">Docs</a> &raquo;</li>
+
+                        <li>Zesty-Router Docs</li>
 
 
+                        <li class="wy-breadcrumbs-aside">
 
 
+                            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
 
 
+                        </li>
+
+                    </ul>
 
 
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="zesty-router-docs">
+                            <h1>Zesty-Router Docs<a class="headerlink" href="#zesty-router-docs"
+                                                    title="Permalink to this headline">¶</a></h1>
+                            <p>Zesty is a creative JavaScript wrapper around the Jetty web server. It works
+                                out-of-the-box with the servlet 3.0 API which enables handling requests in asynchronous
+                                fashion.
+                                Note that the servlet 3.1 API on the other hand, introduces new interfaces to handle
+                                asynchronous socket I/O for which there isn’t an idiomatic way to handle generically
+                                in zesty yet. However, using either Javascript or Java with zesty is handled using a
+                                uniform and easy to understand API.</p>
+                            <div class="toctree-wrapper compound">
+                                <ul>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer
+                                        Object</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#locals-properties">locals:
+                                                Properties</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#threadpoolexecutor-threadpoolexecutor">threadPoolExecutor:
+                                                ThreadPoolExecutor</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#wpcontext-map">wpcontext:
+                                                Map</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#corsconetxt-map">corsconetxt:
+                                                Map</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#servlets-servletcontexthandler">servlets:
+                                                ServletContextHandler</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_server.html#engine-viewengine">engine:
+                                                ViewEngine</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="app_server.html#appprovider-object">AppProvider
+                                        Object</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="app_server.html#handlerconfig-object">HandlerConfig
+                                        Object</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="app_server.html#bodywriter-object">BodyWriter
+                                        Object</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="app_server.html#bodyreader-object">BodyReader
+                                        Object</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="app_server.html#configure-logging">Configure
+                                        Logging</a></li>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes
+                                        Object</a></li>
+                                    <li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest
+                                        Object</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#protocol-string">protocol()
+                                                : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#secure-boolean">secure()
+                                                : boolean</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#hostname-string">hostname()
+                                                : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#ip-string">ip() :
+                                                String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#path-string">path() :
+                                                String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#route-routesearch">route()
+                                                : RouteSearch</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#param-name-string-string">param(name:
+                                                String) : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#pathparams-map">pathParams()
+                                                : Map</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#query-string">query() :
+                                                String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#header-name-string-string">header(name:
+                                                String) : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#error-boolean">error()
+                                                : boolean</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#message-string">message()
+                                                : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#body-byte">body() :
+                                                byte[]</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#body-type-class-t">body(type:
+                                                Class) : T</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#body-provider-bodyreader-t">body(provider:
+                                                BodyReader) : T</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#capture-long">capture()
+                                                : long</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#upload-destination-string-long">upload(destination:
+                                                String) : long</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#cookies-cookie">cookies()
+                                                : Cookie[]</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_request.html#session-create-boolean-httpsession">session(create:
+                                                boolean) : HttpSession</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse
+                                        Object</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#header-header-string-value-string-void">header(header:
+                                                String, value: String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#templates-folder-string-void">templates(folder:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#context-ctx-string-void">context(ctx:
+                                                String): void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#status-status-int-void">status(status:
+                                                int) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#sendstatus-status-int-void">sendStatus(status:
+                                                int) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#end-payload-string-void">end(payload:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#json-payload-object-void">json(payload:
+                                                Object) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#jsonp-payload-object-void">jsonp(payload:
+                                                Object) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#xml-payload-object-template-class-void">xml(payload:
+                                                Object, template: Class) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#content-payload-t-writer-bodywriter-void">content(payload:
+                                                T, writer: BodyWriter) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#render-template-string-model-map-void">render(template:
+                                                String, model: Map) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#next-path-string-void">next(path:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#redirect-path-string-void">redirect(path:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#redirect-status-int-path-string-void">redirect(status:
+                                                int, path: String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#type-mimetype-string-void">type(mimetype:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#cookie-name-string-value-string-void">cookie(name:
+                                                String, value: String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#attachment-filename-string-void">attachment(filename:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#download-path-string-filename-string-mimetype-string-status-handlerstatus-void">download(path:
+                                                String, filename: String, mimeType: String, status: HandlerStatus) :
+                                                void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="handler_response.html#getcontent-byte">getContent()
+                                                : byte[]</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_functions.html">App
+                                        Functions</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#status-string">status() :
+                                                String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#appctx-path-string-void">appctx(path:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#assets-path-string-void">assets(path:
+                                                String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#engine-string-view-void">engine(String
+                                                view) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#resolve-path-string-string">resolve(path:
+                                                String) : String</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#locals-set-string">locals()
+                                                : Set&lt;String&gt;</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#locals-param-string-object">locals(param:
+                                                String) : Object</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#cors-params-map-appserver">cors(params:
+                                                Map) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#router-appserver">router()
+                                                : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#router-supplier-supplier-appserver">router(supplier:
+                                                Supplier) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#filter-filter-handlerfilter-appserver">filter(filter:
+                                                HandlerFilter) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#filter-context-string-filter-handlerfilter-appserver">filter(context:
+                                                String, filter: HandlerFilter) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#route-method-string-path-string-handler-handlerservlet-appserver">route(method:
+                                                String, path: String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method:
+                                                String, path: String, config: HandlerConfig, handler: HandlerServlet) :
+                                                AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#head-path-string-handler-handlerservlet-appserver">head(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#head-path-string-handler-bifunction-appserver">head(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#head-path-string-config-handlerconfig-handler-handlerservlet-appserver">head(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#head-path-string-config-handlerconfig-handler-bifunction-appserver">head(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">head(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#trace-path-string-handler-handlerservlet-appserver">trace(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#trace-path-string-handler-bifunction-appserver">trace(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#trace-path-string-config-handlerconfig-handler-bifunction-appserver">trace(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#options-path-string-handler-handlerservlet-appserver">options(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#options-path-string-handler-bifunction-appserver">options(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#options-path-string-config-handlerconfig-handler-handlerservlet-appserver">options(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#options-path-string-config-handlerconfig-handler-bifunction-appserver">options(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">options(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#get-path-string-handler-handlerservlet-appserver">get(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#get-path-string-handler-bifunction-appserver">get(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#get-path-string-config-handlerconfig-handler-handlerservlet-appserver">get(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#get-path-string-config-handlerconfig-handler-bifunction-appserver">get(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">get(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#post-path-string-handler-handlerservlet-appserver">post(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#post-path-string-handler-bifunction-appserver">post(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#post-path-string-config-handlerconfig-handler-handlerservlet-appserver">post(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#post-path-string-config-handlerconfig-handler-bifunction-appserver">post(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">post(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#put-path-string-handler-handlerservlet-appserver">put(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#put-path-string-handler-bifunction-appserver">put(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#put-path-string-config-handlerconfig-handler-handlerservlet-appserver">put(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#put-path-string-config-handlerconfig-handler-bifunction-appserver">put(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">put(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#delete-path-string-handler-handlerservlet-appserver">delete(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#delete-path-string-handler-bifunction-appserver">delete(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#delete-path-string-config-handlerconfig-handler-bifunction-appserver">delete(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#all-path-string-handler-handlerservlet-appserver">all(path:
+                                                String, handler: HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#all-path-string-handler-bifunction-appserver">all(path:
+                                                String, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#all-path-string-config-handlerconfig-handler-handlerservlet-appserver">all(path:
+                                                String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#all-path-string-config-handlerconfig-handler-bifunction-appserver">all(path:
+                                                String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">all(path:
+                                                String, accept: String, type: String, config: HandlerConfig, handler:
+                                                HandlerServlet) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#websocket-ctx-string-provider-appwsprovider-appserver">websocket(ctx:
+                                                String, provider: AppWsProvider) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#wordpress-home-string-fcgi-proxy-string-appserver">wordpress(home:
+                                                String, fcgi_proxy: String) : AppServer</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#listen-port-int-host-string-void">listen(port:
+                                                int, host: String) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#listen-port-int-host-string-result-consumer-void">listen(port:
+                                                int, host: String, result: Consumer) : void</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_functions.html#lifecycle-event-string-callback-consumer-appserver">lifecycle(event:
+                                                String, callback: Consumer) : AppServer</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_examples.html">App
+                                        Examples</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_examples.html#hello-world-app">Hello
+                                                World App</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_examples.html#simple-rest-app">Simple
+                                                REST App</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_examples.html#adding-a-page">Adding a
+                                                Page</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_examples.html#a-freemarker-template">A
+                                                Freemarker Template</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="app_examples.html#adding-submit-form">Adding
+                                                Submit Form</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress
+                                        Example</a></li>
+                                    <li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket
+                                        Example</a></li>
+                                    <li class="toctree-l1"><a class="reference internal" href="license.html">License</a>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="help.html">Need more
+                                        help?</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="section" id="indices-and-tables">
+                            <h1>Indices and tables<a class="headerlink" href="#indices-and-tables"
+                                                     title="Permalink to this headline">¶</a></h1>
+                            <ul class="simple">
+                                <li><a class="reference internal" href="genindex.html"><span
+                                        class="std std-ref">Index</span></a></li>
+                                <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a>
+                                </li>
+                                <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a>
+                                </li>
+                            </ul>
+                        </div>
 
 
+                    </div>
 
-<div role="navigation" aria-label="breadcrumbs navigation">
+                </div>
+                <footer>
 
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>Zesty-Router Docs</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-  
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="zesty-router-docs">
-<h1>Zesty-Router Docs<a class="headerlink" href="#zesty-router-docs" title="Permalink to this headline">¶</a></h1>
-<p>Zesty is a creative JavaScript wrapper around the Jetty web server. It works out-of-the-box with the servlet 3.0 API which enables handling requests in asynchronous fashion.
-Note that the servlet 3.1 API on the other hand, introduces new interfaces to handle asynchronous socket I/O for which there isn’t an idiomatic way to handle generically
-in zesty yet. However, using either Javascript or Java with zesty is handled using a uniform and easy to understand API.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html">AppServer Object</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#locals-properties">locals: Properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#threadpoolexecutor-threadpoolexecutor">threadPoolExecutor: ThreadPoolExecutor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#wpcontext-map">wpcontext: Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#corsconetxt-map">corsconetxt: Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#servlets-servletcontexthandler">servlets: ServletContextHandler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_server.html#engine-viewengine">engine: ViewEngine</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#appprovider-object">AppProvider Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#handlerconfig-object">HandlerConfig Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodywriter-object">BodyWriter Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#bodyreader-object">BodyReader Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_server.html#configure-logging">Configure Logging</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_routes.html">AppRoutes Object</a></li>
-<li class="toctree-l1"><a class="reference internal" href="handler_request.html">HandlerRequest Object</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#protocol-string">protocol() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#secure-boolean">secure() : boolean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#hostname-string">hostname() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#ip-string">ip() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#path-string">path() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#route-routesearch">route() : RouteSearch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#param-name-string-string">param(name: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#pathparams-map">pathParams() : Map</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#query-string">query() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#header-name-string-string">header(name: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#error-boolean">error() : boolean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#message-string">message() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-byte">body() : byte[]</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-type-class-t">body(type: Class) : T</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#body-provider-bodyreader-t">body(provider: BodyReader) : T</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#capture-long">capture() : long</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#upload-destination-string-long">upload(destination: String) : long</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#cookies-cookie">cookies() : Cookie[]</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_request.html#session-create-boolean-httpsession">session(create: boolean) : HttpSession</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="handler_response.html">HandlerResponse Object</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#header-header-string-value-string-void">header(header: String, value: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#templates-folder-string-void">templates(folder: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#context-ctx-string-void">context(ctx: String): void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#status-status-int-void">status(status: int) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#sendstatus-status-int-void">sendStatus(status: int) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#end-payload-string-void">end(payload: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#json-payload-object-void">json(payload: Object) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#jsonp-payload-object-void">jsonp(payload: Object) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#xml-payload-object-template-class-void">xml(payload: Object, template: Class) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#content-payload-t-writer-bodywriter-void">content(payload: T, writer: BodyWriter) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#render-template-string-model-map-void">render(template: String, model: Map) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#next-path-string-void">next(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-path-string-void">redirect(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#redirect-status-int-path-string-void">redirect(status: int, path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#type-mimetype-string-void">type(mimetype: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#cookie-name-string-value-string-void">cookie(name: String, value: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#attachment-filename-string-void">attachment(filename: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#download-path-string-filename-string-mimetype-string-status-handlerstatus-void">download(path: String, filename: String, mimeType: String, status: HandlerStatus) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="handler_response.html#getcontent-byte">getContent() : byte[]</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="app_functions.html">App Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#status-string">status() : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#appctx-path-string-void">appctx(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#assets-path-string-void">assets(path: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#engine-string-view-void">engine(String view) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#resolve-path-string-string">resolve(path: String) : String</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-set-string">locals() : Set&lt;String&gt;</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#locals-param-string-object">locals(param: String) : Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#cors-params-map-appserver">cors(params: Map) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-appserver">router() : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#router-supplier-supplier-appserver">router(supplier: Supplier) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-filter-handlerfilter-appserver">filter(filter: HandlerFilter) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#filter-context-string-filter-handlerfilter-appserver">filter(context: String, filter: HandlerFilter) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-handler-handlerservlet-appserver">route(method: String, path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#route-method-string-path-string-config-handlerconfig-handler-handlerservlet-appserver">route(method: String, path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-handler-handlerservlet-appserver">head(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-handler-bifunction-appserver">head(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-config-handlerconfig-handler-bifunction-appserver">head(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#head-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">head(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-handler-handlerservlet-appserver">trace(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-handler-bifunction-appserver">trace(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-config-handlerconfig-handler-bifunction-appserver">trace(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#trace-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">trace(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-handler-handlerservlet-appserver">options(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-handler-bifunction-appserver">options(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-config-handlerconfig-handler-bifunction-appserver">options(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#options-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">options(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-handler-handlerservlet-appserver">get(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-handler-bifunction-appserver">get(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-config-handlerconfig-handler-bifunction-appserver">get(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#get-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">get(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-handler-handlerservlet-appserver">post(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-handler-bifunction-appserver">post(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-config-handlerconfig-handler-bifunction-appserver">post(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#post-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">post(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-handler-handlerservlet-appserver">put(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-handler-bifunction-appserver">put(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-config-handlerconfig-handler-bifunction-appserver">put(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#put-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">put(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-handler-handlerservlet-appserver">delete(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-handler-bifunction-appserver">delete(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-config-handlerconfig-handler-bifunction-appserver">delete(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#delete-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">delete(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-handler-handlerservlet-appserver">all(path: String, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-handler-bifunction-appserver">all(path: String, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-config-handlerconfig-handler-bifunction-appserver">all(path: String, config: HandlerConfig, handler: BiFunction) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#all-path-string-accept-string-type-string-config-handlerconfig-handler-handlerservlet-appserver">all(path: String, accept: String, type: String, config: HandlerConfig, handler: HandlerServlet) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#websocket-ctx-string-provider-appwsprovider-appserver">websocket(ctx: String, provider: AppWsProvider) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#wordpress-home-string-fcgi-proxy-string-appserver">wordpress(home: String, fcgi_proxy: String) : AppServer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#listen-port-int-host-string-void">listen(port: int, host: String) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#listen-port-int-host-string-result-consumer-void">listen(port: int, host: String, result: Consumer) : void</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_functions.html#lifecycle-event-string-callback-consumer-appserver">lifecycle(event: String, callback: Consumer) : AppServer</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="app_examples.html">App Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="app_examples.html#hello-world-app">Hello World App</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_examples.html#simple-rest-app">Simple REST App</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_examples.html#adding-a-page">Adding a Page</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_examples.html#a-freemarker-template">A Freemarker Template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="app_examples.html#adding-submit-form">Adding Submit Form</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="app_wordpress.html">WordPress Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="app_websocket.html">Websocket Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="help.html">Need more help?</a></li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
-</div>
+                        <a accesskey="n" class="btn btn-neutral float-right" href="app_server.html"
+                           rel="next" title="AppServer Object">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-           </div>
-           
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="app_server.html" class="btn btn-neutral float-right" title="AppServer Object" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
-  
+                    </div>
 
-  <hr/>
 
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2019, Stephen Maina
+                    <hr/>
 
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2019, Stephen Maina
 
-</footer>
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
 
+                </footer>
+
+            </div>
         </div>
-      </div>
 
     </section>
 
-  </div>
-  
+</div>
 
 
-  
+<script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"
+        type="text/javascript"></script>
+<script src="_static/jquery.js" type="text/javascript"></script>
+<script src="_static/underscore.js" type="text/javascript"></script>
+<script src="_static/doctools.js" type="text/javascript"></script>
+<script src="_static/language_data.js" type="text/javascript"></script>
 
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
 
-  
+<script src="_static/js/theme.js" type="text/javascript"></script>
 
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
 
 </body>
 </html>

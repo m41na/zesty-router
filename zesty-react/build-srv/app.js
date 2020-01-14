@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports["default"] = void 0;
 
@@ -13,7 +13,9 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _router = _interopRequireDefault(require("./router"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {"default": obj};
+}
 
 var publicPath = _express["default"]["static"](_path["default"].join(__dirname, '../build'));
 

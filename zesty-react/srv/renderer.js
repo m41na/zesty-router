@@ -1,4 +1,4 @@
-export function renderFullPage(html, initialState){
+export function renderFullPage(html, initialState) {
     return `
     <!DOCTYPE html>
     <html lang="en">

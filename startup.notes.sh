@@ -55,18 +55,18 @@ echo checking consul essentials
 CONSUL_DATA_DIR=/c/tmp/consul
 CONSUL_CONFIG_DIR=/c/tmp/consul.d
 
-if [ -d $CONSUL_DATA_DIR ] ; then
-	echo "-> consul data dir found"
+if [ -d $CONSUL_DATA_DIR ]; then
+  echo "-> consul data dir found"
 else
-    echo "you need to configure a data directory for consul"
-	exit 1
+  echo "you need to configure a data directory for consul"
+  exit 1
 fi
 
-if [ -d $CONSUL_DATA_DIR ] ; then
-	echo "-> consul config dir found"
+if [ -d $CONSUL_DATA_DIR ]; then
+  echo "-> consul config dir found"
 else
-    echo "you need to configure a config directory for consul"
-	exit 1
+  echo "you need to configure a config directory for consul"
+  exit 1
 fi
 
 echo "ready to start consul agent"

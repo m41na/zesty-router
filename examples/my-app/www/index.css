@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
 }
+
 #wrapper {
     width: 900px;
     margin: 0px auto;
@@ -12,30 +13,41 @@
     grid-template-rows: repeat(5, 40vmin);
     grid-gap: 10px;
 }
+
 #wrapper .content {
     display: grid;
     align-content: center;
     justify-content: center;
 }
-#wrapper .content:nth-child(even) {background: #eee}
-#wrapper .content:nth-child(odd) {background: #ccc}
+
+#wrapper .content:nth-child(even) {
+    background: #eee
+}
+
+#wrapper .content:nth-child(odd) {
+    background: #ccc
+}
 
 #wrapper .content form {
     padding: 5px;
 }
+
 #wrapper .content form .input-row {
     display: flex;
     padding: 5px;
 }
-#wrapper .content form .title{
+
+#wrapper .content form .title {
     margin: 5px;
 }
-#wrapper .content form input[type=text]{
+
+#wrapper .content form input[type=text] {
     padding: 5px 10px;
     border-radius: 10px;
     line-height: 1.5em;
 }
-#wrapper .content form input.button{
+
+#wrapper .content form input.button {
     padding: 8px 10px;
     min-width: 70px;
     margin: 5px;

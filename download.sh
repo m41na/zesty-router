@@ -27,43 +27,43 @@
 echo
 set -e
 
-if [ -w `pwd` ]; then 
-	echo "$(pwd) is WRITABLE"; 
-	echo
-else 
-	echo "the current directory is NOT WRITABLE"; 
-	exit
+if [ -w $(pwd) ]; then
+  echo "$(pwd) is WRITABLE"
+  echo
+else
+  echo "the current directory is NOT WRITABLE"
+  exit
 fi
 
 ZESTY_HOME="zesty-router"
-if [ -d $ZESTY_HOME ] ; then 
-	rm -rf $ZESTY_HOME;
+if [ -d $ZESTY_HOME ]; then
+  rm -rf $ZESTY_HOME
 fi
 
-if [ $? -ne 0 ] ; then
-	echo remove the existing $ZESTY_HOME before proceeding
-	exit
+if [ $? -ne 0 ]; then
+  echo remove the existing $ZESTY_HOME before proceeding
+  exit
 fi
 
 javaHome=$JAVA_HOME
-if [ -z $javaHome ] ; then
-	echo no java home was found
-	exit 1
+if [ -z $javaHome ]; then
+  echo no java home was found
+  exit 1
 fi
 
 echo java version found $javaHome
 echo
 
 mavenHome=$M2_HOME
-if [ -z $mavenHome ] ; then
-	echo M2_HOME not found. Try MAVEN_HOME instead
-	echo
-	
-    mavenHome=$MAVEN_HOME
-    if [ -z $mavenHome ] ; then
-        echo maven home not found
-        exit 1
-    fi
+if [ -z $mavenHome ]; then
+  echo M2_HOME not found. Try MAVEN_HOME instead
+  echo
+
+  mavenHome=$MAVEN_HOME
+  if [ -z $mavenHome ]; then
+    echo maven home not found
+    exit 1
+  fi
 fi
 
 echo maven version found $mavenHome
@@ -71,30 +71,30 @@ echo
 
 git clone https://github.com/m41na/zesty-router.git
 
-if [ $? -ne 0 ] ; then
-	echo the download did not complete successsfully
-	exit 1
+if [ $? -ne 0 ]; then
+  echo the download did not complete successsfully
+  exit 1
 fi
 
 cd $ZESTY_HOME
 
-if [ -e pom.xml ] ; then
-	echo pom.xml file exists. the build process will now commence
-	echo
+if [ -e pom.xml ]; then
+  echo pom.xml file exists. the build process will now commence
+  echo
 else
-	echo pom.xml file does not exist
-	exit 1
+  echo pom.xml file does not exist
+  exit 1
 fi
 
 echo start building project artifacts
-echo 
+echo
 
 mvn clean package -U -DskipTests
 
-if [ $? -ne 0 ] ; then
-	echo the build did not complete successsfully
-	cd ..
-	exit 1
+if [ $? -ne 0 ]; then
+  echo the build did not complete successsfully
+  cd ..
+  exit 1
 fi
 
 cd ..
@@ -104,9 +104,9 @@ echo
 
 mv $ZESTY_HOME/target/zesty*shaded.jar .
 
-if [ $? -ne 0 ] ; then
-	echo the built library was not copied successsfully
-	exit 1
+if [ $? -ne 0 ]; then
+  echo the built library was not copied successsfully
+  exit 1
 fi
 
 rm -rf $ZESTY_HOME

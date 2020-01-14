@@ -5,53 +5,53 @@
     <title>SSE Demo</title>
 </head>
 <body>
-    <div id="app">
-        <ul></ul>
-    </div>
+<div id="app">
+    <ul></ul>
+</div>
 
-    <script type="text/javascript">
-        (function(){
-            const evtSource = new EventSource("/todos");
+<script type="text/javascript">
+    (function () {
+        const evtSource = new EventSource("/todos");
 
-            evtSource.onmessage = function (event) {
-                const newElement = document.createElement("li");
-                const eventList = document.querySelector("ul");
+        evtSource.onmessage = function (event) {
+            const newElement = document.createElement("li");
+            const eventList = document.querySelector("ul");
 
-                newElement.innerHTML = "message: " + event.data;
-                eventList.appendChild(newElement);
-            }
+            newElement.innerHTML = "message: " + event.data;
+            eventList.appendChild(newElement);
+        }
 
-            evtSource.addEventListener("subscribed", function (event) {
-                const newElement = document.createElement("li");
-                newElement.style.backgroundColor = "blue";
-                const eventList = document.querySelector("ul");
+        evtSource.addEventListener("subscribed", function (event) {
+            const newElement = document.createElement("li");
+            newElement.style.backgroundColor = "blue";
+            const eventList = document.querySelector("ul");
 
-                newElement.innerHTML = "message: " + event.data;
-                eventList.appendChild(newElement);
-            });
+            newElement.innerHTML = "message: " + event.data;
+            eventList.appendChild(newElement);
+        });
 
-            evtSource.addEventListener("error", function (event) {
-                const newElement = document.createElement("li");
-                newElement.style.backgroundColor = "red";
-                const eventList = document.querySelector("ul");
+        evtSource.addEventListener("error", function (event) {
+            const newElement = document.createElement("li");
+            newElement.style.backgroundColor = "red";
+            const eventList = document.querySelector("ul");
 
-                newElement.innerHTML = "message: " + event.data;
-                eventList.appendChild(newElement);
-            });
+            newElement.innerHTML = "message: " + event.data;
+            eventList.appendChild(newElement);
+        });
 
-            evtSource.addEventListener("completed", function (event) {
-                const newElement = document.createElement("li");
-                newElement.style.backgroundColor = "green";
-                const eventList = document.querySelector("ul");
+        evtSource.addEventListener("completed", function (event) {
+            const newElement = document.createElement("li");
+            newElement.style.backgroundColor = "green";
+            const eventList = document.querySelector("ul");
 
-                newElement.innerHTML = "message: " + event.data;
-                eventList.appendChild(newElement);
-            });
+            newElement.innerHTML = "message: " + event.data;
+            eventList.appendChild(newElement);
+        });
 
-            window.addEventListener("unload", function( event ) {
-                evtSource.close();
-            });
-        })()
-    </script>
+        window.addEventListener("unload", function (event) {
+            evtSource.close();
+        });
+    })()
+</script>
 </body>
 </html>

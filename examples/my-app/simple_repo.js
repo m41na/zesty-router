@@ -1,6 +1,6 @@
 let Dao = {};
 
-;(function(){
+;(function () {
 
     let AtomicInteger = Java.type('java.util.concurrent.atomic.AtomicInteger');
 
@@ -12,8 +12,8 @@ let Dao = {};
             2: {name: "Carol", email: "carol@jjs.io", id: 2},
             3: {name: "Becky", email: "becky@jjs.io", id: 3}
         }
-        
-        this.lastId = new AtomicInteger(3);   
+
+        this.lastId = new AtomicInteger(3);
 
         this.save = (name, email) => {
             let id = this.lastId.incrementAndGet()
@@ -26,7 +26,7 @@ let Dao = {};
         }
 
         this.findByEmail = (email) => {
-            return Object.values(this.users).find(it => it.email == email )
+            return Object.values(this.users).find(it => it.email == email)
         }
 
         this.update = (id, name, email) => {

@@ -35,7 +35,6 @@ version = '0.1.0'
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
 
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -77,7 +76,6 @@ exclude_patterns = []
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -108,12 +106,10 @@ html_sidebars = {
     '**': ['localtoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'],
 }
 
-
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'zesty-router docs'
-
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -142,7 +138,6 @@ latex_documents = [
     (master_doc, 'zesty-router.tex', 'zesty-router Documentation', 'Stephen Maina', 'manual'),
 ]
 
-
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
@@ -150,7 +145,6 @@ latex_documents = [
 man_pages = [
     (master_doc, 'zesty-router', 'zesty-router Documentation', [author], 1)
 ]
-
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -162,7 +156,6 @@ texinfo_documents = [
      author, 'zesty-router', 'A Javascript wrapper for the Jetty Web Server.',
      'Miscellaneous'),
 ]
-
 
 # -- Options for Epub output -------------------------------------------------
 
@@ -180,6 +173,5 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
-
 
 # -- Extension configuration -------------------------------------------------

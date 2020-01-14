@@ -1,26 +1,29 @@
-#filter{
+#filter {
     margin-bottom: 10px;
 }
+
 #tasks {
     display: inline-block;
 }
+
 .form-group {
     text-align: center;
     padding-bottom: 25px;
 }
+
 #todo {
     margin: 0 auto;
     width: 500px;
 }
 
-#todo li > span{
+#todo li > span {
     cursor: pointer;
 }
 
 a.close {
-  float: right;
+    float: right;
 }
 
-li span.cross-out{
+li span.cross-out {
     text-decoration: line-through;
 }

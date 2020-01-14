@@ -6,8 +6,11 @@ import products from "./store";
 const initialState = window.__PRELOADED_STATE__ || products;
 
 hydrate(
-  <Router>
-    <App products={initialState} />
-  </Router>,
-  document.getElementById("root")
-);
+< Router >
+< App
+products = {initialState}
+/>
+< /Router>,
+document.getElementById("root")
+)
+;

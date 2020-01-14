@@ -10,7 +10,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AppOptions {
 
@@ -95,7 +100,7 @@ public class AppOptions {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("config")) {
-                props = loadDataFile(cmd.getOptionValue("config"));
+                props.putAll(loadDataFile(cmd.getOptionValue("config")));
             }
             if (cmd.hasOption("port")) {
                 props.setProperty("port", cmd.getOptionValue("port"));
@@ -194,9 +199,13 @@ public class AppOptions {
     }
 
     public static Map<String, String> applyDefaults(Options options, String[] args) {
-        Map<String, String> properties = new HashMap<>();
         //gather properties info
         Properties props = handleCli(options, args);
+        //add all properties to map before applying defaults to missing values
+        Stream<Map.Entry<Object, Object>> stream = props.entrySet().stream();
+        Map<String, String> properties = stream.collect(Collectors.toMap(
+                e -> String.valueOf(e.getKey()),
+                e -> String.valueOf(e.getValue())));
         //protocol
         properties.put("port", Optional.ofNullable(props.getProperty("port")).orElse("8080"));
         properties.put("host", Optional.ofNullable(props.getProperty("host")).orElse("localhost"));

@@ -1,4 +1,4 @@
 {
-    "restructuredtext.confPath": "",
-    "python.linting.pylintEnabled": true
+  "restructuredtext.confPath": "",
+  "python.linting.pylintEnabled": true
 }

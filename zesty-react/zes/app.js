@@ -17,6 +17,6 @@ router.get('/ssr', function (req, res, promise) {
 });
 
 let port = 8080, host = 'localhost';
-router.listen(port, host, function(result){
+router.listen(port, host, function (result) {
     print(result);
 });

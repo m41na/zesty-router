@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>SimpleSock</title>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <div id="chatWidget">
-        <div id="chatUser">
-            <input type="text" name="user"/>
-            <button name="connect" class="chat-control" disabled>Connect</button>
-        </div>
-        <div id="chatActive">
-            <div class="active-row">
-                <span class="user">User 1</span>
-                <button class="nudge" name="nudge">chat</button>
-            </div>
-            <div class="active-row">
-                <span class="user">User 2</span>
-                <button class="nudge" name="nudge">chat</button>
-            </div>
-            <div class="active-row">
-                <span class="user">User 3</span>
-                <button class="nudge" name="nudge">chat</button>
-            </div>
-        </div>
-        <div id="chatMessages">
-            <div class="conversation"></div>
-            <textarea name="message" placeholder="Type your message"></textarea>
-        </div>
-        <div id="chatButton">
-            <button name="send" class="chat-control" disabled>Send</button>
-        </div>    
+<div id="chatWidget">
+    <div id="chatUser">
+        <input name="user" type="text"/>
+        <button class="chat-control" disabled name="connect">Connect</button>
     </div>
-    
-    <template id="chatmessage">
-    	<div class="message-row">
-    		<div class="from"><span class="sender"></span> <span class="time"></span></div>
-    		<div class="content"></div>
-    	</div>
-    </template>
-
-    <template id="activeuser">
+    <div id="chatActive">
         <div class="active-row">
-            <span class="user"></span>
-    		<button class="nudge" name="nudge"></button>
+            <span class="user">User 1</span>
+            <button class="nudge" name="nudge">chat</button>
         </div>
-    </template>
-    
-    <script src="wsocket.js"></script>
+        <div class="active-row">
+            <span class="user">User 2</span>
+            <button class="nudge" name="nudge">chat</button>
+        </div>
+        <div class="active-row">
+            <span class="user">User 3</span>
+            <button class="nudge" name="nudge">chat</button>
+        </div>
+    </div>
+    <div id="chatMessages">
+        <div class="conversation"></div>
+        <textarea name="message" placeholder="Type your message"></textarea>
+    </div>
+    <div id="chatButton">
+        <button class="chat-control" disabled name="send">Send</button>
+    </div>
+</div>
+
+<template id="chatmessage">
+    <div class="message-row">
+        <div class="from"><span class="sender"></span> <span class="time"></span></div>
+        <div class="content"></div>
+    </div>
+</template>
+
+<template id="activeuser">
+    <div class="active-row">
+        <span class="user"></span>
+        <button class="nudge" name="nudge"></button>
+    </div>
+</template>
+
+<script src="wsocket.js"></script>
 </body>
 </html>

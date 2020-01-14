@@ -1,6 +1,6 @@
 <#macro page>
-<!DOCTYPE html>
-<html>
+    <!DOCTYPE html>
+    <html>
     <head>
         <title>Index Page</title>
         <meta charset="UTF-8">
@@ -8,9 +8,9 @@
         <link type="text/css" rel="stylesheet" href="/index.css">
     </head>
     <body>
-        <div id="wrapper">
-            <#nested>
-        </div>
+    <div id="wrapper">
+        <#nested>
+    </div>
     </body>
-</html>
+    </html>
 </#macro>

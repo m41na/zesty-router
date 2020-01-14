@@ -7,7 +7,7 @@ let app = zesty.provide({
     appctx: '/users',
     assets: 'www',
     engine: "freemarker"
-});    
+});
 
 let router = app.router();
 router.get('/', function (req, res) {
@@ -47,6 +47,6 @@ router.delete('/delete/{id}', function (req, res) {
 });
 
 let port = 8080, host = 'localhost';
-router.listen(port, host, function(result){
+router.listen(port, host, function (result) {
     print(result);
 });

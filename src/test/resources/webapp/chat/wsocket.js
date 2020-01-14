@@ -7,20 +7,18 @@ let conversation = document.querySelector("#chatMessages .conversation");
 
 userInput.addEventListener('keyup', event => {
     let target = event.target;
-    if(!target.value){
+    if (!target.value) {
         connectBtn.setAttribute('disabled', true);
-    }
-    else{
+    } else {
         connectBtn.removeAttribute('disabled');
     }
 });
 
 messageBox.addEventListener('keyup', event => {
     let target = event.target;
-    if(!target.value){
+    if (!target.value) {
         sendBtn.setAttribute('disabled', true);
-    }
-    else{
+    } else {
         sendBtn.removeAttribute('disabled');
     }
 });
@@ -61,7 +59,7 @@ let connectUser = (user) => {
         conversation.appendChild(createMessage(data));
     }
 
-    function resetChat(){
+    function resetChat() {
         console.log("WebSocket connection closed");
         connectBtn.setAttribute('disabled', true);
         sendBtn.removeAttribute('disabled');
@@ -72,7 +70,7 @@ let connectUser = (user) => {
         }
     }
 
-    function createMessage(msg){
+    function createMessage(msg) {
         if ('content' in document.createElement('template')) {
             let template = document.querySelector('#chatmessage');
             let clone = document.importNode(template.content, true);
@@ -83,15 +81,13 @@ let connectUser = (user) => {
             let content = clone.querySelector(".content")
             content.textContent = msg.message || msg.error;
             let direction = clone.querySelector('.message-row');
-            if(user === msg.from){
+            if (user === msg.from) {
                 direction.classList.add('outgoing');
-            }
-            else{
+            } else {
                 direction.classList.add('incoming');
             }
             return clone;
-        }
-        else{
+        } else {
             let err = document.createElement("div");
             err.innerHTML = "browser does not support templates";
             return err;
