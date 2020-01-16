@@ -24,21 +24,21 @@ public class AppOptions {
     private AppOptions() {
     }
 
-    private static Properties loadDataFile(String protocol, String host, String file, String dataFile) {
+    private static Properties loadProperties(String protocol, String host, String jarFile, String propsFile) {
         Properties props = new Properties();
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(Paths.get(dataFile).toFile()))) {
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(Paths.get(propsFile).toFile()))) {
             props.load(reader);
         } catch (Exception e1) {
-            try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getResourceAsStream(dataFile))) {
+            try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getResourceAsStream(propsFile))) {
                 props.load(reader);
             } catch (Exception e2) {
-                try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getClassLoader().getResourceAsStream(dataFile))) {
+                try (InputStreamReader reader = new InputStreamReader(AppOptions.class.getClassLoader().getResourceAsStream(propsFile))) {
                     props.load(reader);
                 } catch (Exception e3) {
                     try {
-                        URL jarURL = new URL(protocol, host, file);
+                        URL jarURL = new URL(protocol, host, jarFile);
                         URLClassLoader urlClassLoader = new URLClassLoader(new URL[]{jarURL});
-                        try (InputStream reader = urlClassLoader.getResourceAsStream(dataFile)) {
+                        try (InputStream reader = urlClassLoader.getResourceAsStream(propsFile)) {
                             props.load(reader);
                         } catch (IOException e4) {
                             System.err.printf("Could not locate file to load properties; %s", e3.getMessage());
@@ -52,8 +52,8 @@ public class AppOptions {
         return props;
     }
 
-    private static Properties loadDataFile(String dataFile) {
-        return loadDataFile(null, null, null, dataFile);
+    private static Properties loadProperties(String dataFile) {
+        return loadProperties(null, null, null, dataFile);
     }
 
     private static Properties handleCli(Options options, String[] args) {
@@ -100,7 +100,17 @@ public class AppOptions {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption("config")) {
-                props.putAll(loadDataFile(cmd.getOptionValue("config")));
+                Properties extraProperties = loadProperties(cmd.getOptionValue("config"));
+                //override any property whose command line argument is available
+                for(Map.Entry<Object, Object> entry : extraProperties.entrySet()){
+                    String key = String.valueOf(entry.getKey());
+                    if(cmd.hasOption(key)){
+                        props.setProperty(key, cmd.getOptionValue(key));
+                    }
+                    else{
+                        props.setProperty(key, String.valueOf(entry.getValue()));
+                    }
+                }
             }
             if (cmd.hasOption("port")) {
                 props.setProperty("port", cmd.getOptionValue("port"));
