@@ -21,7 +21,7 @@ import java.util.jar.Manifest;
 public class AppLoader {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
-        File rootDir = Paths.get(System.getProperty("user.dir")).toFile();
+        File rootDir = Paths.get(System.getProperty("user.dir"), args[0]).toFile();
         System.out.println("root directory is " + rootDir.getAbsolutePath());
         if (rootDir.isDirectory()) {
             File[] files = rootDir.listFiles(pathname -> pathname.isFile() && pathname.getPath().endsWith(".jar"));

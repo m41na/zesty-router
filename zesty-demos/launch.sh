@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-JAVA_HOME="$GRAALVM_HOME"
-app_jar=zesty-demos-1.0-SNAPSHOT-shaded.jar
-rm -rf ./deploy
-mkdir -p ./deploy/bin
-cp ./target/"$app_jar" ./deploy
 cp ../zesty-cli/target/zesty-cli-0.1.1.jar ./deploy/bin
 cd ./deploy
-java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 -cp ./bin/zesty-cli-0.1.1.jar com.practicaldime.zesty.cli.AppLoader
+
+# java9+ -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+# java8- -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y
+if [ -n "$GRAALVM_HOME" ]; then
+  JAVA_HOME=$GRAALVM_HOME
+fi
+"$JAVA_HOME"/bin/java -cp .:./bin/zesty-cli-0.1.1.jar com.practicaldime.zesty.cli.AppLoader
+
