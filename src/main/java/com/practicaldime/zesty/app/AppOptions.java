@@ -102,12 +102,11 @@ public class AppOptions {
             if (cmd.hasOption("config")) {
                 Properties extraProperties = loadProperties(cmd.getOptionValue("config"));
                 //override any property whose command line argument is available
-                for(Map.Entry<Object, Object> entry : extraProperties.entrySet()){
+                for (Map.Entry<Object, Object> entry : extraProperties.entrySet()) {
                     String key = String.valueOf(entry.getKey());
-                    if(cmd.hasOption(key)){
+                    if (cmd.hasOption(key)) {
                         props.setProperty(key, cmd.getOptionValue(key));
-                    }
-                    else{
+                    } else {
                         props.setProperty(key, String.valueOf(entry.getValue()));
                     }
                 }
@@ -227,29 +226,46 @@ public class AppOptions {
         properties.put("engine", Optional.ofNullable(props.getProperty("engine")).orElse("*"));
         properties.put("lookup", Optional.ofNullable(props.getProperty("lookup")).orElse("FILE"));
         //http session
-        properties.put("session.jdbc.enable", Optional.ofNullable(props.getProperty("session.jdbc.enable")).orElse("true"));
-        properties.put("session.jdbc.url", Optional.ofNullable(props.getProperty("session.jdbc.url")).orElse(String.format("%s%s%s", "jdbc:h2:~/", properties.get("name"), "-session")));
-        properties.put("session.jdbc.driver", Optional.ofNullable(props.getProperty("session.jdbc.driver")).orElse("org.h2.Driver"));
+        properties.put("session.jdbc.enable", Optional.ofNullable(props.getProperty("session.jdbc.enable")).orElse(
+                Optional.ofNullable(props.getProperty("sessionJdbcEnable")).orElse("true")));
+        properties.put("session.jdbc.url", Optional.ofNullable(props.getProperty("session.jdbc.url")).orElse(
+                Optional.ofNullable(props.getProperty("sessionJdbcUrl")).orElse(String.format("%s%s%s", "jdbc:h2:~/", properties.get("name"), "-session"))));
+        properties.put("session.jdbc.driver", Optional.ofNullable(props.getProperty("session.jdbc.driver")).orElse(
+                Optional.ofNullable(props.getProperty("sessionJdbcDriver")).orElse("org.h2.Driver")));
         //static resources
-        properties.put("assets.default.servlet", Optional.ofNullable(props.getProperty("assets.default.servlet")).orElse("false"));
-        properties.put("assets.dirAllowed", Optional.ofNullable(props.getProperty("assets.dirAllowed")).orElse("false"));
-        properties.put("assets.pathInfoOnly", Optional.ofNullable(props.getProperty("assets.pathInfoOnly")).orElse("true"));
-        properties.put("assets.welcomeFile", Optional.ofNullable(props.getProperty("assets.welcomeFile")).orElse("index.html"));
-        properties.put("assets.acceptRanges", Optional.ofNullable(props.getProperty("assets.acceptRanges")).orElse("true"));
-        properties.put("assets.etags", Optional.ofNullable(props.getProperty("assets.etags")).orElse("true"));
-        properties.put("assets.cacheControl", Optional.ofNullable(props.getProperty("assets.cacheControl")).orElse("public, max-age=0"));
+        properties.put("assets.default.servlet", Optional.ofNullable(props.getProperty("assets.default.servlet")).orElse(
+                Optional.ofNullable(props.getProperty("assetsDefaultServlet")).orElse("false")));
+        properties.put("assets.dirAllowed", Optional.ofNullable(props.getProperty("assets.dirAllowed")).orElse(
+                Optional.ofNullable(props.getProperty("assetsDirAllowed")).orElse("false")));
+        properties.put("assets.pathInfoOnly", Optional.ofNullable(props.getProperty("assets.pathInfoOnly")).orElse(
+                Optional.ofNullable(props.getProperty("assetsPathInfoOnly")).orElse("true")));
+        properties.put("assets.welcomeFile", Optional.ofNullable(props.getProperty("assets.welcomeFile")).orElse(
+                Optional.ofNullable(props.getProperty("assetsWelcomeFile")).orElse("index.html")));
+        properties.put("assets.acceptRanges", Optional.ofNullable(props.getProperty("assets.acceptRanges")).orElse(
+                Optional.ofNullable(props.getProperty("assetsAcceptRanges")).orElse("true")));
+        properties.put("assets.etags", Optional.ofNullable(props.getProperty("assets.etags")).orElse(
+                Optional.ofNullable(props.getProperty("assetsEtags")).orElse("true")));
+        properties.put("assets.cacheControl", Optional.ofNullable(props.getProperty("assets.cacheControl")).orElse(
+                Optional.ofNullable(props.getProperty("assetsCacheControl")).orElse("public, max-age=0")));
         //thread pool
         properties.put("poolSize", Optional.ofNullable(props.getProperty("poolSize")).orElse("5"));
         properties.put("maxPoolSize", Optional.ofNullable(props.getProperty("maxPoolSize")).orElse("200"));
         properties.put("keepAliveTime", Optional.ofNullable(props.getProperty("keepAliveTime")).orElse("30000"));
         //https
-        properties.put("https.port", Optional.ofNullable(props.getProperty("https.port")).orElse("8443"));
-        properties.put("https.idleTimeout", Optional.ofNullable(props.getProperty("https.idleTimeout")).orElse("30000"));
-        properties.put("https.outputBufferSize", Optional.ofNullable(props.getProperty("https.outputBufferSize")).orElse("32768"));
-        properties.put("https.ssl.stsMaxAge", Optional.ofNullable(props.getProperty("https.ssl.stsMaxAge")).orElse("2000"));
-        properties.put("https.ssl.includeSubDomains", Optional.ofNullable(props.getProperty("https.ssl.includeSubDomains")).orElse("true"));
-        properties.put("https.keystore.classpath", Optional.ofNullable(props.getProperty("https.keystore.classpath")).orElse("keystore.jks"));
-        properties.put("https.keystore.password", Optional.ofNullable(props.getProperty("https.keystore.password")).orElse("OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u"));
+        properties.put("https.port", Optional.ofNullable(props.getProperty("https.port")).orElse(
+                Optional.ofNullable(props.getProperty("httpsPort")).orElse("8443")));
+        properties.put("https.idleTimeout", Optional.ofNullable(props.getProperty("https.idleTimeout")).orElse(
+                Optional.ofNullable(props.getProperty("httpsIdleTimeout")).orElse("30000")));
+        properties.put("https.outputBufferSize", Optional.ofNullable(props.getProperty("https.outputBufferSize")).orElse(
+                Optional.ofNullable(props.getProperty("httpsOutputBufferSize")).orElse("32768")));
+        properties.put("https.ssl.stsMaxAge", Optional.ofNullable(props.getProperty("https.ssl.stsMaxAge")).orElse(
+                Optional.ofNullable(props.getProperty("httpsSslStsMaxAge")).orElse("2000")));
+        properties.put("https.ssl.includeSubDomains", Optional.ofNullable(props.getProperty("https.ssl.includeSubDomains")).orElse(
+                Optional.ofNullable(props.getProperty("httpsSslIncludeSubDomains")).orElse("true")));
+        properties.put("https.keystore.classpath", Optional.ofNullable(props.getProperty("https.keystore.classpath")).orElse(
+                Optional.ofNullable(props.getProperty("httpsKeystoreClasspath")).orElse("keystore.jks")));
+        properties.put("https.keystore.password", Optional.ofNullable(props.getProperty("https.keystore.password")).orElse(
+                Optional.ofNullable(props.getProperty("httpsKeystorePassword")).orElse("OBF:1x901wu01v1x20041ym71zzu1v2h1wue1x7u")));
 
         return properties;
     }
