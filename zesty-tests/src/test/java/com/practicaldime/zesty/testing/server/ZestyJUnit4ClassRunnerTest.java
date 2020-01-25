@@ -6,6 +6,7 @@ import com.practicaldime.zesty.app.IServer;
 import org.apache.commons.cli.Options;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,6 +22,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(ZestyJUnit4ClassRunner.class)
+@Ignore
 public class ZestyJUnit4ClassRunnerTest {
 
     public static final Integer PORT = 9099;

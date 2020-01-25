@@ -20,7 +20,7 @@
     <modules>
         <module>zesty-demos</module>
         <module>zesty-graphql</module>
-        <module>zesty-testing</module>
+        <module>zesty-tests</module>
         <module>zesty-cli</module>
     </modules>
 

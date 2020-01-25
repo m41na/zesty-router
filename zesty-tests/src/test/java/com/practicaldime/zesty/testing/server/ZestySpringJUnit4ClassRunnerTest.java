@@ -6,6 +6,7 @@ import com.practicaldime.zesty.app.IServer;
 import org.apache.commons.cli.Options;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertFalse;
 @RunWith(ZestySpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ZestySpringJUnit4ClassRunnerTest.ZestyTestConfig.class})
 @TestPropertySource("/test-file.properties")
+@Ignore
 public class ZestySpringJUnit4ClassRunnerTest {
 
     @Value("${x}")
