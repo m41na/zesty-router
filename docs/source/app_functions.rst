@@ -3,7 +3,7 @@ App Functions
 
 These are the functions you can be able to use that are made accessible through the :code:`AppServer` instance.::
 
-    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let zesty = Java.type('com.practicaldime.router.base.AppProvider');
 
     let Date = Java.type('java.util.Date');
     let DateFormat = Java.type('java.text.SimpleDateFormat');

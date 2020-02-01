@@ -27,7 +27,7 @@ This example assumes you are on a Linux system, but there will be a section late
 With these steps covered on the wordpress side, let's now configure the :code:`zesty-router` side of the equation. Create your
 application folder and in it create an :code:`app.js` file. Add this to your new file.::
 
-    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let zesty = Java.type('com.practicaldime.router.base.AppProvider');
     let app = zesty.provide({});
 
     let port = 8080, host = 'localhost';
