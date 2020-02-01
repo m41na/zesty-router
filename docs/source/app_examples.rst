@@ -19,7 +19,7 @@ This is just a simple application which responds with the current time when the 
 
 * In the :code:`index.js` file, import the :code:`AppProvider` class.::
 
-    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let zesty = Java.type('com.practicaldime.router.base.AppProvider');
 
 * Initialize the application using some initial configuration.::
 
@@ -102,7 +102,7 @@ Next, let's create the API service.::
 
     let dao = new UserDao();
 
-    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let zesty = Java.type('com.practicaldime.router.base.AppProvider');
     let app = zesty.provide({
         appctx: '/users'
     });
@@ -470,7 +470,7 @@ With the split done, now simply import the repository to be used by the endpoint
 
     let dao = new Dao.UserDao();
 
-    let zesty = Java.type('com.practicaldime.zesty.app.AppProvider');
+    let zesty = Java.type('com.practicaldime.router.base.AppProvider');
     let app = zesty.provide({
         appctx: '/users',
         assets: 'www',

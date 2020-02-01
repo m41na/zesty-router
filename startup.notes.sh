@@ -7,9 +7,9 @@
 #java -jar /c/Tools/h2/bin/h2-1.4.197.jar
 #java -jar c:\Tools\h2\bin\h2-1.4.197.jar
 #start demo server instance
-#java -cp "target\zesty-router-0.1.1-shaded.jar;target\test-classes" com.practicaldime.zesty.demo.DemoApp 8090
+#java -cp "target\zesty-router-0.1.1-shaded.jar;target\test-classes" com.practicaldime.router.core.demo.DemoApp 8090
 #start demo proxy server
-#java -cp "target\zesty-router-0.1.1-shaded.jar;target\test-classes" com.practicaldime.zesty.demo.Simproxy
+#java -cp "target\zesty-router-0.1.1-shaded.jar;target\test-classes" com.practicaldime.router.core.demo.Simproxy
 #start consul agent
 #consul agent -dev -node [node_name]
 #view cluster members
