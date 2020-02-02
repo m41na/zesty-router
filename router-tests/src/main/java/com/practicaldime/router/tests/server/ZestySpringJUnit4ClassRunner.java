@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.testing.server;
+package com.practicaldime.router.tests.server;
 
 import com.practicaldime.router.core.server.IServer;
 import org.eclipse.jetty.client.HttpClient;

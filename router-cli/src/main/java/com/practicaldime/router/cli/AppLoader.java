@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.cli;
+package com.practicaldime.router.cli;
 
 import java.io.File;
 import java.io.FileInputStream;
