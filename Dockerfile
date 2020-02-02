@@ -15,6 +15,6 @@ ENV HTTP_HOST=$HTTP_HOST
 ENV HTTPS_PORT=$HTTPS_PORT
 
 RUN mkdir -p $DEPLOY_DIR/bin
-COPY ./target/zesty-cli-0.1.1.jar $DEPLOY_DIR/bin
+COPY ./target/router-cli-0.1.1.jar $DEPLOY_DIR/bin
 WORKDIR $DEPLOY_DIR
-RUN java -jar ./bin/zesty-cli-0.1.1.jar com.practicaldime.zesty.cli.AppLoader -p "$HTTP_PORT" -h "$HTTP_HOST" -n "$APP_NAME" -httpsPort "$HTTPS_PORT" -assets "$DEPLOY_DIR"
+RUN java -jar ./bin/router-cli-0.1.1.jar com.practicaldime.zesty.cli.AppLoader -p "$HTTP_PORT" -h "$HTTP_HOST" -n "$APP_NAME" -httpsPort "$HTTPS_PORT" -assets "$DEPLOY_DIR"

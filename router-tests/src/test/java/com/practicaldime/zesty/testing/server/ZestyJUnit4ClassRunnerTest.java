@@ -1,6 +1,6 @@
 package com.practicaldime.zesty.testing.server;
 
-import com.practicaldime.router.core.server.AppProvider;
+import com.practicaldime.router.core.server.Rest;
 import com.practicaldime.router.core.server.IServer;
 import com.practicaldime.router.http.app.AppServer;
 import org.apache.commons.cli.Options;
@@ -39,7 +39,7 @@ public class ZestyJUnit4ClassRunnerTest {
     public IServer provider() {
         Map<String, String> config = applyDefaults(new Options(), new String[]{});
         config.put("appctx", "/");
-        IServer server = ((AppProvider) props -> AppServer.instance(props)).provide(config);
+        IServer server = AppServer.instance(config);
         server.get("/hello", (req, res, done) -> done.resolve(CompletableFuture.runAsync(() -> {
             res.send("hello from server");
         })));

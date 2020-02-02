@@ -46,12 +46,7 @@ public class AppServer implements IServer {
     public static IServer instance(Map<String, String> props) {
         Properties locals = new Properties();
         props.forEach((key, value) -> locals.setProperty(key, value));
-        Function<String, String> properties = new Function<String, String>() {
-            @Override
-            public String apply(String key) {
-                return locals.getProperty(key);
-            }
-        };
+        Function<String, String> properties = key -> locals.getProperty(key);
 
         AppRouter router = new AppRouter(new MethodRouter());
         ServletContextHandler servlets = new ServletContextHandler(ServletContextHandler.SESSIONS);
