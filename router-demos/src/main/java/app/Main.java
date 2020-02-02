@@ -12,16 +12,17 @@ import com.practicaldime.router.http.app.AppServer;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.eclipse.jetty.servlets.EventSource;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Main {
 
@@ -37,8 +38,11 @@ public class Main {
             case 2:
                 syncJdbcTest();
                 break;
-            default:
+            case 3:
                 syncBatchJdbcTest();
+                break;
+            default:
+                asyncBatchJdbcTest();
                 break;
         }
     }
@@ -53,7 +57,7 @@ public class Main {
             Integer res = repo.addTodo("task_" + i);
             count += res;
             if (i % batchSize == 0) {
-                System.out.println(count + "st item inserted in batch " + i / 100);
+                System.out.println(count + " items inserted in batch " + i / 100);
                 Long duration = System.nanoTime() - startTime;
                 System.out.println("Took " + duration / 10e6 + " milli-seconds");
             }
@@ -76,6 +80,32 @@ public class Main {
         Long duration = System.nanoTime() - startTime;
         System.out.println("Took " + duration / 10e6 + " milli-seconds to create " + created + " items");
         repo.clearTodos();
+    }
+
+    public static void asyncBatchJdbcTest() {
+        PGRepo repo = new PGRepo();
+        int testSize = 100000;
+        int batchSize = 1000;
+        String[] todos = new String[testSize];
+        for (int i = 0; i < testSize; i++) {
+            todos[i] = "task__" + i;
+        }
+        Long startTime = System.nanoTime();
+        repo.addTodosAsync(todos, batchSize).handle((res, th) -> {
+            if(th == null){
+                System.out.println("inserted " + res + " items");
+                return res;
+            }
+            else {
+                System.out.println(th.getMessage());
+                return 0;
+            }
+        }).thenAccept(created -> {
+            Long duration = System.nanoTime() - startTime;
+            System.out.println("Took " + duration / 10e6 + " milli-seconds to create " + created + " items");
+            repo.clearTodos();
+        }).join();
+        System.out.println("insert request completed");
     }
 
     public static void snapTest() {
@@ -277,6 +307,7 @@ public class Main {
     static class PGRepo {
 
         public final String DB_URL = "jdbc:postgresql://localhost/";
+        public final String DB_DRIVER = "org.postgresql.Driver";
         public final String DB_USER = "postgres";
         public final String DB_PASS = "admins";
         public final String CREATE_TODOS_TABLE = "" +
@@ -293,6 +324,25 @@ public class Main {
         public final String fetchTodos = "select id, name, completed from tbl_todos offset ? limit ?";
         public final String clearTodos = "truncate table tbl_todos";
 
+        private final Supplier<Connection> pool() {
+            PoolProperties p = new PoolProperties();
+            p.setUrl(DB_URL);
+            p.setDriverClassName(DB_DRIVER);
+            p.setUsername(DB_USER);
+            p.setPassword(DB_PASS);
+            p.setJmxEnabled(true);
+            DataSource datasource = new DataSource();
+            datasource.setPoolProperties(p);
+            return () -> {
+                try {
+                    return datasource.getConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            };
+        }
+
         public PGRepo() {
             try {
                 init();
@@ -304,7 +354,7 @@ public class Main {
         }
 
         private void init() throws ClassNotFoundException, SQLException {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(DB_DRIVER);
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
                 System.out.println("Connecting to database...");
                 Statement stmt = conn.createStatement();
@@ -361,6 +411,37 @@ public class Main {
             }
         }
 
+        public CompletableFuture<Integer> addTodosAsync(String[] todos, int batchSize) {
+            return CompletableFuture.supplyAsync(() -> {
+                try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+                    try (PreparedStatement pst = conn.prepareStatement(insertTodo)) {
+                        Integer count = 0;
+                        for (int i = 0; i < todos.length; i+=batchSize) {
+                            //create batch
+                            for(int j = 0; j < batchSize && (i + j) < todos.length; j++){
+                                pst.setString(1, todos[i + j]);
+                                pst.addBatch();
+                            }
+                            pst.clearParameters();
+                            int[] batched = pst.executeBatch();
+                            count += batched.length;
+                            System.out.println("batch size: " + batchSize + ". batch success: " + batched.length);
+                        }
+                        pst.clearBatch();
+                        return count;
+                    } catch (SQLException e) {
+                        System.err.println("Could not insert new todos batch");
+                        e.printStackTrace();
+                        return 0;
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Could not connect to database...");
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
         public Task fetchTodo(Long id) {
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
                 try (PreparedStatement pst = conn.prepareStatement(selectTodo)) {
@@ -408,7 +489,7 @@ public class Main {
         }
 
         public Integer dropTodo(Long id) {
-            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            try (Connection conn = pool().get()) {
                 try (PreparedStatement pst = conn.prepareStatement(deleteTodo)) {
                     pst.setLong(1, id);
                     return pst.executeUpdate();
