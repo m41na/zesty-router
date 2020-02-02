@@ -7,4 +7,5 @@ cd ./deploy
 if [ -n "$GRAALVM_HOME" ]; then
   JAVA_HOME=$GRAALVM_HOME
 fi
+
 "$JAVA_HOME"/bin/java -cp .:./bin/router-cli-0.1.1.jar com.practicaldime.zesty.cli.AppLoader

@@ -1,6 +1,5 @@
-package com.practicaldime.zesty.testing.server;
+package com.practicaldime.router.tests.server;
 
-import com.practicaldime.router.core.server.Rest;
 import com.practicaldime.router.core.server.IServer;
 import com.practicaldime.router.http.app.AppServer;
 import org.apache.commons.cli.Options;

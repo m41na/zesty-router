@@ -1,4 +1,4 @@
-package com.practicaldime.zesty.testing.server;
+package com.practicaldime.router.tests.server;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

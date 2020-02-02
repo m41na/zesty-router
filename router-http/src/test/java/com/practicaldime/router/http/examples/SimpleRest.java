@@ -26,45 +26,45 @@ public class SimpleRest {
             @Override
             public Function<IServer, IServer> augment() {
                 return app ->
-                 app.get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
-                    res.json(dao.all());
-                    done.complete();
-                })
-                        .get("/{id}", (req, res, done) -> {
-                            String id = req.param("id");
-                            User result = dao.findById(Integer.valueOf(id));
-                            res.json(result);
+                        app.get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
+                            res.json(dao.all());
                             done.complete();
                         })
-                        .get("/email/{email}", (req, res, done) -> {
-                            String email = req.param("email");
-                            res.json(dao.findByEmail(email));
-                            done.complete();
-                        })
-                        .post("/create", (req, res, done) -> {
-                            String name = req.param("name");
-                            String email = req.param("email");
-                            dao.save(name, email);
-                            res.status(201);
-                            done.complete();
-                        })
-                        .put("/update/{id}", (req, res, done) -> {
-                            String id = req.param("id");
-                            String name = req.param("name");
-                            String email = req.param("email");
-                            dao.update(Integer.valueOf(id), name, email);
-                            res.status(204);
-                            done.complete();
-                        })
-                        .delete("/delete/{id}", (req, res, done) -> {
-                            String id = req.param("id");
-                            dao.delete(Integer.valueOf(id));
-                            res.status(205);
-                            done.complete();
-                        })
-                        .put("/error", (req, res, done) -> {
-                            throw new UnsupportedOperationException("bad things happened will happen");
-                        });
+                                .get("/{id}", (req, res, done) -> {
+                                    String id = req.param("id");
+                                    User result = dao.findById(Integer.valueOf(id));
+                                    res.json(result);
+                                    done.complete();
+                                })
+                                .get("/email/{email}", (req, res, done) -> {
+                                    String email = req.param("email");
+                                    res.json(dao.findByEmail(email));
+                                    done.complete();
+                                })
+                                .post("/create", (req, res, done) -> {
+                                    String name = req.param("name");
+                                    String email = req.param("email");
+                                    dao.save(name, email);
+                                    res.status(201);
+                                    done.complete();
+                                })
+                                .put("/update/{id}", (req, res, done) -> {
+                                    String id = req.param("id");
+                                    String name = req.param("name");
+                                    String email = req.param("email");
+                                    dao.update(Integer.valueOf(id), name, email);
+                                    res.status(204);
+                                    done.complete();
+                                })
+                                .delete("/delete/{id}", (req, res, done) -> {
+                                    String id = req.param("id");
+                                    dao.delete(Integer.valueOf(id));
+                                    res.status(205);
+                                    done.complete();
+                                })
+                                .put("/error", (req, res, done) -> {
+                                    throw new UnsupportedOperationException("bad things happened will happen");
+                                });
             }
         };
 
