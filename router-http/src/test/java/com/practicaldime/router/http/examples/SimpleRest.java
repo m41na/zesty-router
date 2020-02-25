@@ -24,8 +24,8 @@ public class SimpleRest {
             }
 
             @Override
-            public Function<IServer, IServer> augment() {
-                return app ->
+            public Function<Map<String, String>, IServer> build(IServer app) {
+                return props ->
                         app.get("/", (handler) -> handler.setAsyncSupported(true), (req, res, done) -> {
                             res.json(dao.all());
                             done.complete();

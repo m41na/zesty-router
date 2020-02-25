@@ -18,7 +18,10 @@ import org.eclipse.jetty.servlets.EventSource;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -92,11 +95,10 @@ public class Main {
         }
         Long startTime = System.nanoTime();
         repo.addTodosAsync(todos, batchSize).handle((res, th) -> {
-            if(th == null){
+            if (th == null) {
                 System.out.println("inserted " + res + " items");
                 return res;
-            }
-            else {
+            } else {
                 System.out.println(th.getMessage());
                 return 0;
             }
@@ -141,8 +143,8 @@ public class Main {
             }
 
             @Override
-            public Function<IServer, IServer> augment() {
-                return (app) -> app.assets("/", "www")
+            public Function<Map<String, String>, IServer> build(IServer app) {
+                return (props) -> app.assets("/", "www")
                         .get("/todo", (req, res, done) -> {
                             res.json(repo.list());
                             done.complete();
@@ -324,6 +326,16 @@ public class Main {
         public final String fetchTodos = "select id, name, completed from tbl_todos offset ? limit ?";
         public final String clearTodos = "truncate table tbl_todos";
 
+        public PGRepo() {
+            try {
+                init();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         private final Supplier<Connection> pool() {
             PoolProperties p = new PoolProperties();
             p.setUrl(DB_URL);
@@ -341,16 +353,6 @@ public class Main {
                     return null;
                 }
             };
-        }
-
-        public PGRepo() {
-            try {
-                init();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
         }
 
         private void init() throws ClassNotFoundException, SQLException {
@@ -386,9 +388,9 @@ public class Main {
             try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
                 try (PreparedStatement pst = conn.prepareStatement(insertTodo)) {
                     Integer count = 0;
-                    for (int i = 0; i < todos.length; i+=batchSize) {
+                    for (int i = 0; i < todos.length; i += batchSize) {
                         //create batch
-                        for(int j = 0; j < batchSize && (i + j) < todos.length; j++){
+                        for (int j = 0; j < batchSize && (i + j) < todos.length; j++) {
                             pst.setString(1, todos[i + j]);
                             pst.addBatch();
                         }
@@ -416,9 +418,9 @@ public class Main {
                 try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
                     try (PreparedStatement pst = conn.prepareStatement(insertTodo)) {
                         Integer count = 0;
-                        for (int i = 0; i < todos.length; i+=batchSize) {
+                        for (int i = 0; i < todos.length; i += batchSize) {
                             //create batch
-                            for(int j = 0; j < batchSize && (i + j) < todos.length; j++){
+                            for (int j = 0; j < batchSize && (i + j) < todos.length; j++) {
                                 pst.setString(1, todos[i + j]);
                                 pst.addBatch();
                             }
