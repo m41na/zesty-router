@@ -20,6 +20,8 @@ public interface RouteRequest {
 
     String param(String name);
 
+    <T>T param(String name, Class<T> type);
+
     Map<String, String> pathParams();
 
     String query();

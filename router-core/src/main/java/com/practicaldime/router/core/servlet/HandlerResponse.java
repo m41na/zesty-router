@@ -90,6 +90,12 @@ public class HandlerResponse extends HttpServletResponseWrapper implements Route
     }
 
     @Override
+    public void send(int status, String payload) {
+        status(status);
+        send(payload);
+    }
+
+    @Override
     public void bytes(byte[] payload) {
         this.content = payload;
     }

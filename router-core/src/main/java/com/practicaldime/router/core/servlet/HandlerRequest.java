@@ -86,6 +86,11 @@ public class HandlerRequest extends HttpServletRequestWrapper implements RouteRe
     }
 
     @Override
+    public <T>T param(String name, Class<T> type) {
+        return type.cast(param(name));
+    }
+
+    @Override
     public Map<String, String> pathParams() {
         return route.pathParams;
     }

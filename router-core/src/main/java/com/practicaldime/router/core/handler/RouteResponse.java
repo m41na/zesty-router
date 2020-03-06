@@ -25,6 +25,8 @@ public interface RouteResponse {
 
     void send(String payload);
 
+    void send(int status, String payload);
+
     void bytes(byte[] payload);
 
     void json(Object payload);
