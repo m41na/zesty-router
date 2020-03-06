@@ -11,7 +11,7 @@ public interface Rest {
 
     IServer provide(Map<String, String> properties);
 
-    Function<IServer, IServer> augment();
+    Function<IServer, IServer> compose();
 
     default void start(String[] args) {
         start(new Options(), args);
@@ -19,6 +19,6 @@ public interface Rest {
 
     default void start(Options options, String[] args) {
         Map<String, String> properties = applyDefaults(options, args);
-        augment().apply(provide(properties)).listen(Integer.parseInt(properties.get("port")), properties.get("host"), (result) -> System.out.println(result));
+        compose().apply(provide(properties)).listen(Integer.parseInt(properties.get("port")), properties.get("host"), (result) -> System.out.println(result));
     }
 }

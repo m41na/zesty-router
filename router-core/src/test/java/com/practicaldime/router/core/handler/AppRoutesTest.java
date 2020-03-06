@@ -77,7 +77,7 @@ public class AppRoutesTest {
         //search
         Routing.Search getTodoFound = router.searchRoute(getTodo);
         assertNotNull("Expecting result found", getTodoFound.result);
-        assertEquals("Exxpecting 1 param", 1, getTodoFound.pathParams.size());
+        assertEquals("Expecting 1 param", 1, getTodoFound.pathParams.size());
 
         Routing.Attributes getStatus = new Routing.Attributes();
         getStatus.method = "get";

@@ -111,7 +111,7 @@ public class Main {
             }
 
             @Override
-            public Function<IServer, IServer> augment() {
+            public Function<IServer, IServer> compose() {
                 return (app) -> app.assets("/", "www")
                         .get("/todo", (req, res, done) -> {
                             res.json(repo.list());
