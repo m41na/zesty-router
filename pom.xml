@@ -72,7 +72,7 @@
         <graalvm.version>19.3.0.2</graalvm.version>
         <servlet.api>4.0.1</servlet.api>
         <spring.version>4.3.16.RELEASE</spring.version>
-        <jackson.version>2.10.2</jackson.version>
+        <jackson.version>2.12.7.1</jackson.version>
         <!-- manifest entries -->
         <maven.version>3.6.1</maven.version>
         <maven.compile.source>1.9</maven.compile.source>
